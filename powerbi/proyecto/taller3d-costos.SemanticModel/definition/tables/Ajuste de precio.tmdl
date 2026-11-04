@@ -1,0 +1,20 @@
+table 'Ajuste de precio'
+	lineageTag: d8d24f5a-3767-508a-81b4-aa426207f76e
+
+	column 'Ajuste de precio %'
+		dataType: int64
+		formatString: +0;-0;0
+		lineageTag: fe398b14-5e8c-5d5a-bd81-3b3bec95b863
+		summarizeBy: none
+		sourceColumn: [Ajuste de precio %]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+	partition 'Ajuste de precio' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(-30, 30, 5), "Ajuste de precio %", [Value])
+
+	annotation PBI_Id = 1ab661109e285cc8a461

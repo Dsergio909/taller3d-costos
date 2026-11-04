@@ -1,0 +1,57 @@
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    name: Datos, costos, SQL, flujo y privacidad
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      # Sin dependencias: solo la librería estándar de Python (unittest, sqlite3, csv) y Node.
+      - name: Pruebas
+        run: python -m unittest discover -s pruebas -t pruebas -v
+
+  n8n:
+    name: n8n + Postgres con Docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Levantar n8n y Postgres
+        run: |
+          printf 'POSTGRES_PASSWORD=solo-para-ci\nN8N_VERSION=\n' > .env
+          mkdir -p registro && chmod 777 registro
+          docker compose up -d
+      - name: Esperar a que n8n responda
+        run: |
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost:5679/healthz && exit 0
+            sleep 3
+          done
+          docker compose logs n8n
+          exit 1
+      - name: Importar los flujos
+        run: |
+          docker compose exec -T n8n n8n import:workflow --input=/taller/flujos/aviso_errores.json
+          docker compose exec -T n8n n8n import:workflow --input=/taller/flujos/cotizacion.json
+          docker compose exec -T n8n n8n list:workflow | tee flujos.txt
+          grep -q "Cotización con aprobación" flujos.txt
+          grep -q "Aviso de errores" flujos.txt
+      - name: Apagar
+        if: always()
+        run: docker compose down -v

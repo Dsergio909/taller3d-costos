@@ -1,0 +1,71 @@
+table Detalle
+	lineageTag: 8c0f4830-a5a2-574b-8a8b-f259ba5e47ab
+
+	column id_pedido
+		dataType: string
+		isHidden
+		lineageTag: d21dfa27-d8a5-5437-8814-e4cd7b4d2680
+		summarizeBy: none
+		sourceColumn: id_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column linea
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c1ca5fae-cd8e-5ef6-aa40-bd2f70b16b03
+		summarizeBy: none
+		sourceColumn: linea
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_pieza
+		dataType: string
+		isHidden
+		lineageTag: f78806e9-eef8-5d95-9fe0-12d107579ef3
+		summarizeBy: none
+		sourceColumn: id_pieza
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f6854cc-046d-546d-b5fd-84eb940dc59c
+		summarizeBy: sum
+		sourceColumn: cantidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_unitario
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 4cb6e043-ddf9-5313-9aa9-55436df11773
+		summarizeBy: none
+		sourceColumn: precio_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+	column descuento_pct
+		dataType: double
+		formatString: 0%
+		lineageTag: 41b0bfa8-739b-59c4-ae25-914fae8d1731
+		summarizeBy: none
+		sourceColumn: descuento_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Detalle = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "pedido_detalle.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Cultura en-US: los CSV usan punto decimal y fechas AAAA-MM-DD
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"id_pedido", type text}, {"linea", Int64.Type}, {"id_pieza", type text}, {"cantidad", Int64.Type}, {"precio_unitario", type number}, {"descuento_pct", type number}}, "en-US"),
+				    SinMarca = Table.RemoveColumns(Tipos, {"origen_datos"})
+				in
+				    SinMarca
+
+	annotation PBI_ResultType = Table

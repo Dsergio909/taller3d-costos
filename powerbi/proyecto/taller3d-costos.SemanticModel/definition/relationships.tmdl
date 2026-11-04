@@ -1,0 +1,23 @@
+relationship 0a809c49-1cb4-5522-881c-e9689acf8faf
+	fromColumn: Detalle.id_pedido
+	toColumn: Pedidos.id_pedido
+
+relationship 19946b50-bd8b-5480-a582-9d07422e0e5d
+	fromColumn: Detalle.id_pieza
+	toColumn: Piezas.id_pieza
+
+relationship f202a52a-14ff-567a-9baa-8fd79c9c37ef
+	fromColumn: Pedidos.id_cliente
+	toColumn: Clientes.id_cliente
+
+relationship d41d2533-4cf8-5e40-912a-c39ea7fad038
+	fromColumn: Pedidos.canal
+	toColumn: Canales.canal
+
+relationship e54fe45f-d80d-5cb8-8924-b7d85a03c3d6
+	fromColumn: Pedidos.fecha
+	toColumn: Calendario.Fecha
+
+relationship 544c14b7-0c99-53f4-ba9d-94ae1db88350
+	fromColumn: Gastos.fecha
+	toColumn: Calendario.Fecha

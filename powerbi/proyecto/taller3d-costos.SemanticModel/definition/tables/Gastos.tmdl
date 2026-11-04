@@ -1,0 +1,60 @@
+table Gastos
+	lineageTag: 10e249c4-2ee6-5023-9d59-4158fbbdfd6d
+
+	column id_gasto
+		dataType: string
+		isHidden
+		lineageTag: bd219d8f-a6a5-5b9e-94c9-4e056987e7ce
+		summarizeBy: none
+		sourceColumn: id_gasto
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Short Date
+		isHidden
+		lineageTag: a34bc6a4-ed07-5dd8-8606-9c2cf3da10dc
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: bbd72359-cfbd-5160-923a-07a7c76b09fc
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column concepto
+		dataType: string
+		lineageTag: aa1aef3e-5973-5622-99d7-e19dbe7e0b41
+		summarizeBy: none
+		sourceColumn: concepto
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 2259abfa-857e-5ffc-b56c-ef9a2e03e33f
+		summarizeBy: sum
+		sourceColumn: valor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Gastos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "gastos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Cultura en-US: los CSV usan punto decimal y fechas AAAA-MM-DD
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"id_gasto", type text}, {"fecha", type date}, {"categoria", type text}, {"concepto", type text}, {"valor", type number}}, "en-US"),
+				    SinMarca = Table.RemoveColumns(Tipos, {"origen_datos"})
+				in
+				    SinMarca
+
+	annotation PBI_ResultType = Table

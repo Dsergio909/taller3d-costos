@@ -1,0 +1,247 @@
+table Medidas
+	lineageTag: 6ba8b8cd-a8ec-56ad-a27b-18dd1d6c9c45
+
+	/// Aviso que sale en cada página: dice si el tablero está leyendo datos ficticios o reales.
+	measure 'Origen de los datos' =
+			VAR reales = CALCULATE(COUNTROWS(Pedidos), Pedidos[origen_datos] <> "ficticio", REMOVEFILTERS())
+			RETURN IF(reales = 0, "Datos ficticios · taller de ejemplo", "DATOS REALES · no publicar")
+		displayFolder: Control
+		lineageTag: bc2062c4-fd6b-5a32-8aac-4613ef8ba7f7
+
+	/// Precio x cantidad menos el descuento, solo pedidos entregados.
+	measure 'Ventas netas' =
+			CALCULATE(
+			    SUMX(Detalle, Detalle[cantidad] * Detalle[precio_unitario] * (1 - Detalle[descuento_pct])),
+			    Pedidos[estado] = "Entregado"
+			)
+		formatString: \$#,0
+		displayFolder: Ventas
+		lineageTag: 37adf99e-37c3-59d1-a832-12aa9ca016ff
+
+	measure 'Unidades vendidas' = CALCULATE(SUM(Detalle[cantidad]), Pedidos[estado] = "Entregado")
+		formatString: #,0
+		displayFolder: Ventas
+		lineageTag: c5d09f9c-fa23-5882-9743-fc273ad810e1
+
+	/// Todos los pedidos, incluidos cancelados y devueltos.
+	measure Pedidos = COUNTROWS(Pedidos)
+		formatString: #,0
+		displayFolder: Ventas
+		lineageTag: 04c92a91-cb08-572f-a84a-ab1f6b67bd74
+
+	measure 'Pedidos entregados' = CALCULATE(COUNTROWS(Pedidos), Pedidos[estado] = "Entregado")
+		formatString: #,0
+		displayFolder: Ventas
+		lineageTag: 20fd68a0-4964-5b09-afb4-8bad5c7a2512
+
+	measure '% cancelados o devueltos' = DIVIDE([Pedidos] - [Pedidos entregados], [Pedidos])
+		formatString: 0.0%
+		displayFolder: Ventas
+		lineageTag: 673b0625-d006-5924-b35e-746eac2bdf70
+
+	/// Venta promedio por pedido entregado.
+	measure 'Ticket promedio' = DIVIDE([Ventas netas], [Pedidos entregados])
+		formatString: \$#,0
+		displayFolder: Ventas
+		lineageTag: 6ab050fe-5191-5bee-8891-161fb49672de
+
+	/// De los clientes con al menos un pedido entregado, cuántos compraron más de una vez.
+	measure 'Clientes que vuelven %' =
+			VAR porCliente = ADDCOLUMNS(VALUES(Pedidos[id_cliente]), "@n", CALCULATE(COUNTROWS(Pedidos), Pedidos[estado] = "Entregado"))
+			RETURN DIVIDE(COUNTROWS(FILTER(porCliente, [@n] > 1)), COUNTROWS(FILTER(porCliente, [@n] >= 1)))
+		formatString: 0.0%
+		displayFolder: Ventas
+		lineageTag: 384fa31c-f012-5207-89ee-27af4c51eb5a
+
+	/// Unidades vendidas x costo unitario de cada pieza (Power Query, consulta Piezas).
+	measure 'Costo de lo vendido' = CALCULATE(SUMX(Detalle, Detalle[cantidad] * RELATED(Piezas[Costo unitario])), Pedidos[estado] = "Entregado")
+		formatString: \$#,0
+		displayFolder: Ganancia
+		lineageTag: afd095c7-1b6d-5294-a503-86acf079515b
+
+	/// Lo que cobra cada canal (tienda de la plataforma o link de pago).
+	measure Comisiones =
+			CALCULATE(
+			    SUMX(Detalle, Detalle[cantidad] * Detalle[precio_unitario] * (1 - Detalle[descuento_pct]) * RELATED(Canales[comision_pct])),
+			    Pedidos[estado] = "Entregado"
+			)
+		formatString: \$#,0
+		displayFolder: Ganancia
+		lineageTag: f7847f2d-71bf-5d15-8133-11a329dd92d7
+
+	measure Ganancia = [Ventas netas] - [Costo de lo vendido] - [Comisiones]
+		formatString: \$#,0
+		displayFolder: Ganancia
+		lineageTag: 3de65386-2bd7-528f-9a48-2317a1ea49ee
+
+	measure 'Margen %' = DIVIDE([Ganancia], [Ventas netas])
+		formatString: 0.0%
+		displayFolder: Ganancia
+		lineageTag: 0901dd94-434a-51c4-9f5f-23791798ac15
+
+	measure 'Ventas sin comisión' = [Ventas netas] - [Comisiones]
+		formatString: \$#,0
+		displayFolder: Ganancia
+		lineageTag: a6994d14-1b4d-5e9a-86a7-c5284fe7d6f9
+
+	/// Lo que salió de la caja (compras de material, pauta, empaques, repuestos).
+	measure Gastos = SUM(Gastos[valor])
+		formatString: \$#,0
+		displayFolder: Gastos
+		lineageTag: b3573516-6a1c-5b64-b273-459f75a3628f
+
+	measure 'Gasto promedio por mes' = AVERAGEX(VALUES(Calendario[Mes clave]), [Gastos])
+		formatString: \$#,0
+		displayFolder: Gastos
+		lineageTag: 8dcad7f8-5994-5835-8447-281aac0af0ef
+
+	/// Ventas sin comisión menos gastos de caja del mes.
+	measure 'Resultado de caja' = [Ventas sin comisión] - [Gastos]
+		formatString: \$#,0
+		displayFolder: Gastos
+		lineageTag: 2d3ee12c-6686-5da3-86bf-30dbef764c06
+
+	measure Material = SUM(Piezas[Costo material])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 274b3da6-4d34-5771-88f6-bf97e7672734
+
+	/// Alcohol, guantes, papel y film FEP (resina) o pegante (FDM), repartidos en la placa.
+	measure Insumos = SUM(Piezas[Costo insumos])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 137abf63-1701-5e19-98ee-c3c31de00f86
+
+	measure Luz = SUM(Piezas[Costo energía])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 3a7d5c3e-a60d-50f0-a6b6-8e6fd79e9f4e
+
+	/// Desgaste y pago de la impresora por hora de uso.
+	measure 'Máquina' = SUM(Piezas[Costo máquina])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 0667cb50-f59c-501e-a4a0-bf6223580ac1
+
+	/// Preparar la placa (repartido) y el acabado de cada pieza.
+	measure 'Mano de obra' = SUM(Piezas[Costo mano de obra])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 3360a108-9894-59bb-a406-cbfc76f3023c
+
+	/// Lo que se pierde por placas que salen mal.
+	measure Fallas = SUM(Piezas[Costo fallas])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 60862f34-5135-55fc-b249-04715517091c
+
+	measure 'Costo por unidad' = SUM(Piezas[Costo unitario])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 1772c539-4a50-58f0-8aab-da66c788dc26
+
+	/// Qué parte del costo es trabajo (preparar y acabar).
+	measure '% mano de obra' = DIVIDE([Mano de obra], [Costo por unidad])
+		formatString: 0.0%
+		displayFolder: Costo por pieza
+		lineageTag: 06241a99-088a-5630-899b-1601e35910c9
+
+	/// Qué parte del costo es resina o filamento.
+	measure '% material' = DIVIDE([Material], [Costo por unidad])
+		formatString: 0.0%
+		displayFolder: Costo por pieza
+		lineageTag: fd583c41-49cd-5d1c-8f48-2a7a86dba70d
+
+	/// Promedio simple del catálogo.
+	measure 'Costo promedio' = AVERAGE(Piezas[Costo unitario])
+		formatString: \$#,0
+		displayFolder: Costo por pieza
+		lineageTag: 6bcf5d7a-6e1e-5b54-9b72-e3ef8222947a
+
+	measure 'Precio de lista' = AVERAGE(Piezas[precio_lista])
+		formatString: \$#,0
+		displayFolder: Precio
+		lineageTag: 2f1458bf-d904-5520-9cdc-807771f39146
+
+	measure 'Margen objetivo' = CALCULATE(MAX(Tarifas[valor]), Tarifas[parametro] = "margen_objetivo")
+		formatString: 0.0%
+		displayFolder: Precio
+		lineageTag: e6629ad8-53bd-5395-9c79-cce35ad06f4b
+
+	/// Margen de cada pieza a su precio de lista, después de la comisión del canal elegido en «Canal para precio» (sin canal: sin comisión).
+	measure 'Margen a precio de lista' =
+			VAR comision = SELECTEDVALUE('Canal para precio'[Comisión], 0)
+			RETURN DIVIDE(SUMX(Piezas, Piezas[precio_lista] * (1 - comision) - Piezas[Costo unitario]), SUM(Piezas[precio_lista]))
+		formatString: 0.0%
+		displayFolder: Precio
+		lineageTag: 9af92f9e-bc33-5f2c-b192-89ba046a5a54
+
+	/// Precio para ganar el margen objetivo después de la comisión, redondeado hacia arriba (igual que costeo.py).
+	measure 'Precio sugerido' =
+			VAR comision = SELECTEDVALUE('Canal para precio'[Comisión], 0)
+			VAR paso = CALCULATE(MAX(Tarifas[valor]), Tarifas[parametro] = "redondeo_precio")
+			VAR exacto = DIVIDE(SELECTEDVALUE(Piezas[Costo unitario]), 1 - [Margen objetivo] - comision)
+			RETURN IF(HASONEVALUE(Piezas[id_pieza]), CEILING(ROUND(exacto / paso, 9), 1) * paso)
+		formatString: \$#,0
+		displayFolder: Precio
+		lineageTag: 64b937d4-256d-57d7-aa54-7443def10680
+
+	measure 'Ajuste de precio' = SELECTEDVALUE('Ajuste de precio'[Ajuste de precio %], 0) / 100
+		formatString: +0%;-0%;0%
+		displayFolder: Qué pasa si
+		lineageTag: 1f543c7a-adeb-5864-9232-37044ff61599
+
+	measure 'Ajuste de cantidad' = SELECTEDVALUE('Ajuste de cantidad'[Ajuste de cantidad %], 0) / 100
+		formatString: +0%;-0%;0%
+		displayFolder: Qué pasa si
+		lineageTag: 4eb7d791-c803-5197-8ce9-156813f029ff
+
+	/// Ventas del año si el precio y la cantidad cambian según los dos parámetros.
+	measure 'Ventas con ajuste' =
+			VAR ap = [Ajuste de precio]
+			VAR ac = [Ajuste de cantidad]
+			RETURN CALCULATE(
+			    SUMX(Detalle, Detalle[cantidad] * (1 + ac) * Detalle[precio_unitario] * (1 - Detalle[descuento_pct]) * (1 + ap)),
+			    Pedidos[estado] = "Entregado"
+			)
+		formatString: \$#,0
+		displayFolder: Qué pasa si
+		lineageTag: 525b09f9-5c44-525b-9d7f-c9f90f7f2973
+
+	/// Misma cuenta de sql/07_que_pasa_si.sql.
+	measure 'Ganancia con ajuste' =
+			VAR ap = [Ajuste de precio]
+			VAR ac = [Ajuste de cantidad]
+			RETURN CALCULATE(
+			    SUMX(Detalle,
+			        Detalle[cantidad] * (1 + ac) * (
+			            Detalle[precio_unitario] * (1 - Detalle[descuento_pct]) * (1 + ap) * (1 - RELATED(Canales[comision_pct]))
+			            - RELATED(Piezas[Costo unitario])
+			        )
+			    ),
+			    Pedidos[estado] = "Entregado"
+			)
+		formatString: \$#,0
+		displayFolder: Qué pasa si
+		lineageTag: 7dc6fb9d-3264-5fb6-96fd-e0c9e6021163
+
+	measure 'Cambio en la ganancia' = [Ganancia con ajuste] - [Ganancia]
+		formatString: +\$#,0;-\$#,0;\$0
+		displayFolder: Qué pasa si
+		lineageTag: 854d64fe-3505-5caf-a2d8-b361d33e3a3a
+
+	measure 'Margen con ajuste %' = DIVIDE([Ganancia con ajuste], [Ventas con ajuste])
+		formatString: 0.0%
+		displayFolder: Qué pasa si
+		lineageTag: 9a30e41e-07f0-58e2-961f-7677625c874a
+
+	column Orden
+		dataType: int64
+		isHidden
+		lineageTag: 11b9f5b5-8041-58b4-9fd7-249e342be9fa
+		summarizeBy: none
+		sourceColumn: [Orden]
+
+	partition Medidas = calculated
+		mode: import
+		source = ROW("Orden", 1)

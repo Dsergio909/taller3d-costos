@@ -1,0 +1,23 @@
+table 'Canal para precio'
+	lineageTag: 8ae02e91-1fb8-50dc-978c-209d4efa06ee
+
+	column Canal
+		dataType: string
+		lineageTag: 52d55d45-d094-5825-9afe-b523f015b29e
+		summarizeBy: none
+		sourceColumn: [Canal]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Comisión'
+		dataType: double
+		formatString: 0%
+		lineageTag: 0fd58113-ded7-5d60-b6b9-0c6b021672b8
+		summarizeBy: none
+		sourceColumn: [Comisión]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Canal para precio' = calculated
+		mode: import
+		source = SELECTCOLUMNS(Canales, "Canal", Canales[canal], "Comisión", Canales[comision_pct])

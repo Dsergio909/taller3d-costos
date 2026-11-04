@@ -1,0 +1,6 @@
+/// Carpeta con los CSV. Cámbiala a la carpeta donde clonaste el repo (termina en \datos\).
+/// Para tus datos reales, apunta a ...\datos_reales\ (esa carpeta nunca se sube a GitHub).
+expression CarpetaDatos = "C:\Trabajo\taller3d-costos\datos\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 0721f05b-59ea-5824-8917-f826c3a5d3a9
+
+	annotation PBI_ResultType = Text

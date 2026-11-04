@@ -1,0 +1,178 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1544.5730089735275,
+            "y": 275.35199038017885
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "6ba8b8cd-a8ec-56ad-a27b-18dd1d6c9c45",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1828.5730089735275,
+            "y": 325.35199038017885
+          },
+          "nodeIndex": "Ajuste de cantidad",
+          "nodeLineageTag": "b30f835c-8639-55c1-a6d9-f43bba9bbce1",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2112.5730089735275,
+            "y": 325.35199038017885
+          },
+          "nodeIndex": "Ajuste de precio",
+          "nodeLineageTag": "d8d24f5a-3767-508a-81b4-aa426207f76e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 337.02672259510632,
+            "y": 406.59649450253596
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "144493e6-dcd8-5c7a-8d1a-a9f73e4f7fa9",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2396.5730089735275,
+            "y": 361.35199038017885
+          },
+          "nodeIndex": "Canal para precio",
+          "nodeLineageTag": "8ae02e91-1fb8-50dc-978c-209d4efa06ee",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 440.18364133054069,
+            "y": -50
+          },
+          "nodeIndex": "Canales",
+          "nodeLineageTag": "95383f14-b319-520b-b39b-39cc24816200",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1112.8722572818324,
+            "y": 104.43610656987869
+          },
+          "nodeIndex": "Clientes",
+          "nodeLineageTag": "4dba6dbd-eb88-5f29-ada9-f2f154ab537e",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 911.1882184157239,
+            "y": 283.43168730951618
+          },
+          "nodeIndex": "Detalle",
+          "nodeLineageTag": "8c0f4830-a5a2-574b-8a8b-f259ba5e47ab",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 600.70398076035769
+          },
+          "nodeIndex": "Gastos",
+          "nodeLineageTag": "10e249c4-2ee6-5023-9d59-4158fbbdfd6d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 624.08628246074284,
+            "y": 154.56237132889959
+          },
+          "nodeIndex": "Pedidos",
+          "nodeLineageTag": "d211a586-e1a2-5486-be8c-5acca001e489",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1310.5730089735275,
+            "y": 285.52616917297371
+          },
+          "nodeIndex": "Piezas",
+          "nodeLineageTag": "b6ef3e7f-d434-5d0f-ba6d-0fb8941d4bd0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2680.5730089735275,
+            "y": 325.35199038017885
+          },
+          "nodeIndex": "Tarifas",
+          "nodeLineageTag": "aeb8fe1a-90fe-5b78-8e9e-12fc866c3388",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

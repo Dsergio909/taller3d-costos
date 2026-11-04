@@ -1,0 +1,65 @@
+table Pedidos
+	lineageTag: d211a586-e1a2-5486-be8c-5acca001e489
+
+	column id_pedido
+		dataType: string
+		lineageTag: 1f12e351-6029-5090-bccd-f7538e302200
+		summarizeBy: none
+		sourceColumn: id_pedido
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 81cfe95d-971f-5b5d-9b06-5528fa9a0b53
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+	column canal
+		dataType: string
+		lineageTag: ad7e810d-1a54-50c3-b9f8-e7affe9813e8
+		summarizeBy: none
+		sourceColumn: canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_cliente
+		dataType: string
+		lineageTag: 92e145dc-1df7-55ee-b153-376afd9a8bdc
+		summarizeBy: none
+		sourceColumn: id_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado
+		dataType: string
+		lineageTag: c5f5f83d-3494-5f1e-bce1-2477d7475628
+		summarizeBy: none
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column origen_datos
+		dataType: string
+		isHidden
+		lineageTag: dcd7a3a4-569e-51e7-a32a-a64a0c26933c
+		summarizeBy: none
+		sourceColumn: origen_datos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Pedidos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "pedidos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Cultura en-US: los CSV usan punto decimal y fechas AAAA-MM-DD
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"id_pedido", type text}, {"fecha", type date}, {"canal", type text}, {"id_cliente", type text}, {"estado", type text}, {"origen_datos", type text}}, "en-US")
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table

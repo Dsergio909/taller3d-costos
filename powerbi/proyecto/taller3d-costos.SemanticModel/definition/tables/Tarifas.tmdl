@@ -1,0 +1,57 @@
+table Tarifas
+	isHidden
+	lineageTag: aeb8fe1a-90fe-5b78-8e9e-12fc866c3388
+
+	column parametro
+		dataType: string
+		lineageTag: f664e009-4bba-5f34-b51a-858ce26037c8
+		summarizeBy: none
+		sourceColumn: parametro
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor
+		dataType: double
+		lineageTag: 753b8186-bf13-53fa-bad4-30edf3e6072b
+		summarizeBy: none
+		sourceColumn: valor
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidad
+		dataType: string
+		lineageTag: 21a42264-9a09-5c53-8725-0c96c5a2c6cf
+		summarizeBy: none
+		sourceColumn: unidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column aplica_a
+		dataType: string
+		lineageTag: 58e0d019-9887-53b6-956e-a1baf5257bf9
+		summarizeBy: none
+		sourceColumn: aplica_a
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion
+		dataType: string
+		lineageTag: 1443b515-d116-5849-bae2-c922f51b2207
+		summarizeBy: none
+		sourceColumn: descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Tarifas = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "tarifas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Cultura en-US: los CSV usan punto decimal y fechas AAAA-MM-DD
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"parametro", type text}, {"valor", type number}, {"unidad", type text}, {"aplica_a", type text}, {"descripcion", type text}}, "en-US"),
+				    SinMarca = Table.RemoveColumns(Tipos, {"origen_datos"})
+				in
+				    SinMarca
+
+	annotation PBI_ResultType = Table

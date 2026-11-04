@@ -1,0 +1,32 @@
+table Clientes
+	lineageTag: 4dba6dbd-eb88-5f29-ada9-f2f154ab537e
+
+	column id_cliente
+		dataType: string
+		lineageTag: 92c48ff0-e334-5ad2-afb1-2af1ce4a480c
+		summarizeBy: none
+		sourceColumn: id_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciudad
+		dataType: string
+		lineageTag: 469c412d-d40e-56f0-81e2-7504a20083e1
+		summarizeBy: none
+		sourceColumn: ciudad
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Clientes = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "clientes.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Cultura en-US: los CSV usan punto decimal y fechas AAAA-MM-DD
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"id_cliente", type text}, {"ciudad", type text}}, "en-US"),
+				    SinMarca = Table.RemoveColumns(Tipos, {"origen_datos"})
+				in
+				    SinMarca
+
+	annotation PBI_ResultType = Table

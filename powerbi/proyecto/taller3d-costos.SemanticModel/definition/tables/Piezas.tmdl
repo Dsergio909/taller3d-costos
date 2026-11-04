@@ -1,0 +1,166 @@
+table Piezas
+	lineageTag: b6ef3e7f-d434-5d0f-ba6d-0fb8941d4bd0
+
+	column id_pieza
+		dataType: string
+		lineageTag: e20948eb-7ab4-5065-91ae-11df6c7ddd82
+		summarizeBy: none
+		sourceColumn: id_pieza
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre
+		dataType: string
+		lineageTag: 0ad6c07a-9721-543e-bd7a-31a07e6b62a2
+		summarizeBy: none
+		sourceColumn: nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 2fc8cc71-0395-579f-9349-83e41f408003
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column tecnologia
+		dataType: string
+		lineageTag: 2d620247-7fd2-5abd-8c5c-27342dade12a
+		summarizeBy: none
+		sourceColumn: tecnologia
+
+		annotation SummarizationSetBy = Automatic
+
+	column material_cantidad
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 532487c0-88b2-5abb-8d23-ade46a6651f1
+		summarizeBy: none
+		sourceColumn: material_cantidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column horas_placa
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 9358aa77-7a99-55e7-9ae7-022c800dfaf0
+		summarizeBy: none
+		sourceColumn: horas_placa
+
+		annotation SummarizationSetBy = Automatic
+
+	column piezas_por_placa
+		dataType: int64
+		formatString: 0
+		lineageTag: b34c20fc-f233-5576-926c-14c0e5ebe6af
+		summarizeBy: none
+		sourceColumn: piezas_por_placa
+
+		annotation SummarizationSetBy = Automatic
+
+	column minutos_acabado
+		dataType: double
+		formatString: 0
+		lineageTag: 3e942902-10f4-524f-9804-f91077d8de6a
+		summarizeBy: none
+		sourceColumn: minutos_acabado
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_lista
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 960041a6-1ada-5ef7-81d8-96faf7605259
+		summarizeBy: none
+		sourceColumn: precio_lista
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo material'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: bc4e0112-5888-5322-863a-9ec707e3ff4c
+		summarizeBy: sum
+		sourceColumn: Costo material
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo insumos'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 826c433b-41c7-5250-a513-894baaeb3027
+		summarizeBy: sum
+		sourceColumn: Costo insumos
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo energía'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: a19db43e-05e5-5ccd-bc69-3cdcd303dce4
+		summarizeBy: sum
+		sourceColumn: Costo energía
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo máquina'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 2d31dc34-ace5-5be7-89d4-75ef6c9f9d4f
+		summarizeBy: sum
+		sourceColumn: Costo máquina
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo mano de obra'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 78eec27e-9280-5029-ab70-03f24995cc46
+		summarizeBy: sum
+		sourceColumn: Costo mano de obra
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo fallas'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: a0c03b8c-e65f-59e1-9d48-737a9c89c17c
+		summarizeBy: sum
+		sourceColumn: Costo fallas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Costo unitario'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: a1b51f86-93ef-5d35-b773-d3c587798209
+		summarizeBy: sum
+		sourceColumn: Costo unitario
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Piezas = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "piezas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Encabezados = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    // Los CSV usan punto decimal: se leen con cultura en-US para que 0.3 no se vuelva 3
+				    Tipos = Table.TransformColumnTypes(Encabezados, {{"material_cantidad", type number}, {"horas_placa", type number}, {"piezas_por_placa", Int64.Type}, {"minutos_acabado", type number}, {"precio_lista", type number}}, "en-US"),
+				    T = Record.FromList(Tarifas[valor], Tarifas[parametro]),
+				    EsResina = (fila) => fila[tecnologia] = "Resina",
+				    Material = Table.AddColumn(Tipos, "Costo material", each if EsResina(_) then [material_cantidad] * (1 + T[resina_soportes_pct]) * T[resina_precio_litro] / 1000 else [material_cantidad] * (1 + T[fdm_purga_pct]) * T[filamento_precio_kg] / 1000, type number),
+				    Insumos = Table.AddColumn(Material, "Costo insumos", each (if EsResina(_) then T[alcohol_ml_por_placa] * T[alcohol_precio_litro] / 1000 + T[guantes_pares_por_placa] * T[guantes_precio_par] + T[papel_por_placa] + T[fep_precio] / T[fep_placas_vida] else T[fdm_insumos_por_placa]) / [piezas_por_placa], type number),
+				    Energia = Table.AddColumn(Insumos, "Costo energía", each [horas_placa] * (if EsResina(_) then T[resina_potencia_w] else T[fdm_potencia_w]) / 1000 * T[energia_precio_kwh] / [piezas_por_placa], type number),
+				    Maquina = Table.AddColumn(Energia, "Costo máquina", each [horas_placa] * (if EsResina(_) then T[resina_maquina_hora] else T[fdm_maquina_hora]) / [piezas_por_placa], type number),
+				    ManoObra = Table.AddColumn(Maquina, "Costo mano de obra", each (T[preparacion_min_por_placa] / [piezas_por_placa] + [minutos_acabado]) / 60 * T[mano_obra_hora], type number),
+				    Base = (f) => f[Costo material] + f[Costo insumos] + f[Costo energía] + f[Costo máquina] + f[Costo mano de obra],
+				    Fallas = Table.AddColumn(ManoObra, "Costo fallas", each Base(_) * (if EsResina(_) then T[resina_tasa_fallas] else T[fdm_tasa_fallas]), type number),
+				    Total = Table.AddColumn(Fallas, "Costo unitario", each Base(_) + [Costo fallas], type number),
+				    SinMarca = Table.RemoveColumns(Total, {"origen_datos"})
+				in
+				    SinMarca
+
+	annotation PBI_ResultType = Table

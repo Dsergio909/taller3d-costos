@@ -1,0 +1,20 @@
+table 'Ajuste de cantidad'
+	lineageTag: b30f835c-8639-55c1-a6d9-f43bba9bbce1
+
+	column 'Ajuste de cantidad %'
+		dataType: int64
+		formatString: +0;-0;0
+		lineageTag: 05f82b7c-90fd-579d-a7aa-fb41c404c237
+		summarizeBy: none
+		sourceColumn: [Ajuste de cantidad %]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+	partition 'Ajuste de cantidad' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(-30, 30, 5), "Ajuste de cantidad %", [Value])
+
+	annotation PBI_Id = 09a592903f5e5c6ab7ac

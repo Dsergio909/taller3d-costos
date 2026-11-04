@@ -1,0 +1,66 @@
+{
+  "name": "Taller3D",
+  "dataColors": [
+    "#1a5fb4",
+    "#8fb1dd",
+    "#3e4c59",
+    "#c3ccd5",
+    "#0f3a6e",
+    "#7b8794",
+    "#dbe6f3",
+    "#52606d"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1f2933",
+  "tableAccent": "#1a5fb4",
+  "good": "#2f7d5b",
+  "neutral": "#7b8794",
+  "bad": "#b3261e",
+  "textClasses": {
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 22,
+      "color": "#1f2933"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 11,
+      "color": "#1f2933"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 11,
+      "color": "#1f2933"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#52606d"
+    }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#f5f7f9"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#f5f7f9"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

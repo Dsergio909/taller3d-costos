@@ -1,0 +1,28 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["CarpetaDatos","Tarifas","Canales","Clientes","Pedidos","Detalle","Gastos","Piezas"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Tarifas
+ref table Canales
+ref table Clientes
+ref table Pedidos
+ref table Detalle
+ref table Gastos
+ref table Piezas
+ref table Calendario
+ref table 'Ajuste de precio'
+ref table 'Ajuste de cantidad'
+ref table 'Canal para precio'
+ref table Medidas
+
+ref cultureInfo es-ES

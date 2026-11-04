@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "taller3d-costos"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b3b066a6-587d-5482-94a8-d41f4142045e"
+  }
+}

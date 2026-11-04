@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "d71e22dd2b185a7290b2",
+  "displayName": "Gastos por mes",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280
+}
