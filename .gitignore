@@ -1,0 +1,20 @@
+# Datos reales del taller: NUNCA se suben
+datos_reales/
+
+# Registro de cotizaciones y errores del flujo (tiene nombres de clientes)
+registro/
+
+# Claves y datos locales de n8n
+.env
+.n8n_local/
+
+# Python y sistema
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Power BI: archivos temporales y caché del proyecto
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/cache.abf
+*.pbix.bak

@@ -1,0 +1,25 @@
+parametro,valor,unidad,aplica_a,descripcion,origen_datos
+resina_precio_litro,150000,COP/L,Resina,Precio de la resina estándar,ficticio
+resina_soportes_pct,0.3,fracción,Resina,Resina extra que se va en soportes y base,ficticio
+alcohol_ml_por_placa,150,ml,Resina,Alcohol isopropílico que se gasta lavando una placa,ficticio
+alcohol_precio_litro,40000,COP/L,Resina,Precio del alcohol isopropílico,ficticio
+guantes_pares_por_placa,2,pares,Resina,Guantes de nitrilo por placa,ficticio
+guantes_precio_par,1000,COP/par,Resina,Precio de un par de guantes,ficticio
+papel_por_placa,1000,COP,Resina,Toallas de papel y filtros por placa,ficticio
+fep_precio,60000,COP,Resina,Film FEP de repuesto de la cuba,ficticio
+fep_placas_vida,60,placas,Resina,Placas que dura un film FEP,ficticio
+resina_potencia_w,100,W,Resina,Consumo promedio de la impresora de resina,ficticio
+resina_maquina_hora,400,COP/h,Resina,Desgaste y pago de la impresora por hora de uso,ficticio
+resina_tasa_fallas,0.1,fracción,Resina,"De cada 10 placas, 1 sale mal",ficticio
+filamento_precio_kg,100000,COP/kg,FDM,Precio del filamento PLA,ficticio
+fdm_purga_pct,0.1,fracción,FDM,Filamento que se va en purga y torre al cambiar color,ficticio
+fdm_insumos_por_placa,500,COP,FDM,Pegante de placa y limpieza,ficticio
+fdm_potencia_w,150,W,FDM,Consumo promedio de la impresora FDM,ficticio
+fdm_maquina_hora,500,COP/h,FDM,"Desgaste (boquilla, placa) y pago de la impresora por hora",ficticio
+fdm_tasa_fallas,0.05,fracción,FDM,"De cada 20 placas, 1 sale mal",ficticio
+energia_precio_kwh,1000,COP/kWh,Ambas,Tarifa de la luz,ficticio
+mano_obra_hora,15000,COP/h,Ambas,Valor de una hora de trabajo,ficticio
+preparacion_min_por_placa,15,min,Ambas,"Rebanar, cargar y retirar una placa",ficticio
+minutos_acabado_a_medida,30,min,Ambas,Acabado de una pieza a medida (cotizador de n8n),ficticio
+margen_objetivo,0.4,fracción,Ambas,Margen que se quiere ganar sobre el precio,ficticio
+redondeo_precio,500,COP,Ambas,El precio sugerido se redondea hacia arriba a este múltiplo,ficticio

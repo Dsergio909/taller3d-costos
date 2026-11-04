@@ -1,0 +1,78 @@
+id_gasto,fecha,categoria,concepto,valor,origen_datos
+GAS-001,2025-01-03,Materiales,Resina,150000,ficticio
+GAS-002,2025-01-03,Materiales,Filamento,200000,ficticio
+GAS-003,2025-01-10,Insumos,"Alcohol, guantes y papel",36000,ficticio
+GAS-004,2025-01-20,Energía,Luz de las impresoras,9000,ficticio
+GAS-005,2025-01-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-006,2025-01-25,Empaques,"Bolsas, cajas y etiquetas",42000,ficticio
+GAS-007,2025-02-03,Materiales,Resina,150000,ficticio
+GAS-008,2025-02-03,Materiales,Filamento,200000,ficticio
+GAS-009,2025-02-10,Insumos,"Alcohol, guantes y papel",27000,ficticio
+GAS-010,2025-02-20,Energía,Luz de las impresoras,8000,ficticio
+GAS-011,2025-02-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-012,2025-02-25,Empaques,"Bolsas, cajas y etiquetas",46500,ficticio
+GAS-013,2025-03-03,Materiales,Resina,150000,ficticio
+GAS-014,2025-03-03,Materiales,Filamento,200000,ficticio
+GAS-015,2025-03-10,Insumos,"Alcohol, guantes y papel",45000,ficticio
+GAS-016,2025-03-20,Energía,Luz de las impresoras,8000,ficticio
+GAS-017,2025-03-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-018,2025-03-25,Empaques,"Bolsas, cajas y etiquetas",54000,ficticio
+GAS-019,2025-03-08,Herramientas,Lámpara de curado,120000,ficticio
+GAS-020,2025-04-03,Materiales,Resina,150000,ficticio
+GAS-021,2025-04-03,Materiales,Filamento,300000,ficticio
+GAS-022,2025-04-10,Insumos,"Alcohol, guantes y papel",27000,ficticio
+GAS-023,2025-04-20,Energía,Luz de las impresoras,14000,ficticio
+GAS-024,2025-04-15,Repuestos,Boquilla y placa FDM,80000,ficticio
+GAS-025,2025-04-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-026,2025-04-25,Empaques,"Bolsas, cajas y etiquetas",51000,ficticio
+GAS-027,2025-05-03,Materiales,Resina,150000,ficticio
+GAS-028,2025-05-03,Materiales,Filamento,300000,ficticio
+GAS-029,2025-05-10,Insumos,"Alcohol, guantes y papel",72000,ficticio
+GAS-030,2025-05-20,Energía,Luz de las impresoras,18000,ficticio
+GAS-031,2025-05-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-032,2025-05-25,Empaques,"Bolsas, cajas y etiquetas",73500,ficticio
+GAS-033,2025-06-03,Materiales,Resina,150000,ficticio
+GAS-034,2025-06-03,Materiales,Filamento,300000,ficticio
+GAS-035,2025-06-10,Insumos,"Alcohol, guantes y papel",45000,ficticio
+GAS-036,2025-06-20,Energía,Luz de las impresoras,17000,ficticio
+GAS-037,2025-06-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-038,2025-06-25,Empaques,"Bolsas, cajas y etiquetas",60000,ficticio
+GAS-039,2025-07-03,Materiales,Resina,150000,ficticio
+GAS-040,2025-07-03,Materiales,Filamento,300000,ficticio
+GAS-041,2025-07-10,Insumos,"Alcohol, guantes y papel",72000,ficticio
+GAS-042,2025-07-20,Energía,Luz de las impresoras,21000,ficticio
+GAS-043,2025-07-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-044,2025-07-25,Empaques,"Bolsas, cajas y etiquetas",60000,ficticio
+GAS-045,2025-08-03,Materiales,Resina,150000,ficticio
+GAS-046,2025-08-03,Materiales,Filamento,200000,ficticio
+GAS-047,2025-08-10,Insumos,"Alcohol, guantes y papel",45000,ficticio
+GAS-048,2025-08-20,Energía,Luz de las impresoras,15000,ficticio
+GAS-049,2025-08-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-050,2025-08-25,Empaques,"Bolsas, cajas y etiquetas",61500,ficticio
+GAS-051,2025-08-08,Herramientas,Alicates y espátulas,60000,ficticio
+GAS-052,2025-09-03,Materiales,Resina,150000,ficticio
+GAS-053,2025-09-03,Materiales,Filamento,200000,ficticio
+GAS-054,2025-09-10,Insumos,"Alcohol, guantes y papel",45000,ficticio
+GAS-055,2025-09-20,Energía,Luz de las impresoras,12000,ficticio
+GAS-056,2025-09-15,Repuestos,Boquilla y placa FDM,80000,ficticio
+GAS-057,2025-09-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-058,2025-09-25,Empaques,"Bolsas, cajas y etiquetas",64500,ficticio
+GAS-059,2025-10-03,Materiales,Resina,300000,ficticio
+GAS-060,2025-10-03,Materiales,Filamento,300000,ficticio
+GAS-061,2025-10-10,Insumos,"Alcohol, guantes y papel",126000,ficticio
+GAS-062,2025-10-20,Energía,Luz de las impresoras,23000,ficticio
+GAS-063,2025-10-01,Publicidad,Pauta en redes,150000,ficticio
+GAS-064,2025-10-25,Empaques,"Bolsas, cajas y etiquetas",73500,ficticio
+GAS-065,2025-11-03,Materiales,Resina,150000,ficticio
+GAS-066,2025-11-03,Materiales,Filamento,300000,ficticio
+GAS-067,2025-11-10,Insumos,"Alcohol, guantes y papel",54000,ficticio
+GAS-068,2025-11-20,Energía,Luz de las impresoras,19000,ficticio
+GAS-069,2025-11-01,Publicidad,Pauta en redes,400000,ficticio
+GAS-070,2025-11-25,Empaques,"Bolsas, cajas y etiquetas",81000,ficticio
+GAS-071,2025-12-03,Materiales,Resina,150000,ficticio
+GAS-072,2025-12-03,Materiales,Filamento,500000,ficticio
+GAS-073,2025-12-10,Insumos,"Alcohol, guantes y papel",99000,ficticio
+GAS-074,2025-12-20,Energía,Luz de las impresoras,34000,ficticio
+GAS-075,2025-12-15,Repuestos,Film FEP,60000,ficticio
+GAS-076,2025-12-01,Publicidad,Pauta en redes,400000,ficticio
+GAS-077,2025-12-25,Empaques,"Bolsas, cajas y etiquetas",114000,ficticio

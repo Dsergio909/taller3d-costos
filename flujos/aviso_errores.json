@@ -1,0 +1,112 @@
+{
+  "id": "taller3dErrores1",
+  "name": "Taller 3D · Aviso de errores",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7caa7540-f67d-53ed-aa01-26416d7abd50",
+      "name": "Cuando falla una corrida",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Toma el error de cualquier corrida y lo deja en registro/errores.csv.\nconst e = $input.first().json;\nconst r = { fecha_hora: new Date().toISOString(), flujo: e.workflow?.name || '',\n  id_ejecucion: e.execution?.id || '', nodo: e.execution?.lastNodeExecuted || '',\n  mensaje: (e.execution?.error?.message || 'Error sin mensaje').slice(0, 300) };\nconst esc = (v) => { const s = v === undefined || v === null ? '' : String(v);\n  return /[\",\\n\\r]/.test(s) ? '\"' + s.replace(/\"/g, '\"\"') + '\"' : s; };\nconst linea = [\"fecha_hora\", \"flujo\", \"id_ejecucion\", \"nodo\", \"mensaje\"].map((c) => esc(r[c])).join(',') + '\\n';\nreturn [{ json: { ...r, linea } }];\n"
+      },
+      "id": "5481a7fd-08ec-5c32-b2cb-d1a9eae8aa9a",
+      "name": "Armar línea de error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "linea",
+        "options": {
+          "fileName": "linea.csv"
+        }
+      },
+      "id": "513ad22c-d025-5797-bcf6-84373d9255d7",
+      "name": "Error: a archivo",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "registro/errores.csv",
+        "dataPropertyName": "data",
+        "options": {
+          "append": true
+        }
+      },
+      "id": "3a7354c6-8f66-539b-990f-e52a66f63275",
+      "name": "Error: guardar",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        660,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    }
+  ],
+  "connections": {
+    "Cuando falla una corrida": {
+      "main": [
+        [
+          {
+            "node": "Armar línea de error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar línea de error": {
+      "main": [
+        [
+          {
+            "node": "Error: a archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error: a archivo": {
+      "main": [
+        [
+          {
+            "node": "Error: guardar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "active": false,
+  "tags": [],
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

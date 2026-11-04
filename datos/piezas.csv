@@ -1,0 +1,18 @@
+id_pieza,nombre,categoria,tecnologia,material_cantidad,horas_placa,piezas_por_placa,minutos_acabado,precio_lista,origen_datos
+R01,Ficha de juego,Juegos,Resina,1.2,1.5,40,3,6000,ficticio
+R02,Aretes (par),Accesorios,Resina,1,1,30,5,15000,ficticio
+R03,Miniatura 32 mm,Figuras,Resina,6,2.5,12,10,25000,ficticio
+R04,Figura 10 cm,Figuras,Resina,45,5,2,40,90000,ficticio
+R05,Busto 12 cm,Figuras,Resina,80,6,1,60,120000,ficticio
+R06,Dije,Accesorios,Resina,2,1.2,25,5,12000,ficticio
+R07,Anillo,Accesorios,Resina,1.5,1,20,5,18000,ficticio
+R08,Llavero detallado,Llaveros,Resina,4,1.5,15,8,14000,ficticio
+F01,Llavero,Llaveros,FDM,6,1.5,12,2,8000,ficticio
+F02,Maceta pequeña,Hogar,FDM,60,3,2,5,25000,ficticio
+F03,Soporte de celular,Escritorio,FDM,35,2,2,3,18000,ficticio
+F04,Organizador de escritorio,Escritorio,FDM,150,6,1,5,45000,ficticio
+F05,Lámpara (base),Hogar,FDM,120,7,1,20,70000,ficticio
+F06,Figura multicolor,Figuras,FDM,50,4,1,10,30000,ficticio
+F07,Imán de nevera,Hogar,FDM,8,2,16,2,6000,ficticio
+F08,Repuesto a medida,A medida,FDM,25,1.5,1,30,20000,ficticio
+F09,Caja con tapa,Hogar,FDM,90,5,1,5,35000,ficticio

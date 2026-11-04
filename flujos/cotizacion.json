@@ -1,0 +1,710 @@
+{
+  "id": "taller3dCotizar1",
+  "name": "Taller 3D · Cotización con aprobación",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Pide tu cotización",
+        "formDescription": "Taller de impresión 3D (ejemplo con datos ficticios). Te respondemos con el precio exacto.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tu nombre o usuario",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Canal",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "TikTok"
+                  },
+                  {
+                    "option": "Instagram"
+                  },
+                  {
+                    "option": "WhatsApp"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Pieza",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "R01 · Ficha de juego"
+                  },
+                  {
+                    "option": "R02 · Aretes (par)"
+                  },
+                  {
+                    "option": "R03 · Miniatura 32 mm"
+                  },
+                  {
+                    "option": "R04 · Figura 10 cm"
+                  },
+                  {
+                    "option": "R05 · Busto 12 cm"
+                  },
+                  {
+                    "option": "R06 · Dije"
+                  },
+                  {
+                    "option": "R07 · Anillo"
+                  },
+                  {
+                    "option": "R08 · Llavero detallado"
+                  },
+                  {
+                    "option": "F01 · Llavero"
+                  },
+                  {
+                    "option": "F02 · Maceta pequeña"
+                  },
+                  {
+                    "option": "F03 · Soporte de celular"
+                  },
+                  {
+                    "option": "F04 · Organizador de escritorio"
+                  },
+                  {
+                    "option": "F05 · Lámpara (base)"
+                  },
+                  {
+                    "option": "F06 · Figura multicolor"
+                  },
+                  {
+                    "option": "F07 · Imán de nevera"
+                  },
+                  {
+                    "option": "F08 · Repuesto a medida"
+                  },
+                  {
+                    "option": "F09 · Caja con tapa"
+                  },
+                  {
+                    "option": "A medida"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Cantidad",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Tecnología (solo a medida)",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Resina"
+                  },
+                  {
+                    "option": "FDM"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Gramos o ml (solo a medida)",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Horas de impresión (solo a medida)",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Comentario",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "responseMode": "onReceived",
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Listo, recibimos tu pedido. Te respondemos con el precio pronto."
+            }
+          }
+        }
+      },
+      "id": "4deddd4d-f059-54d6-b3e0-fcd656eb74b6",
+      "name": "Pedido por formulario",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "0d8c5040-4f8d-5707-84d0-2e045924556b"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cotizar-taller3d",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "e9549a85-e703-5b05-a51a-d311aba78dcf",
+      "name": "Pedido por webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        200
+      ],
+      "webhookId": "0470d64e-ab49-5b3f-8387-c504175028c9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Deja el pedido igual venga del formulario o del webhook.\nconst e = $input.first().json;\nconst cuerpo = e.body || e;              // el webhook trae los datos en body\nconst deFormulario = 'Pieza' in cuerpo;\nconst pieza = deFormulario ? String(cuerpo['Pieza']).split(' · ')[0] : cuerpo.id_pieza;\nconst num = (v) => (v === undefined || v === null || v === '' ? null : Number(v));\nreturn [{ json: {\n  origen: deFormulario ? 'formulario' : 'webhook',\n  recibido_en: new Date().toISOString(),\n  cliente: String(deFormulario ? cuerpo['Tu nombre o usuario'] : cuerpo.nombre || '').trim().slice(0, 60),\n  canal: deFormulario ? cuerpo['Canal'] : cuerpo.canal,\n  id_pieza: pieza,\n  cantidad: num(deFormulario ? cuerpo['Cantidad'] : cuerpo.cantidad),\n  a_medida: {\n    tecnologia: deFormulario ? cuerpo['Tecnología (solo a medida)'] : cuerpo.tecnologia,\n    material_cantidad: num(deFormulario ? cuerpo['Gramos o ml (solo a medida)'] : cuerpo.material_cantidad),\n    horas_placa: num(deFormulario ? cuerpo['Horas de impresión (solo a medida)'] : cuerpo.horas_placa),\n  },\n  comentario: String((deFormulario ? cuerpo['Comentario'] : cuerpo.comentario) || '').slice(0, 300),\n} }];\n"
+      },
+      "id": "2c76fd8d-575e-57a0-aac6-a8023620f695",
+      "name": "Normalizar pedido",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f28c678f-5bbd-57f0-a057-6d1870baa575",
+              "name": "carpeta_datos",
+              "value": "datos",
+              "type": "string"
+            },
+            {
+              "id": "0b16b03b-eed0-5160-9f5d-c7f989cd5e98",
+              "name": "carpeta_registro",
+              "value": "registro",
+              "type": "string"
+            },
+            {
+              "id": "93c38b82-498d-5016-b380-01c2872bb053",
+              "name": "ollama_url",
+              "value": "http://localhost:11434",
+              "type": "string"
+            },
+            {
+              "id": "f25484c3-6c3c-5b00-b972-20b740499db3",
+              "name": "modelo",
+              "value": "qwen3.5:4b",
+              "type": "string"
+            },
+            {
+              "id": "ff9b0c39-62af-54ff-a192-2a0614be5b1b",
+              "name": "dias_entrega",
+              "value": "5",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "457c3500-c61a-5173-9cfc-986cfe01ca69",
+      "name": "Configuración",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.carpeta_datos }}/{tarifas,piezas,canales}.csv",
+        "options": {}
+      },
+      "id": "1f2ec70b-e49e-56bb-a430-47e2a458becc",
+      "name": "Leer tarifas y catálogo",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        660,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "fc44b222-3048-5038-a09c-4330a9bbcf79",
+      "name": "CSV a filas",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Costeo de una pieza impresa en 3D: la misma fórmula de scripts/costeo.py.\n// Este código va dentro del nodo «Calcular cotización» del flujo de n8n\n// (scripts/armar_flujo.py lo copia tal cual) y las pruebas lo comparan con Python y SQL.\n\nfunction leerCsv(texto) {\n  // CSV sencillo con comillas dobles (como los que escribe Python).\n  const filas = [];\n  let fila = [], campo = '', comillas = false;\n  const t = texto.replace(/^﻿/, '');\n  for (let i = 0; i < t.length; i++) {\n    const c = t[i];\n    if (comillas) {\n      if (c === '\"' && t[i + 1] === '\"') { campo += '\"'; i++; }\n      else if (c === '\"') comillas = false;\n      else campo += c;\n    } else if (c === '\"') comillas = true;\n    else if (c === ',') { fila.push(campo); campo = ''; }\n    else if (c === '\\n' || c === '\\r') {\n      if (c === '\\r' && t[i + 1] === '\\n') i++;\n      fila.push(campo); campo = '';\n      if (fila.length > 1 || fila[0] !== '') filas.push(fila);\n      fila = [];\n    } else campo += c;\n  }\n  if (campo !== '' || fila.length) { fila.push(campo); filas.push(fila); }\n  const [encabezado, ...resto] = filas;\n  return resto.map((f) => Object.fromEntries(encabezado.map((h, i) => [h, f[i]])));\n}\n\nfunction tablaTarifas(filas) {\n  const t = {};\n  for (const f of filas) t[f.parametro] = Number(f.valor);\n  return t;\n}\n\nfunction costoUnitario(pieza, t) {\n  const cantidad = Number(pieza.material_cantidad);\n  const horas = Number(pieza.horas_placa);\n  const ppp = Number(pieza.piezas_por_placa);\n  const acabado = Number(pieza.minutos_acabado);\n  if (!(ppp > 0) || !(cantidad >= 0) || !(horas >= 0) || !(acabado >= 0)) {\n    throw new Error('Datos de la pieza fuera de rango');\n  }\n  let material, insumosPlaca, potencia, maquinaHora, tasa;\n  if (pieza.tecnologia === 'Resina') {\n    material = cantidad * (1 + t.resina_soportes_pct) * t.resina_precio_litro / 1000;\n    insumosPlaca = t.alcohol_ml_por_placa * t.alcohol_precio_litro / 1000\n      + t.guantes_pares_por_placa * t.guantes_precio_par\n      + t.papel_por_placa\n      + t.fep_precio / t.fep_placas_vida;\n    [potencia, maquinaHora, tasa] = [t.resina_potencia_w, t.resina_maquina_hora, t.resina_tasa_fallas];\n  } else if (pieza.tecnologia === 'FDM') {\n    material = cantidad * (1 + t.fdm_purga_pct) * t.filamento_precio_kg / 1000;\n    insumosPlaca = t.fdm_insumos_por_placa;\n    [potencia, maquinaHora, tasa] = [t.fdm_potencia_w, t.fdm_maquina_hora, t.fdm_tasa_fallas];\n  } else {\n    throw new Error('Tecnología desconocida: ' + pieza.tecnologia);\n  }\n  const insumos = insumosPlaca / ppp;\n  const energia = horas * potencia / 1000 * t.energia_precio_kwh / ppp;\n  const maquina = horas * maquinaHora / ppp;\n  const manoObra = (t.preparacion_min_por_placa / ppp + acabado) / 60 * t.mano_obra_hora;\n  const base = material + insumos + energia + maquina + manoObra;\n  const fallas = base * tasa;\n  return {\n    material, insumos, energia, maquina, mano_obra: manoObra, fallas,\n    costo_total: material + insumos + energia + maquina + manoObra + fallas,\n  };\n}\n\nfunction precioSugerido(costo, t, comision) {\n  const divisor = 1 - t.margen_objetivo - (comision || 0);\n  if (divisor <= 0) throw new Error('Margen más comisión no pueden sumar 100 % o más');\n  const paso = t.redondeo_precio;\n  // Se quita el ruido de coma flotante antes del techo (igual efecto que en Python).\n  return Math.ceil(Number((costo / divisor / paso).toFixed(9))) * paso;\n}\n\nfunction cotizar(pieza, cantidad, canal, t, canales) {\n  if (!Number.isInteger(cantidad) || cantidad < 1) throw new Error('La cantidad debe ser un entero mayor que cero');\n  if (!(canal in canales)) throw new Error('Canal desconocido: ' + canal);\n  const c = costoUnitario(pieza, t);\n  const comision = canales[canal];\n  const precioUnitario = precioSugerido(c.costo_total, t, comision);\n  const total = precioUnitario * cantidad;\n  const costoTotal = c.costo_total * cantidad;\n  const comisionValor = total * comision;\n  return {\n    costo_unitario: c.costo_total,\n    precio_unitario: precioUnitario,\n    cantidad,\n    total,\n    comision: comisionValor,\n    ganancia: total - costoTotal - comisionValor,\n    margen_pct: (total - costoTotal - comisionValor) / total,\n  };\n}\n\nif (typeof module !== 'undefined') {\n  module.exports = { leerCsv, tablaTarifas, costoUnitario, precioSugerido, cotizar };\n}\n\n// ---------------------------------------------------------------------------\n// Pegamento de n8n: junta las filas de los 3 CSV y calcula la cotización.\nconst pedido = $('Configuración').first().json;\nconst filas = $input.all().map((i) => i.json);\nconst tarifas = tablaTarifas(filas.filter((f) => 'parametro' in f));\nconst catalogo = filas.filter((f) => 'id_pieza' in f && 'tecnologia' in f);\nconst canales = Object.fromEntries(filas.filter((f) => 'comision_pct' in f).map((f) => [f.canal, Number(f.comision_pct)]));\nconst origenDatos = filas.length && filas.every((f) => f.origen_datos === 'ficticio') ? 'ficticio' : 'real';\n\nconst fallo = (motivo) => [{ json: { ...pedido, ok: false, motivo, origen_datos: origenDatos } }];\nif (!tarifas.margen_objetivo || !catalogo.length || !Object.keys(canales).length) {\n  throw new Error('No se pudieron leer tarifas.csv, piezas.csv o canales.csv');\n}\n\nlet pieza;\nif (pedido.id_pieza === 'A medida') {\n  const m = pedido.a_medida || {};\n  if (!['Resina', 'FDM'].includes(m.tecnologia)) return fallo('Pieza a medida sin tecnología');\n  if (!(m.material_cantidad > 0) || !(m.horas_placa > 0)) return fallo('Pieza a medida sin gramos/ml u horas');\n  if (m.material_cantidad > 2000 || m.horas_placa > 72) return fallo('Pieza a medida fuera de rango: revisar a mano');\n  pieza = { id_pieza: 'MEDIDA', nombre: 'Pieza a medida', tecnologia: m.tecnologia,\n    material_cantidad: m.material_cantidad, horas_placa: m.horas_placa, piezas_por_placa: 1,\n    minutos_acabado: tarifas.minutos_acabado_a_medida };\n} else {\n  pieza = catalogo.find((p) => p.id_pieza === pedido.id_pieza);\n  if (!pieza) return fallo('La pieza no está en el catálogo');\n}\nif (!Number.isInteger(pedido.cantidad) || pedido.cantidad < 1 || pedido.cantidad > 500) {\n  return fallo('Cantidad inválida (debe ser un entero entre 1 y 500)');\n}\nif (!(pedido.canal in canales)) return fallo('Canal desconocido');\n\nconst cot = cotizar(pieza, pedido.cantidad, pedido.canal, tarifas, canales);\nconst pesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');\nconst dias = Number(pedido.dias_entrega);\nconst prompt = [\n  'Atiendes un taller de impresión 3D en Colombia. Escribe la respuesta para ' + (pedido.cliente || 'el cliente') + ', que escribió por ' + pedido.canal + '.',\n  'Usa SOLO estas cifras, tal cual, sin agregar otras:',\n  '- Pieza: ' + pieza.nombre,\n  '- Cantidad: ' + cot.cantidad,\n  '- Precio por unidad: ' + pesos(cot.precio_unitario),\n  '- Total: ' + pesos(cot.total),\n  '- Entrega: ' + dias + ' días hábiles',\n  'Reglas: máximo 4 frases, tutea, tono amable y concreto, sin emojis, sin inventar descuentos, envíos ni fechas.',\n  pedido.comentario ? 'El cliente comentó: \"' + pedido.comentario + '\" (respóndelo solo si se puede sin agregar cifras).' : '',\n].filter(Boolean).join('\\n');\nconst plantilla = 'Hola' + (pedido.cliente ? ' ' + pedido.cliente : '') + ', gracias por escribirnos. '\n  + cot.cantidad + ' x ' + pieza.nombre + ' quedan en ' + pesos(cot.precio_unitario) + ' cada una, '\n  + pesos(cot.total) + ' en total. La entrega es en ' + dias + ' días hábiles. ¿Te lo separamos?';\n\nreturn [{ json: { ...pedido, ok: true, pieza: pieza.nombre, tecnologia: pieza.tecnologia, ...cot,\n  precio_texto: pesos(cot.precio_unitario), total_texto: pesos(cot.total), prompt, plantilla,\n  origen_datos: origenDatos } }];\n"
+      },
+      "id": "af7bc4e8-30fc-5745-8e90-c247ca7144f5",
+      "name": "Calcular cotización",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "67c0e921-1b39-5e26-a028-002303eb7ec2",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9baea45a-4890-5cc3-a290-b2b230b8fc9a",
+      "name": "¿Pedido válido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.ollama_url }}/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $json.modelo, prompt: $json.prompt, stream: false, think: false, options: { temperature: 0.3 } }) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "67d25d39-fef6-5167-8050-6253b437829b",
+      "name": "Redactar con IA local (Ollama)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Control de la IA: cada número del borrador debe estar en la cotización.\nconst c = $('Calcular cotización').first().json;\nconst r = $input.first().json;\nlet borrador = String(r.response || '').trim();\n// Algunos modelos piensan en voz alta entre <think>…</think>: se quita.\nborrador = borrador.replace(/<think>[\\s\\S]*?<\\/think>/g, '').trim();\nconst permitidos = new Set([c.cantidad, Math.round(c.precio_unitario), Math.round(c.total), Number(c.dias_entrega)]\n  .map((n) => String(n)));\nfor (const n of String(c.pieza).match(/\\d+/g) || []) permitidos.add(n);   // «Miniatura 32 mm»\nconst limpio = borrador.replace(/\\b3D\\b/gi, '');\nconst numeros = (limpio.match(/\\d[\\d.,]*/g) || []).map((n) => n.replace(/[.,](?=\\d{3}\\b)/g, '').replace(/[.,]$/, ''));\nconst extranos = numeros.filter((n) => !permitidos.has(n));\nconst tieneTotal = numeros.includes(String(Math.round(c.total)));\nlet ia_ok = borrador.length > 0 && extranos.length === 0 && tieneTotal;\nlet nota_ia = ia_ok ? 'Borrador de la IA revisado: todas las cifras cuadran'\n  : !borrador ? 'La IA no devolvió texto: se usó la plantilla'\n  : extranos.length ? 'La IA puso cifras que no están en la cotización (' + extranos.join(', ') + '): se usó la plantilla'\n  : 'La IA no puso el total: se usó la plantilla';\nconst texto = ia_ok ? borrador : c.plantilla;\nreturn [{ json: { ...c, borrador: texto, ia_ok, nota_ia } }];\n"
+      },
+      "id": "944e47e3-7a8f-5dd3-bea1-aab8aebed337",
+      "name": "Revisar cifras del borrador",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Ollama no respondió después de los reintentos: se sigue con la plantilla.\nconst c = $('Calcular cotización').first().json;\nreturn [{ json: { ...c, borrador: c.plantilla, ia_ok: false,\n  nota_ia: 'Ollama no respondió después de 3 intentos: se usó la plantilla' } }];\n"
+      },
+      "id": "06bd8c14-6b81-554e-8133-e626f8cb30f0",
+      "name": "Plantilla sin IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Aviso para Sergio: deja el enlace de aprobación en registro/pendientes.csv.\n// (Aquí se puede conectar Telegram o correo, con la credencial guardada en n8n, nunca en el repo.)\nconst c = $input.first().json;\nconst r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, cliente: c.cliente,\n  pieza: c.pieza, cantidad: c.cantidad, total: Math.round(c.total), enlace_aprobacion: $execution.resumeFormUrl };\nconst esc = (v) => { const s = v === undefined || v === null ? '' : String(v);\n  return /[\",\\n\\r]/.test(s) ? '\"' + s.replace(/\"/g, '\"\"') + '\"' : s; };\nconst linea = [\"fecha_hora\", \"id_ejecucion\", \"cliente\", \"pieza\", \"cantidad\", \"total\", \"enlace_aprobacion\"].map((c) => esc(r[c])).join(',') + '\\n';\nreturn [{ json: { ...c, linea, resumen_para_sergio: '**' + c.cliente + '** pidió ' + c.cantidad + ' x ' + c.pieza\n  + ' por ' + c.canal + '. Costo ' + Math.round(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + ' %.\\n\\n' + c.nota_ia\n  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
+      },
+      "id": "878c2d91-c796-5b32-b8b3-ef1eaf166afd",
+      "name": "Avisar a Sergio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "linea",
+        "options": {
+          "fileName": "linea.csv"
+        }
+      },
+      "id": "07e036d7-f801-579b-a6df-8e58565fd86b",
+      "name": "Pendiente: a archivo",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2200,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Configuración').first().json.carpeta_registro }}/pendientes.csv",
+        "dataPropertyName": "data",
+        "options": {
+          "append": true
+        }
+      },
+      "id": "5ff2ddf7-0761-58a0-90af-0e9d2dce3f61",
+      "name": "Pendiente: guardar",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2420,
+        -160
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "resume": "form",
+        "formTitle": "Aprobar cotización",
+        "formDescription": "={{ $json.resumen_para_sergio }}",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Decisión",
+              "fieldType": "dropdown",
+              "requiredField": true,
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Aprobar"
+                  },
+                  {
+                    "option": "Corregir"
+                  },
+                  {
+                    "option": "Rechazar"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Texto corregido",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 24,
+        "resumeUnit": "hours",
+        "options": {}
+      },
+      "id": "3459074a-4e5c-5338-be1b-d0427fd4f22f",
+      "name": "Aprobación de Sergio",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2200,
+        0
+      ],
+      "webhookId": "a9016021-9461-59dd-acef-3cc3d90cb08b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Arma la línea del registro con la decisión de Sergio (o el motivo del rechazo automático).\nconst valido = $('¿Pedido válido?').first().json.ok === true;\nconst c = valido ? $('Avisar a Sergio').first().json : $('Calcular cotización').first().json;\nconst f = valido ? $input.first().json : {};\nlet decision, mensaje;\nif (!valido) { decision = 'Inválido'; mensaje = c.motivo; }\nelse if (f['Decisión'] === 'Aprobar') { decision = 'Aprobado'; mensaje = c.borrador; }\nelse if (f['Decisión'] === 'Corregir') {\n  const t = String(f['Texto corregido'] || '').trim();\n  decision = t ? 'Corregido' : 'Aprobado sin cambios (corrección vacía)'; mensaje = t || c.borrador; }\nelse if (f['Decisión'] === 'Rechazar') { decision = 'Rechazado'; mensaje = ''; }\nelse { decision = 'Sin respuesta en 24 h'; mensaje = ''; }\nconst r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, origen: c.origen,\n  cliente: c.cliente, canal: c.canal, id_pieza: c.id_pieza, pieza: c.pieza || '', cantidad: c.cantidad,\n  costo_unitario: valido ? Math.round(c.costo_unitario) : '', precio_unitario: valido ? c.precio_unitario : '',\n  total: valido ? Math.round(c.total) : '', margen_pct: valido ? Math.round(c.margen_pct * 1000) / 10 : '',\n  ia_ok: valido ? c.ia_ok : '', nota_ia: valido ? c.nota_ia : '', decision, mensaje_final: mensaje,\n  origen_datos: c.origen_datos };\nconst esc = (v) => { const s = v === undefined || v === null ? '' : String(v);\n  return /[\",\\n\\r]/.test(s) ? '\"' + s.replace(/\"/g, '\"\"') + '\"' : s; };\nconst linea = [\"fecha_hora\", \"id_ejecucion\", \"origen\", \"cliente\", \"canal\", \"id_pieza\", \"pieza\", \"cantidad\", \"costo_unitario\", \"precio_unitario\", \"total\", \"margen_pct\", \"ia_ok\", \"nota_ia\", \"decision\", \"mensaje_final\", \"origen_datos\"].map((c) => esc(r[c])).join(',') + '\\n';\nreturn [{ json: { ...r, linea } }];\n"
+      },
+      "id": "45210520-2629-5630-a0a6-111c6c79d5e3",
+      "name": "Armar registro",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2420,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "linea",
+        "options": {
+          "fileName": "linea.csv"
+        }
+      },
+      "id": "08128638-9e62-5fb1-b28f-83cfaf85e5d0",
+      "name": "Registro: a archivo",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2640,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Configuración').first().json.carpeta_registro }}/cotizaciones.csv",
+        "dataPropertyName": "data",
+        "options": {
+          "append": true
+        }
+      },
+      "id": "e3a0b64f-ec97-55e4-9b73-62111102369f",
+      "name": "Registro: guardar",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2860,
+        100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    }
+  ],
+  "connections": {
+    "Pedido por formulario": {
+      "main": [
+        [
+          {
+            "node": "Normalizar pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedido por webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalizar pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar pedido": {
+      "main": [
+        [
+          {
+            "node": "Configuración",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuración": {
+      "main": [
+        [
+          {
+            "node": "Leer tarifas y catálogo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer tarifas y catálogo": {
+      "main": [
+        [
+          {
+            "node": "CSV a filas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CSV a filas": {
+      "main": [
+        [
+          {
+            "node": "Calcular cotización",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcular cotización": {
+      "main": [
+        [
+          {
+            "node": "¿Pedido válido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Pedido válido?": {
+      "main": [
+        [
+          {
+            "node": "Redactar con IA local (Ollama)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Armar registro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redactar con IA local (Ollama)": {
+      "main": [
+        [
+          {
+            "node": "Revisar cifras del borrador",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Plantilla sin IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revisar cifras del borrador": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plantilla sin IA": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar a Sergio": {
+      "main": [
+        [
+          {
+            "node": "Pendiente: a archivo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Aprobación de Sergio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pendiente: a archivo": {
+      "main": [
+        [
+          {
+            "node": "Pendiente: guardar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprobación de Sergio": {
+      "main": [
+        [
+          {
+            "node": "Armar registro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Armar registro": {
+      "main": [
+        [
+          {
+            "node": "Registro: a archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registro: a archivo": {
+      "main": [
+        [
+          {
+            "node": "Registro: guardar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": "taller3dErrores1",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "active": false,
+  "tags": [],
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
