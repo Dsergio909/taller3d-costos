@@ -28,6 +28,19 @@ Cómo se construyó y se revisó este repo, con números. Método: construir lo 
 
 Pruebas al cerrar la vuelta: 49 de 49.
 
+## Vuelta 2 de errores (4-nov-2026): usar el método con datos reales
+La pregunta de esta vuelta: ¿qué se rompe cuando el dueño del taller copia `datos/` a `datos_reales/` y lo edita en Excel?
+
+| # | Qué revisé | Qué encontré | Arreglo |
+|---|---|---|---|
+| 1 | CSV guardados por Excel en español (punto y coma, coma decimal, fechas dd/mm/aaaa, BOM, CRLF) | `costeo.py` se caía (`KeyError: 'parametro'`); el SQL, Power Query y n8n también esperan coma y punto decimal | `scripts/revisar_datos.py --arreglar`: los 7 CSV de Excel quedan idénticos byte a byte a los originales, y antes guarda copia en `_originales/`. Los lectores de Python ahora toleran el BOM |
+| 2 | Errores típicos al editar a mano | Nada los atrapaba: margen escrito «40» en vez de 0,4, tarifa borrada, canal que no existe, columna renombrada, texto en una columna de número | El revisor los detecta con un mensaje claro; con errores no toca ningún archivo |
+| 3 | Identificadores repetidos | Un parámetro repetido en `tarifas.csv` hace que Python use el último sin avisar y que Power Query falle | El revisor avisa de claves repetidas en 5 tablas |
+| 4 | Privacidad con datos reales presentes | Las pruebas de GitHub no pueden ver `datos_reales/` (no existe allá) | `scripts/revisar_privacidad.py`, solo local: compara piezas, clientes y tarifas reales contra los 121 archivos que se subirían, incluido el `.pbix`. Probado con un `datos_reales/` falso y una fuga plantada: la encontró |
+| 5 | Que `datos_reales/` no se cuele en git | Con la carpeta creada, `git status` no la muestra | Ya estaba en `.gitignore`; confirmado |
+
+Pruebas al cerrar la vuelta: 57 de 57 (8 nuevas del revisor de datos).
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|

@@ -22,7 +22,7 @@ Tengo un taller de impresión 3D, con una impresora de resina y una FDM. Cuando 
 | SQL | 8 consultas numeradas y comentadas (SQLite), con funciones de ventana | `sql/` · resultados en `docs/resultados_sql.md` |
 | Tablero de Power BI | 4 páginas: costo por pieza, precio y margen con «qué pasa si», gastos por mes y pedidos por canal | `powerbi/` · medidas en `dax/medidas.md` |
 | Flujo de n8n | Cotización: recibe el pedido, calcula el precio, la IA local redacta la respuesta, yo apruebo o corrijo y queda registrado | `flujos/` |
-| Pruebas | 49 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Pruebas | 57 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## Cómo se calcula el costo
 Una placa de impresión se reparte entre las piezas que caben en ella. En resina eso pesa mucho: una placa llena tarda casi lo mismo que una sola pieza, porque el tiempo depende de la altura.
@@ -89,8 +89,9 @@ Reintentos: la llamada a Ollama y la escritura de archivos se reintentan 3 veces
 - Otra prueba busca teléfonos, correos, claves, tokens, IPs de la casa y rutas personales en todos los archivos del repo.
 - El tablero muestra en cada página si está leyendo datos ficticios o reales. El `.pbix`, el PDF y las capturas del repo salen de la versión ficticia.
 - Los flujos de n8n no traen credenciales. Si conectas Telegram o correo, la credencial se guarda dentro de n8n, nunca en el repo.
+- Antes de subir algo, en mi PC corro `python scripts/revisar_privacidad.py`: compara `datos_reales/` contra todo lo que se subiría (incluido el `.pbix`) y avisa si aparece una pieza, un cliente o una tarifa real.
 
-Para usar tus propios datos: copia la carpeta `datos/` como `datos_reales/`, cambia los valores y pon `real` en `origen_datos`. Después apunta `CarpetaDatos` del tablero a esa carpeta, o corre los scripts con `--datos datos_reales`.
+Para usar tus propios datos: copia la carpeta `datos/` como `datos_reales/`, cambia los valores y pon `real` en `origen_datos`. Si los editas en Excel, corre `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel en español guarda con punto y coma, coma decimal y fechas dd/mm/aaaa, y el script los deja en el formato que esperan el tablero, el SQL y n8n (antes guarda una copia de los originales). También avisa si falta una tarifa, si un margen quedó escrito como 40 en vez de 0,4 o si un pedido tiene un canal que no existe. Después apunta `CarpetaDatos` del tablero a esa carpeta, o corre los scripts con `--datos datos_reales`.
 
 ## Qué falta
 - El flujo no le contesta solo al cliente: deja el mensaje aprobado listo para copiar. Conectar WhatsApp o Telegram necesita credenciales que no van en un repo público.
@@ -135,7 +136,7 @@ I run a 3D printing workshop with a resin printer and an FDM printer. When someo
 | SQL | 8 numbered and commented queries (SQLite), with window functions | `sql/` · results in `docs/resultados_sql.md` |
 | Power BI dashboard | 4 pages: cost per part, price and margin with «what-if», expenses per month and orders per channel | `powerbi/` · measures in `dax/medidas.md` |
 | n8n workflow | Quote: receives the order, calculates the price, local AI drafts the response, I approve or correct it and it gets recorded | `flujos/` |
-| Tests | 49 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Tests | 57 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## How cost is calculated
 A print plate is distributed among the parts that fit on it. In resin, this weighs a lot: a full plate takes almost as long as a single part, because time depends on height.
@@ -202,8 +203,9 @@ Retries: the call to Ollama and file writing are retried 3 times before failing.
 - Another test searches for phones, emails, keys, tokens, home IPs, and personal file paths in all repo files.
 - The dashboard shows on each page whether it is reading fictional or real data. The `.pbix`, the PDF, and the repo screenshots come from the fictional version.
 - The n8n workflows do not include credentials. If you connect Telegram or email, the credential is saved inside n8n, never in the repo.
+- Before pushing anything, I run `python scripts/revisar_privacidad.py` on my PC: it compares `datos_reales/` against everything that would be uploaded (including the `.pbix`) and warns if a real piece, customer or rate shows up.
 
-To use your own data: copy the `datos/` folder as `datos_reales/`, change the values, and set `real` in `origen_datos`. Then point the dashboard's `CarpetaDatos` to that folder, or run the scripts with `--datos datos_reales`.
+To use your own data: copy the `datos/` folder as `datos_reales/`, change the values, and set `real` in `origen_datos`. If you edit them in Excel, run `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel in Spanish saves with semicolons, decimal commas and dd/mm/yyyy dates, and the script converts them to the format the dashboard, the SQL and n8n expect (it saves a copy of the originals first). It also warns if a rate is missing, if a margin was typed as 40 instead of 0.4, or if an order has a channel that does not exist. Then point the dashboard's `CarpetaDatos` to that folder, or run the scripts with `--datos datos_reales`.
 
 ## What's missing
 - The flow does not reply to the customer by itself: it leaves the approved message ready to copy. Connecting WhatsApp or Telegram requires credentials that can't go in a public repo.

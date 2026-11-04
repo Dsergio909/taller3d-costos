@@ -24,18 +24,18 @@ COMPONENTES = ["material", "insumos", "energia", "maquina", "mano_obra", "fallas
 
 def leer_tarifas(carpeta: Path) -> dict[str, float]:
     """Lee tarifas.csv y devuelve {parametro: valor}."""
-    with open(Path(carpeta) / "tarifas.csv", encoding="utf-8", newline="") as f:
+    with open(Path(carpeta) / "tarifas.csv", encoding="utf-8-sig", newline="") as f:
         return {fila["parametro"]: float(fila["valor"]) for fila in csv.DictReader(f)}
 
 
 def leer_canales(carpeta: Path) -> dict[str, float]:
     """Lee canales.csv y devuelve {canal: comision (fracción)}."""
-    with open(Path(carpeta) / "canales.csv", encoding="utf-8", newline="") as f:
+    with open(Path(carpeta) / "canales.csv", encoding="utf-8-sig", newline="") as f:
         return {fila["canal"]: float(fila["comision_pct"]) for fila in csv.DictReader(f)}
 
 
 def leer_piezas(carpeta: Path) -> list[dict]:
-    with open(Path(carpeta) / "piezas.csv", encoding="utf-8", newline="") as f:
+    with open(Path(carpeta) / "piezas.csv", encoding="utf-8-sig", newline="") as f:
         return list(csv.DictReader(f))
 
 

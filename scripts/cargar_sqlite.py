@@ -26,7 +26,7 @@ def conectar(carpeta: Path | str = RAIZ / "datos", archivo: str = ":memory:") ->
     con.execute("PRAGMA foreign_keys = ON")
     con.executescript((SQL / "00_esquema.sql").read_text(encoding="utf-8"))
     for tabla in TABLAS:
-        with open(carpeta / f"{tabla}.csv", encoding="utf-8", newline="") as f:
+        with open(carpeta / f"{tabla}.csv", encoding="utf-8-sig", newline="") as f:
             lector = csv.reader(f)
             columnas = next(lector)
             marcas = ",".join("?" * len(columnas))
