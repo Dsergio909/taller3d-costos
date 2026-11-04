@@ -89,6 +89,21 @@
               "queryRef": "Medidas.Margen a precio de lista",
               "nativeQueryRef": "Margen",
               "displayName": "Margen"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Ganancia por hora de impresora"
+                }
+              },
+              "queryRef": "Medidas.Ganancia por hora de impresora",
+              "nativeQueryRef": "Ganancia por hora",
+              "displayName": "Ganancia por hora"
             }
           ]
         }
@@ -103,10 +118,10 @@
                     "Entity": "Medidas"
                   }
                 },
-                "Property": "Margen a precio de lista"
+                "Property": "Ganancia por hora de impresora"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": false
@@ -201,7 +216,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Costo y margen a precio de lista'"
+                  "Value": "'Costo, margen y ganancia por hora de impresora'"
                 }
               }
             },

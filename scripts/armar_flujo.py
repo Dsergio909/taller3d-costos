@@ -162,13 +162,13 @@ return [{ json: { ...c, borrador: c.plantilla, ia_ok: false,
 
 def codigo_pendiente() -> str:
     return (
-        "// Aviso para Sergio: deja el enlace de aprobación en registro/pendientes.csv.\n"
+        "// Aviso para el dueño del taller: deja el enlace de aprobación en registro/pendientes.csv.\n"
         "// (Aquí se puede conectar Telegram o correo, con la credencial guardada en n8n, nunca en el repo.)\n"
         "const c = $input.first().json;\n"
         "const r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, cliente: c.cliente,\n"
         "  pieza: c.pieza, cantidad: c.cantidad, total: Math.round(c.total), enlace_aprobacion: $execution.resumeFormUrl };\n"
         + a_texto_csv(json.dumps(COLUMNAS_PENDIENTES))
-        + "return [{ json: { ...c, linea, resumen_para_sergio: '**' + c.cliente + '** pidió ' + c.cantidad + ' x ' + c.pieza\n"
+        + "return [{ json: { ...c, linea, resumen_para_el_dueno: '**' + c.cliente + '** pidió ' + c.cantidad + ' x ' + c.pieza\n"
         "  + ' por ' + c.canal + '. Costo ' + Math.round(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n"
         "  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + ' %.\\n\\n' + c.nota_ia\n"
         "  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
@@ -177,9 +177,9 @@ def codigo_pendiente() -> str:
 
 def codigo_registro() -> str:
     return (
-        "// Arma la línea del registro con la decisión de Sergio (o el motivo del rechazo automático).\n"
+        "// Arma la línea del registro con la decisión del dueño (o el motivo del rechazo automático).\n"
         "const valido = $('¿Pedido válido?').first().json.ok === true;\n"
-        "const c = valido ? $('Avisar a Sergio').first().json : $('Calcular cotización').first().json;\n"
+        "const c = valido ? $('Avisar al dueño').first().json : $('Calcular cotización').first().json;\n"
         "const f = valido ? $input.first().json : {};\n"
         "let decision, mensaje;\n"
         "if (!valido) { decision = 'Inválido'; mensaje = c.motivo; }\n"
@@ -281,12 +281,12 @@ def flujo_cotizacion(piezas: list[dict], costeo_js: str) -> dict:
         }, retryOnFail=True, maxTries=3, waitBetweenTries=3000, onError="continueErrorOutput"),
         nodo("Revisar cifras del borrador", "n8n-nodes-base.code", 2, 1760, -80, {"jsCode": CODIGO_REVISAR}),
         nodo("Plantilla sin IA", "n8n-nodes-base.code", 2, 1760, 80, {"jsCode": CODIGO_SIN_IA}),
-        nodo("Avisar a Sergio", "n8n-nodes-base.code", 2, 1980, 0, {"jsCode": codigo_pendiente()}),
+        nodo("Avisar al dueño", "n8n-nodes-base.code", 2, 1980, 0, {"jsCode": codigo_pendiente()}),
         *nodos_guardar("Pendiente", "={{ $('Configuración').first().json.carpeta_registro }}/pendientes.csv", 2200, -160),
-        nodo("Aprobación de Sergio", "n8n-nodes-base.wait", 1.1, 2200, 0, {
+        nodo("Aprobación del dueño", "n8n-nodes-base.wait", 1.1, 2200, 0, {
             "resume": "form",
             "formTitle": "Aprobar cotización",
-            "formDescription": "={{ $json.resumen_para_sergio }}",
+            "formDescription": "={{ $json.resumen_para_el_dueno }}",
             "formFields": {"values": [
                 {"fieldLabel": "Decisión", "fieldType": "dropdown", "requiredField": True,
                  "fieldOptions": {"values": [{"option": "Aprobar"}, {"option": "Corregir"}, {"option": "Rechazar"}]}},
@@ -308,11 +308,11 @@ def flujo_cotizacion(piezas: list[dict], costeo_js: str) -> dict:
         "Calcular cotización": [["¿Pedido válido?"]],
         "¿Pedido válido?": [["Redactar con IA local (Ollama)"], ["Armar registro"]],
         "Redactar con IA local (Ollama)": [["Revisar cifras del borrador"], ["Plantilla sin IA"]],
-        "Revisar cifras del borrador": [["Avisar a Sergio"]],
-        "Plantilla sin IA": [["Avisar a Sergio"]],
-        "Avisar a Sergio": [["Pendiente: a archivo", "Aprobación de Sergio"]],
+        "Revisar cifras del borrador": [["Avisar al dueño"]],
+        "Plantilla sin IA": [["Avisar al dueño"]],
+        "Avisar al dueño": [["Pendiente: a archivo", "Aprobación del dueño"]],
         "Pendiente: a archivo": [["Pendiente: guardar"]],
-        "Aprobación de Sergio": [["Armar registro"]],
+        "Aprobación del dueño": [["Armar registro"]],
         "Armar registro": [["Registro: a archivo"]],
         "Registro: a archivo": [["Registro: guardar"]],
     }

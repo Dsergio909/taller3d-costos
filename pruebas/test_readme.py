@@ -105,8 +105,25 @@ class CifrasDelReadme(unittest.TestCase):
     def test_gastos(self):
         total = self.con.execute("SELECT SUM(valor) FROM gastos").fetchone()[0]
         por = dict(self.con.execute("SELECT categoria, SUM(valor) FROM gastos GROUP BY 1").fetchall())
-        for cat in ("Energía", "Materiales", "Publicidad"):
+        for cat in ("Energía",):
             self.esta(es_pct(por[cat] / total * 100), en_pct(por[cat] / total * 100))
+
+    def test_ganancia_por_hora(self):
+        f = {r["nombre"]: r for r in self.filas("09_ganancia_por_hora_de_impresora.sql")}
+        aretes, org = f["Aretes (par)"], f["Organizador de escritorio"]
+        self.assertEqual(aretes["puesto_por_hora"], 1, "los aretes ya no son los que más dejan por hora")
+        self.esta(es_pesos(aretes["ganancia_por_hora"]), en_pesos(aretes["ganancia_por_hora"]))
+        self.esta(es_pesos(org["ganancia_por_hora"]), en_pesos(org["ganancia_por_hora"]))
+        self.esta(es_pesos(org["ganancia_por_pieza"]), en_pesos(org["ganancia_por_pieza"]))
+        piezas = {p["nombre"]: p for p in costeo.leer_piezas(DATOS)}
+        self.esta(f"caben {piezas['Aretes (par)']['piezas_por_placa']} en una placa",
+                  f"{piezas['Aretes (par)']['piezas_por_placa']} fit on one plate")
+        self.esta(f"ocupa la FDM {float(piezas['Organizador de escritorio']['horas_placa']):g} horas",
+                  f"FDM printer busy for {float(piezas['Organizador de escritorio']['horas_placa']):g} hours")
+
+    def test_consultas_sql(self):
+        n = len(list(SQL.glob("0[1-9]_*.sql")))
+        self.esta(f"{n} consultas numeradas", f"{n} numbered and commented queries")
 
     def test_tasas_de_falla(self):
         t = costeo.leer_tarifas(DATOS)

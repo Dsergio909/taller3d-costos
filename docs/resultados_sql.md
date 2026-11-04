@@ -209,3 +209,26 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 | 2025-11 | 52 | 2,222,995 | 1,004,000 | 1,218,995 | -30.5 |
 | 2025-12 | 73 | 3,848,060 | 1,357,000 | 2,491,060 | 73.1 |
 
+## 09 · ¿Qué pieza deja más plata por cada hora de impresora?
+`sql/09_ganancia_por_hora_de_impresora.sql`
+
+| id_pieza | nombre | tecnologia | ganancia_por_pieza | minutos_de_impresora | ganancia_por_hora | puesto_por_hora | puesto_por_pieza | puesto_en_su_impresora |
+|---|---|---|---|---|---|---|---|---|
+| R02 | Aretes (par) | Resina | 12,888 | 2.0 | 386,640 | 1 | 10 | 1 |
+| R07 | Anillo | Resina | 15,520 | 3.0 | 310,390 | 2 | 6 | 2 |
+| R06 | Dije | Resina | 9,565 | 2.9 | 199,263 | 3 | 13 | 3 |
+| R01 | Ficha de juego | Resina | 4,519 | 2.3 | 120,503 | 4 | 15 | 4 |
+| R08 | Llavero detallado | Resina | 9,879 | 6.0 | 98,787 | 5 | 12 | 5 |
+| R03 | Miniatura 32 mm | Resina | 19,588 | 12.5 | 94,022 | 6 | 4 | 6 |
+| F01 | Llavero | FDM | 6,325 | 7.5 | 50,599 | 7 | 14 | 1 |
+| F07 | Imán de nevera | FDM | 4,187 | 7.5 | 33,494 | 8 | 16 | 2 |
+| R04 | Figura 10 cm | Resina | 60,410 | 150.0 | 24,164 | 9 | 2 | 7 |
+| R05 | Busto 12 cm | Resina | 67,915 | 360.0 | 11,319 | 10 | 1 | 8 |
+| F03 | Soporte de celular | FDM | 10,256 | 60.0 | 10,256 | 11 | 11 | 3 |
+| F02 | Maceta pequeña | FDM | 13,503 | 90.0 | 9,002 | 12 | 9 | 4 |
+| F05 | Lámpara (base) | FDM | 41,650 | 420.0 | 5,950 | 13 | 3 | 5 |
+| F06 | Figura multicolor | FDM | 14,408 | 240.0 | 3,602 | 14 | 8 | 6 |
+| F09 | Caja con tapa | FDM | 15,418 | 300.0 | 3,084 | 15 | 7 | 7 |
+| F04 | Organizador de escritorio | FDM | 17,805 | 360.0 | 2,968 | 16 | 5 | 8 |
+| F08 | Repuesto a medida | FDM | 3,751 | 90.0 | 2,501 | 17 | 17 | 9 |
+

@@ -21,7 +21,7 @@ class ConsultasSQL(unittest.TestCase):
 
     def test_todas_corren(self):
         archivos = sorted(SQL.glob("0[1-9]_*.sql"))
-        self.assertEqual(len(archivos), 8)
+        self.assertEqual(len(archivos), 9)
         for ruta in archivos:
             _c, filas = cargar_sqlite.correr(self.con, ruta)
             self.assertGreater(len(filas), 0, ruta.name)
@@ -51,6 +51,20 @@ class ConsultasSQL(unittest.TestCase):
         self.assertAlmostEqual(sum(m["ventas_sin_comision"] for m in meses),
                                sum(c["ventas_netas"] - c["comision"] for c in canales), delta=15)
         self.assertIsNone(meses[0]["pct_ventas_vs_mes_anterior"])
+
+    def test_ganancia_por_hora(self):
+        filas = self.correr("09_ganancia_por_hora_de_impresora.sql")
+        self.assertEqual(len(filas), 17)
+        import costeo
+        t = costeo.leer_tarifas(DATOS)
+        piezas = {p["id_pieza"]: p for p in costeo.leer_piezas(DATOS)}
+        for f in filas:  # ganancia por hora = (precio - costo) / (horas de placa / piezas por placa)
+            p = piezas[f["id_pieza"]]
+            esperado = ((float(p["precio_lista"]) - costeo.costo_unitario(p, t)["costo_total"])
+                        / (float(p["horas_placa"]) / float(p["piezas_por_placa"])))
+            self.assertAlmostEqual(f["ganancia_por_hora"], esperado, delta=0.6, msg=f["id_pieza"])
+        self.assertEqual(filas[0]["puesto_por_hora"], 1)
+        self.assertEqual([f["ganancia_por_hora"] for f in filas], sorted((f["ganancia_por_hora"] for f in filas), reverse=True))
 
     def test_resina_y_fdm(self):
         filas = {f["tecnologia"]: f for f in self.correr("02_resina_vs_fdm.sql")}

@@ -231,6 +231,17 @@ Precio de lista =
 AVERAGE(Piezas[precio_lista])
 ```
 
+### Ganancia por hora de impresora
+Ganancia a precio de lista por cada hora que la pieza ocupa la impresora (placa llena). La impresora es el cuello de botella: esto dice qué conviene imprimir.
+
+```dax
+Ganancia por hora de impresora =
+DIVIDE(
+    SUMX(Piezas, Piezas[precio_lista] - Piezas[Costo unitario]),
+    SUMX(Piezas, Piezas[horas_placa] / Piezas[piezas_por_placa])
+)
+```
+
 ### Margen objetivo
 
 ```dax

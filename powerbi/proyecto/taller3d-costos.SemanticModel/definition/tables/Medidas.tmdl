@@ -163,6 +163,16 @@ table Medidas
 		displayFolder: Precio
 		lineageTag: 2f1458bf-d904-5520-9cdc-807771f39146
 
+	/// Ganancia a precio de lista por cada hora que la pieza ocupa la impresora (placa llena). La impresora es el cuello de botella: esto dice qué conviene imprimir.
+	measure 'Ganancia por hora de impresora' =
+			DIVIDE(
+			    SUMX(Piezas, Piezas[precio_lista] - Piezas[Costo unitario]),
+			    SUMX(Piezas, Piezas[horas_placa] / Piezas[piezas_por_placa])
+			)
+		formatString: \$#,0
+		displayFolder: Precio
+		lineageTag: bf5e6b8d-4dd7-57ff-b1e4-986ab2e220c5
+
 	measure 'Margen objetivo' = CALCULATE(MAX(Tarifas[valor]), Tarifas[parametro] = "margen_objetivo")
 		formatString: 0.0%
 		displayFolder: Precio

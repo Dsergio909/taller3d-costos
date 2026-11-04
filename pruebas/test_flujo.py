@@ -75,13 +75,13 @@ class Flujo(unittest.TestCase):
                 if n["type"] == "n8n-nodes-base.readWriteFile" and n["parameters"].get("operation") == "write":
                     self.assertTrue(n["parameters"]["options"]["append"], f"{n['name']} debe agregar, no reemplazar")
 
-    def test_sergio_aprueba_antes_de_guardar(self):
-        espera = nodo(self.cot, "Aprobación de Sergio")
+    def test_el_dueno_aprueba_antes_de_guardar(self):
+        espera = nodo(self.cot, "Aprobación del dueño")
         self.assertEqual(espera["type"], "n8n-nodes-base.wait")
         self.assertEqual(espera["parameters"]["resume"], "form")
         opciones = [o["option"] for o in espera["parameters"]["formFields"]["values"][0]["fieldOptions"]["values"]]
         self.assertEqual(opciones, ["Aprobar", "Corregir", "Rechazar"])
-        self.assertEqual(self.cot["connections"]["Aprobación de Sergio"]["main"][0][0]["node"], "Armar registro")
+        self.assertEqual(self.cot["connections"]["Aprobación del dueño"]["main"][0][0]["node"], "Armar registro")
 
     # --- El código de los nodos, corrido en Node con datos de prueba ---------------------------
 
@@ -170,7 +170,7 @@ class Flujo(unittest.TestCase):
         for decision, esperado in casos.items():
             formulario = {"Decisión": decision, "Texto corregido": "Texto, con coma y \"comillas\""} if decision else {}
             r = self._correr_nodo("Armar registro", [formulario],
-                                  {"¿Pedido válido?": {"ok": True}, "Avisar a Sergio": aviso})[0]
+                                  {"¿Pedido válido?": {"ok": True}, "Avisar al dueño": aviso})[0]
             self.assertEqual(r["decision"], esperado)
             fila = next(csv.reader([r["linea"]]))
             self.assertEqual(len(fila), len(armar_flujo.COLUMNAS_REGISTRO), "la línea CSV debe quedar bien armada")

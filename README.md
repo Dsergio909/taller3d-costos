@@ -19,10 +19,10 @@ Tengo un taller de impresión 3D, con una impresora de resina y una FDM. Cuando 
 |---|---|---|
 | Datos ficticios | Un taller inventado: 17 piezas, 549 pedidos de 2025, 77 gastos, 320 clientes (solo un código y una ciudad) | `scripts/generar_datos_ficticios.py` → `datos/` |
 | Fórmula de costo | El costo de una pieza, paso a paso. Es la referencia de todo lo demás | `scripts/costeo.py` |
-| SQL | 8 consultas numeradas y comentadas (SQLite), con funciones de ventana | `sql/` · resultados en `docs/resultados_sql.md` |
+| SQL | 9 consultas numeradas y comentadas (SQLite), con funciones de ventana | `sql/` · resultados en `docs/resultados_sql.md` |
 | Tablero de Power BI | 4 páginas: costo por pieza, precio y margen con «qué pasa si», gastos por mes y pedidos por canal | `powerbi/` · medidas en `dax/medidas.md` |
 | Flujo de n8n | Cotización: recibe el pedido, calcula el precio, la IA local redacta la respuesta, yo apruebo o corrijo y queda registrado | `flujos/` |
-| Pruebas | 58 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Pruebas | 61 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## Cómo se calcula el costo
 Una placa de impresión se reparte entre las piezas que caben en ella. En resina eso pesa mucho: una placa llena tarda casi lo mismo que una sola pieza, porque el tiempo depende de la altura.
@@ -53,7 +53,7 @@ Las cifras son del taller ficticio, pero el método es el que uso con el mío. T
 2. **El repuesto a medida casi no deja.** A precio de lista gana 18,8 %, y por TikTok, con la comisión, baja a 8,8 %. Fue de lo más vendido (64 unidades). Para ganar el 40 % tendría que costar $27.500 por WhatsApp y no $20.000.
 3. **WhatsApp tiene el margen más bajo, pero es el canal que más deja.** Trae el 42,8 % de las ventas con solo 136 de 549 pedidos, ticket promedio de $85.133 y el 42 % de sus clientes vuelve a comprar. Su margen es el más bajo (53,4 %) porque ahí se venden las piezas grandes y a medida, no por comisiones.
 4. **Subir el precio 10 % deja más plata aunque se venda 10 % menos.** La ganancia del año pasaría de $15.012.331 a $15.742.466 (+$730.136). Bajar el precio 10 % y vender 20 % más deja casi lo mismo que hoy ($15.039.639), con 20 % más de trabajo.
-5. **La luz casi no pesa.** Es el 2,1 % de los gastos del año. Lo grande es material (54,6 %) y publicidad (23,9 %).
+5. **Lo que importa es cuánto deja cada hora de impresora, no la ganancia por pieza.** La impresora es el cuello de botella: mientras imprime una cosa, no imprime otra. Un par de aretes de resina deja $386.640 por hora de impresora, porque caben 30 en una placa. El organizador de escritorio deja más por pieza ($17.805), pero ocupa la FDM 6 horas: $2.968 por hora. En cambio, la luz casi no pesa: es el 2,1 % de los gastos del año.
 
 ## Cómo correrlo
 Necesitas Python 3.12 y, para el flujo, Node.js. No hay que instalar paquetes de Python: todo usa la librería estándar.
@@ -61,7 +61,7 @@ Necesitas Python 3.12 y, para el flujo, Node.js. No hay que instalar paquetes de
 ```bash
 python scripts/generar_datos_ficticios.py      # arma el taller inventado en datos/
 python scripts/costeo.py                        # costo de cada pieza
-python scripts/cargar_sqlite.py                 # corre las 8 consultas SQL
+python scripts/cargar_sqlite.py                 # corre las 9 consultas SQL
 python -m unittest discover -s pruebas -t pruebas -v   # las pruebas
 ```
 
@@ -135,10 +135,10 @@ I run a 3D printing workshop with a resin printer and an FDM printer. When someo
 |---|---|---|
 | Fictional data | A made-up workshop: 17 parts, 549 orders from 2025, 77 expenses, 320 customers (only one code and one city) | `scripts/generar_datos_ficticios.py` → `datos/` |
 | Cost formula | The cost of a part, step by step. It's the reference for everything else | `scripts/costeo.py` |
-| SQL | 8 numbered and commented queries (SQLite), with window functions | `sql/` · results in `docs/resultados_sql.md` |
+| SQL | 9 numbered and commented queries (SQLite), with window functions | `sql/` · results in `docs/resultados_sql.md` |
 | Power BI dashboard | 4 pages: cost per part, price and margin with «what-if», expenses per month and orders per channel | `powerbi/` · measures in `dax/medidas.md` |
 | n8n workflow | Quote: receives the order, calculates the price, local AI drafts the response, I approve or correct it and it gets recorded | `flujos/` |
-| Tests | 58 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Tests | 61 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## How cost is calculated
 A print plate is distributed among the parts that fit on it. In resin, this weighs a lot: a full plate takes almost as long as a single part, because time depends on height.
@@ -169,7 +169,7 @@ The figures are from the fictional workshop, but the method is what I use with m
 2. **Custom spare parts barely make money.** At list price the margin is 18.8%, and on TikTok, after the commission, it drops to 8.8%. They were one of the best sellers (64 units). To make 40% they would have to sell for COP 27,500 on WhatsApp instead of COP 20,000.
 3. **WhatsApp has the lowest margin, but it is the channel that makes the most money.** It brings in 42.8% of sales with only 136 out of 549 orders, an average ticket of COP 85,133 and 42% of its customers return to buy. Its margin is the lowest (53.4%) because that is where the large and custom pieces sell, not because of commissions.
 4. **Raising prices by 10% makes more money even if I sell 10% less.** The year's profit would go from COP 15,012,331 to COP 15,742,466 (+COP 730,136). Lowering prices by 10% and selling 20% more leaves almost the same as today (COP 15,039,639), with 20% more work.
-5. **Electricity weighs almost nothing.** It is 2.1% of annual expenses. The big ones are materials (54.6%) and advertising (23.9%).
+5. **What matters is how much each printer hour makes, not the profit per piece.** The printer is the bottleneck: while it prints one thing, it cannot print another. A pair of resin earrings makes COP 386,640 per printer hour, because 30 fit on one plate. The desk organizer makes more per piece (COP 17,805), but it keeps the FDM printer busy for 6 hours: COP 2,968 per hour. Electricity, on the other hand, barely matters: it is 2.1% of the year's expenses.
 
 ## How to run it
 You need Python 3.12 and Node.js for the flow. No Python packages are required; everything uses the standard library.
@@ -177,7 +177,7 @@ You need Python 3.12 and Node.js for the flow. No Python packages are required; 
 ```bash
 python scripts/generar_datos_ficticios.py      # creates the fake workshop in datos/
 python scripts/costeo.py                        # cost of each part
-python scripts/cargar_sqlite.py                 # runs the 8 SQL queries
+python scripts/cargar_sqlite.py                 # runs the 9 SQL queries
 python -m unittest discover -s pruebas -t pruebas -v   # the tests
 ```
 

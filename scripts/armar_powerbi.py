@@ -210,6 +210,11 @@ MEDIDAS = [
     ("% material", "DIVIDE([Material], [Costo por unidad])", PCT, "Costo por pieza", "Qué parte del costo es resina o filamento."),
     ("Costo promedio", "AVERAGE(Piezas[Costo unitario])", MONEDA, "Costo por pieza", "Promedio simple del catálogo."),
     ("Precio de lista", "AVERAGE(Piezas[precio_lista])", MONEDA, "Precio", None),
+    ("Ganancia por hora de impresora",
+     "DIVIDE(\n    SUMX(Piezas, Piezas[precio_lista] - Piezas[Costo unitario]),\n"
+     "    SUMX(Piezas, Piezas[horas_placa] / Piezas[piezas_por_placa])\n)",
+     MONEDA, "Precio", "Ganancia a precio de lista por cada hora que la pieza ocupa la impresora (placa llena). "
+     "La impresora es el cuello de botella: esto dice qué conviene imprimir."),
     ("Margen objetivo", 'CALCULATE(MAX(Tarifas[valor]), Tarifas[parametro] = "margen_objetivo")', PCT, "Precio", None),
     ("Margen a precio de lista",
      "VAR comision = SELECTEDVALUE('Canal para precio'[Comisión], 0)\n"
@@ -537,8 +542,8 @@ def paginas() -> list[Pagina]:
     p1.tabla("tabla", 740, 184, 516, 512, [
         (col("Piezas", "nombre"), "Pieza"), (col("Piezas", "tecnologia"), "Tecnología"),
         (med("Costo por unidad"), "Costo"), (med("Precio de lista"), "Precio de lista"),
-        (med("Margen a precio de lista"), "Margen")],
-        "Costo y margen a precio de lista", orden=(med("Margen a precio de lista"), "Ascending"))
+        (med("Margen a precio de lista"), "Margen"), (med("Ganancia por hora de impresora"), "Ganancia por hora")],
+        "Costo, margen y ganancia por hora de impresora", orden=(med("Ganancia por hora de impresora"), "Descending"))
 
     p2 = Pagina("precio", "Precio y margen")
     p2.encabezado("Precio y margen", "¿Qué pasa con la ganancia del año si cambio el precio y vendo más o menos?")
