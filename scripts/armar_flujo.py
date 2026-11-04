@@ -139,7 +139,7 @@ let borrador = String(r.response || '').trim();
 borrador = borrador.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 const permitidos = new Set([c.cantidad, Math.round(c.precio_unitario), Math.round(c.total), Number(c.dias_entrega)]
   .map((n) => String(n)));
-for (const n of String(c.pieza).match(/\d+/g) || []) permitidos.add(n);   // «Miniatura 32 mm»
+for (const n of (String(c.pieza) + ' ' + String(c.cliente)).match(/\d+/g) || []) permitidos.add(n);   // «Miniatura 32 mm», «andrea_92»
 const limpio = borrador.replace(/\b3D\b/gi, '');
 const numeros = (limpio.match(/\d[\d.,]*/g) || []).map((n) => n.replace(/[.,](?=\d{3}\b)/g, '').replace(/[.,]$/, ''));
 const extranos = numeros.filter((n) => !permitidos.has(n));

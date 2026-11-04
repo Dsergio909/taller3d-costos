@@ -143,8 +143,12 @@ class Flujo(unittest.TestCase):
                  f"{c['total_texto']} en total, y te las entregamos en 5 días hábiles. Es impresión 3D en resina.")
         inventado = bueno + " El envío vale $10.000."
         sin_total = f"Hola, cada una vale {c['precio_texto']}."
+        con_usuario = f"Hola andrea_92, " + bueno
         casos = [(bueno, True), (inventado, False), (sin_total, False), ("", False),
                  ("<think>calculo 99</think>" + bueno, True)]
+        c_usuario = {**c, "cliente": "andrea_92"}
+        r = self._correr_nodo("Revisar cifras del borrador", [{"response": con_usuario}], {"Calcular cotización": c_usuario})[0]
+        self.assertTrue(r["ia_ok"], "los números del nombre del cliente no son cifras inventadas")
         for texto, ok in casos:
             r = self._correr_nodo("Revisar cifras del borrador", [{"response": texto}], {"Calcular cotización": c})[0]
             self.assertEqual(r["ia_ok"], ok, texto)
