@@ -88,7 +88,7 @@ def main() -> None:
         salida += [f"## {titulo}", f"`sql/{ruta.name}`", "", _md(columnas, filas), ""]
     if a.md:
         Path(a.md).parent.mkdir(parents=True, exist_ok=True)
-        Path(a.md).write_text("\n".join(salida), encoding="utf-8")
+        Path(a.md).write_text("\n".join(salida) + "\n", encoding="utf-8", newline="\n")
         print(f"\nGuardado en {a.md}")
 
 

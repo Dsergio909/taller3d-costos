@@ -369,7 +369,7 @@ def main() -> None:
     costeo_js = (RAIZ / "flujos" / "costeo.js").read_text(encoding="utf-8")
     salida.mkdir(parents=True, exist_ok=True)
     for nombre, flujo in (("cotizacion.json", flujo_cotizacion(piezas, costeo_js)), ("aviso_errores.json", flujo_errores())):
-        (salida / nombre).write_text(json.dumps(flujo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        (salida / nombre).write_text(json.dumps(flujo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
         print("Escrito", (salida / nombre).relative_to(RAIZ))
 
 
