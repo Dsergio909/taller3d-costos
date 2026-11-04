@@ -34,6 +34,13 @@ class Flujo(unittest.TestCase):
                          "flujos/cotizacion.json está desactualizado: corre scripts/armar_flujo.py")
         self.assertEqual(self.err, json.loads(json.dumps(armar_flujo.flujo_errores())))
 
+    def test_diagrama_al_dia(self):
+        import diagrama_flujo
+        actual = (FLUJOS / "diagrama_cotizacion.svg").read_text(encoding="utf-8")
+        self.assertEqual(actual, diagrama_flujo.dibujar(self.cot), "corre scripts/diagrama_flujo.py")
+        for n in self.cot["nodes"]:
+            self.assertIn(n["name"].split()[0], actual)
+
     def test_usa_la_misma_formula(self):
         self.assertIn(self.costeo_js, nodo(self.cot, "Calcular cotización")["parameters"]["jsCode"])
 

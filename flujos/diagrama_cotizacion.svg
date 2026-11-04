@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1685" height="493" viewBox="0 0 1685 493" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif">
+<rect width="1685" height="493" fill="#f5f7f9"/>
+<defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#52606d"/></marker></defs>
+<text x="40" y="36" font-size="18" font-weight="600" fill="#1f2933">Taller 3D · Cotización con aprobación</text>
+<text x="40" y="56" font-size="12" fill="#52606d">Flujo de n8n. Las líneas punteadas son el camino cuando algo falla o el pedido no es válido.</text>
+<path d="M210,109 C228,109 228,150 245,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M210,191 C228,191 228,150 245,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M415,150 C432,150 432,150 450,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M620,150 C638,150 638,150 655,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M825,150 C842,150 842,150 860,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1030,150 C1048,150 1048,150 1065,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1235,150 C1252,150 1252,150 1270,150" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1355,179 C1355,236 330,236 330,293" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1355,179 C1355,236 1150,236 1150,293" fill="none" stroke="#52606d" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#f)"/>
+<path d="M415,322 C432,322 432,285 450,285" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M415,330 C432,330 432,359 450,359" fill="none" stroke="#52606d" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#f)"/>
+<path d="M620,285 C638,285 638,322 655,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M620,359 C638,359 638,322 655,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M825,322 C842,322 842,404 860,404" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M825,322 C842,322 842,322 860,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1030,404 C1048,404 1048,404 1065,404" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1030,322 C1048,322 1048,322 1065,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1235,322 C1252,322 1252,322 1270,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<path d="M1440,322 C1458,322 1458,322 1475,322" fill="none" stroke="#52606d" stroke-width="1.4" marker-end="url(#f)"/>
+<rect x="40" y="80" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="50" y="96" font-size="10" fill="#52606d">ENTRADA</text>
+<text x="50" y="113" font-size="12.5" fill="#1f2933">Pedido por formulario</text>
+<rect x="40" y="162" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="50" y="178" font-size="10" fill="#52606d">ENTRADA</text>
+<text x="50" y="195" font-size="12.5" fill="#1f2933">Pedido por webhook</text>
+<rect x="245" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="255" y="137" font-size="10" fill="#52606d">CÓDIGO</text>
+<text x="255" y="154" font-size="12.5" fill="#1f2933">Normalizar pedido</text>
+<rect x="450" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="460" y="137" font-size="10" fill="#52606d">CONFIGURACIÓN</text>
+<text x="460" y="154" font-size="12.5" fill="#1f2933">Configuración</text>
+<rect x="655" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="665" y="137" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="665" y="154" font-size="12.5" fill="#1f2933">Leer tarifas y</text>
+<text x="665" y="169" font-size="12.5" fill="#1f2933">catálogo</text>
+<rect x="860" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="870" y="137" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="870" y="154" font-size="12.5" fill="#1f2933">CSV a filas</text>
+<rect x="1065" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#1a5fb4" stroke-width="1.6"/>
+<text x="1075" y="137" font-size="10" fill="#1a5fb4">CÓDIGO</text>
+<text x="1075" y="154" font-size="12.5" fill="#1f2933">Calcular cotización</text>
+<rect x="1270" y="121" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="1280" y="137" font-size="10" fill="#52606d">DECISIÓN</text>
+<text x="1280" y="154" font-size="12.5" fill="#1f2933">¿Pedido válido?</text>
+<rect x="245" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#1a5fb4" stroke-width="1.6"/>
+<text x="255" y="309" font-size="10" fill="#1a5fb4">IA LOCAL</text>
+<text x="255" y="326" font-size="12.5" fill="#1f2933">Redactar con IA local</text>
+<text x="255" y="341" font-size="12.5" fill="#1f2933">(Ollama)</text>
+<rect x="450" y="256" width="170" height="58" rx="4" fill="#ffffff" stroke="#1a5fb4" stroke-width="1.6"/>
+<text x="460" y="272" font-size="10" fill="#1a5fb4">CÓDIGO</text>
+<text x="460" y="289" font-size="12.5" fill="#1f2933">Revisar cifras del</text>
+<text x="460" y="304" font-size="12.5" fill="#1f2933">borrador</text>
+<rect x="450" y="330" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="460" y="346" font-size="10" fill="#52606d">CÓDIGO</text>
+<text x="460" y="363" font-size="12.5" fill="#1f2933">Plantilla sin IA</text>
+<rect x="655" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="665" y="309" font-size="10" fill="#52606d">CÓDIGO</text>
+<text x="665" y="326" font-size="12.5" fill="#1f2933">Avisar a Sergio</text>
+<rect x="860" y="375" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="870" y="391" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="870" y="408" font-size="12.5" fill="#1f2933">Pendiente: a archivo</text>
+<rect x="1065" y="375" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="1075" y="391" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="1075" y="408" font-size="12.5" fill="#1f2933">Pendiente: guardar</text>
+<rect x="860" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#1a5fb4" stroke-width="1.6"/>
+<text x="870" y="309" font-size="10" fill="#1a5fb4">PERSONA</text>
+<text x="870" y="326" font-size="12.5" fill="#1f2933">Aprobación de Sergio</text>
+<rect x="1065" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="1075" y="309" font-size="10" fill="#52606d">CÓDIGO</text>
+<text x="1075" y="326" font-size="12.5" fill="#1f2933">Armar registro</text>
+<rect x="1270" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="1280" y="309" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="1280" y="326" font-size="12.5" fill="#1f2933">Registro: a archivo</text>
+<rect x="1475" y="293" width="170" height="58" rx="4" fill="#ffffff" stroke="#c3ccd5" stroke-width="1"/>
+<text x="1485" y="309" font-size="10" fill="#52606d">ARCHIVO</text>
+<text x="1485" y="326" font-size="12.5" fill="#1f2933">Registro: guardar</text>
+</svg>
