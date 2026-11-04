@@ -85,6 +85,12 @@ python -m unittest discover -s pruebas -t pruebas -v   # las pruebas
 
 Reintentos: la llamada a Ollama y la escritura de archivos se reintentan 3 veces antes de fallar.
 
+**Probado en n8n de verdad** (n8n 2.44.7 con Ollama): `python scripts/probar_flujo_n8n.py` manda 4 pedidos y responde las aprobaciones. Salieron 4 de 4 bien, con el mismo precio de `costeo.py`. Resultado y errores que solo aparecieron corriendo n8n en `docs/prueba_n8n.md`.
+
+La IA puede inventar cosas que no son cifras: en una prueba escribió «la miniatura está lista» cuando todavía no estaba impresa. Por eso yo apruebo o corrijo antes de que salga.
+
+![Formulario de aprobación en n8n](capturas/05_aprobacion_n8n.jpg)
+
 ## Privacidad
 - `datos_reales/`, `registro/` y `.env` están en `.gitignore`.
 - Cada fila de cada CSV del repo dice `origen_datos = ficticio`. Una prueba falla si aparece un CSV sin esa marca o cualquier archivo dentro de `datos_reales/`.
@@ -200,6 +206,12 @@ python -m unittest discover -s pruebas -t pruebas -v   # the tests
 6. Everything ends up in `registro/cotizaciones.csv`: cost, price, margin, whether the AI passed the control and my decision. If something fails, the error flow notes it in `registro/errores.csv`.
 
 Retries: the call to Ollama and file writing are retried 3 times before failing.
+
+**Tested on a real n8n** (n8n 2.44.7 with Ollama): `python scripts/probar_flujo_n8n.py` sends 4 orders and answers the approvals. 4 out of 4 came out right, with the same price as `costeo.py`. Results, and the bugs that only showed up running n8n, in `docs/prueba_n8n.md`.
+
+The AI can make up things that are not numbers: in one test it wrote «the miniature is ready» when it had not been printed yet. That is why I approve or correct before it goes out.
+
+![Approval form in n8n](capturas/05_aprobacion_n8n.jpg)
 
 ## Privacy
 - `datos_reales/`, `registro/` and `.env` are in `.gitignore`.

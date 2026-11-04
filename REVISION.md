@@ -62,6 +62,21 @@ Error encontrado de paso: el patrón `0[1-9]_*.sql` no veía la consulta 10. Aho
 
 Pruebas: 63 de 63.
 
+## Vuelta 3 de mejoras (4-nov-2026): el flujo corriendo en n8n de verdad
+Sergio aprobó instalar n8n (4-nov). n8n 2.44.7 con Node 24, puerto 5679, puerto interno 5699, datos en `.n8n_local/`.
+
+| # | Qué | Resultado |
+|---|---|---|
+| 1 | Importar y activar los dos flujos | n8n los aceptó sin cambios: al activarlos revisa cada nodo y registra el formulario y el webhook |
+| 2 | Pedido inválido | No llegó a la IA; quedó como «Inválido» en el registro |
+| 3 | **Error 1:** Ollama no respondía (`ECONNREFUSED ::1:11434`) | `localhost` va primero a IPv6 en Node 24 y Ollama escucha en `127.0.0.1`. El respaldo funcionó (usó la plantilla y lo avisó). Arreglo: `127.0.0.1` |
+| 4 | **Error 2:** al reanudar después de la aprobación, «Armar registro» fallaba | n8n no sabe cuál salida del IF tomar después de una espera. El flujo de errores lo anotó en `registro/errores.csv` (el manejo de errores funcionó). Arreglo: leer el nodo «Avisar al dueño» |
+| 5 | **Error 3:** el formulario mostraba `**` y el costo sin formato | Texto plano y costo en pesos |
+| 6 | Prueba de punta a punta nueva: `scripts/probar_flujo_n8n.py` | 4 de 4 pedidos bien (Aprobado, Corregido con tildes, Rechazado, Inválido), precios iguales a `costeo.py`, 0 errores nuevos. Detalle en `docs/prueba_n8n.md` |
+| 7 | Lo que hace la IA de verdad | 2 de 3 borradores pasaron el control de cifras; en 1 no puso el total y se usó la plantilla. En otro dijo «la miniatura está lista» (falso): el control de números no lo ve, la aprobación humana sí |
+
+Nota: el navegador integrado de Claude bloquea el envío de formularios (`ERR_BLOCKED_BY_CLIENT`); por eso las aprobaciones de prueba se envían con el script, igual que lo hace un navegador.
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|

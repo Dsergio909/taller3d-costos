@@ -169,13 +169,13 @@ class Flujo(unittest.TestCase):
         casos = {"Aprobar": "Aprobado", "Corregir": "Corregido", "Rechazar": "Rechazado", None: "Sin respuesta en 24 h"}
         for decision, esperado in casos.items():
             formulario = {"Decisión": decision, "Texto corregido": "Texto, con coma y \"comillas\""} if decision else {}
-            r = self._correr_nodo("Armar registro", [formulario],
-                                  {"¿Pedido válido?": {"ok": True}, "Avisar al dueño": aviso})[0]
+            entrada = formulario if decision else aviso  # sin respuesta en 24 h, la espera devuelve el aviso
+            r = self._correr_nodo("Armar registro", [entrada], {"Avisar al dueño": aviso})[0]
             self.assertEqual(r["decision"], esperado)
             fila = next(csv.reader([r["linea"]]))
             self.assertEqual(len(fila), len(armar_flujo.COLUMNAS_REGISTRO), "la línea CSV debe quedar bien armada")
         invalido = {**self._pedido(cantidad=0), "ok": False, "motivo": "Cantidad inválida", "origen_datos": "ficticio"}
-        r = self._correr_nodo("Armar registro", [invalido], {"¿Pedido válido?": invalido, "Calcular cotización": invalido})[0]
+        r = self._correr_nodo("Armar registro", [invalido], {})[0]
         self.assertEqual(r["decision"], "Inválido")
 
 

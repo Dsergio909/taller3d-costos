@@ -170,8 +170,9 @@ def codigo_pendiente() -> str:
         "const r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, cliente: c.cliente,\n"
         "  pieza: c.pieza, cantidad: c.cantidad, total: Math.round(c.total), enlace_aprobacion: $execution.resumeFormUrl };\n"
         + a_texto_csv(json.dumps(COLUMNAS_PENDIENTES))
-        + "return [{ json: { ...c, linea, resumen_para_el_dueno: '**' + c.cliente + '** pidió ' + c.cantidad + ' x ' + c.pieza\n"
-        "  + ' por ' + c.canal + '. Costo ' + Math.round(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n"
+        + "const pesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');\n"
+        "return [{ json: { ...c, linea, resumen_para_el_dueno: c.cliente + ' pidió ' + c.cantidad + ' x ' + c.pieza\n"
+        "  + ' por ' + c.canal + '. Costo ' + pesos(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n"
         "  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + ' %.\\n\\n' + c.nota_ia\n"
         "  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
     )
@@ -180,9 +181,13 @@ def codigo_pendiente() -> str:
 def codigo_registro() -> str:
     return (
         "// Arma la línea del registro con la decisión del dueño (o el motivo del rechazo automático).\n"
-        "const valido = $('¿Pedido válido?').first().json.ok === true;\n"
-        "const c = valido ? $('Avisar al dueño').first().json : $('Calcular cotización').first().json;\n"
-        "const f = valido ? $input.first().json : {};\n"
+        "// Del «no» del IF llega el pedido inválido (ok: false). Del «sí» llega lo que devolvió la aprobación:\n"
+        "// el formulario o, si pasaron 24 h, el mismo aviso. Se lee «Avisar al dueño» (una sola salida),\n"
+        "// no el IF: al reanudar después de la espera, n8n no sabe cuál de sus dos salidas tomar.\n"
+        "const entrada = $input.first().json;\n"
+        "const valido = entrada.ok !== false;\n"
+        "const c = valido ? $('Avisar al dueño').first().json : entrada;\n"
+        "const f = valido ? entrada : {};\n"
         "let decision, mensaje;\n"
         "if (!valido) { decision = 'Inválido'; mensaje = c.motivo; }\n"
         "else if (f['Decisión'] === 'Aprobar') { decision = 'Aprobado'; mensaje = c.borrador; }\n"
@@ -232,7 +237,7 @@ def flujo_cotizacion(piezas: list[dict], costeo_js: str) -> dict:
     tecnologias = [{"option": "Resina"}, {"option": "FDM"}]
     config = [
         ("carpeta_datos", "datos"), ("carpeta_registro", "registro"),
-        ("ollama_url", "http://localhost:11434"), ("modelo", "qwen3.5:4b"), ("dias_entrega", "5"),
+        ("ollama_url", "http://127.0.0.1:11434"), ("modelo", "qwen3.5:4b"), ("dias_entrega", "5"),
     ]
     nodos = [
         nodo("Pedido por formulario", "n8n-nodes-base.formTrigger", 2.2, 0, 0, {
