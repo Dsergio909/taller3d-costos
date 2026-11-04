@@ -1,7 +1,7 @@
 -- 01 · ¿Cuánto cuesta de verdad cada pieza?
 -- La misma fórmula de scripts/costeo.py, en SQL.
 -- Lo que cuesta por placa (lavado, luz, máquina, preparar) se divide por las
--- piezas que caben en la placa. Al final se suma la tasa de fallas.
+-- piezas que caben en la placa. Al final se reparte lo que se pierde en placas que salen mal.
 
 DROP VIEW IF EXISTS v_costo_pieza;
 CREATE VIEW v_costo_pieza AS
@@ -57,8 +57,9 @@ partes AS (
 SELECT
     id_pieza, nombre, categoria, tecnologia, precio_lista,
     material, insumos, energia, maquina, mano_obra,
-    (material + insumos + energia + maquina + mano_obra) * tasa_fallas AS fallas,
-    (material + insumos + energia + maquina + mano_obra) * (1 + tasa_fallas) AS costo_total
+    -- si 1 de cada 10 placas sale mal, para tener 9 buenas se pagan 10: costo base / (1 - tasa)
+    (material + insumos + energia + maquina + mano_obra) * tasa_fallas / (1 - tasa_fallas) AS fallas,
+    (material + insumos + energia + maquina + mano_obra) / (1 - tasa_fallas)               AS costo_total
 FROM partes;
 
 -- Resultado: una fila por pieza, del costo más alto al más bajo.

@@ -56,12 +56,14 @@ function costoUnitario(pieza, t) {
   } else {
     throw new Error('Tecnología desconocida: ' + pieza.tecnologia);
   }
+  if (!(tasa >= 0 && tasa < 1)) throw new Error('La tasa de fallas debe ser una fracción menor que 1');
   const insumos = insumosPlaca / ppp;
   const energia = horas * potencia / 1000 * t.energia_precio_kwh / ppp;
   const maquina = horas * maquinaHora / ppp;
   const manoObra = (t.preparacion_min_por_placa / ppp + acabado) / 60 * t.mano_obra_hora;
   const base = material + insumos + energia + maquina + manoObra;
-  const fallas = base * tasa;
+  // Si 1 de cada 10 placas sale mal, para tener 9 buenas se pagan 10: base / (1 - tasa).
+  const fallas = base * tasa / (1 - tasa);
   return {
     material, insumos, energia, maquina, mano_obra: manoObra, fallas,
     costo_total: material + insumos + energia + maquina + manoObra + fallas,

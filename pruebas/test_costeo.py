@@ -27,7 +27,8 @@ class Costeo(unittest.TestCase):
 
         material 1,2 ml x 1,3 x 150 = 234 · insumos (6.000 + 2.000 + 1.000 + 1.000) / 40 = 250
         luz 1,5 h x 0,1 kW x 1.000 / 40 = 3,75 · máquina 1,5 x 400 / 40 = 15
-        mano de obra (15/40 + 3) min / 60 x 15.000 = 843,75 · fallas 10 % = 134,65 → 1.481,15
+        mano de obra (15/40 + 3) min / 60 x 15.000 = 843,75 → base 1.346,50
+        fallas: 1 de cada 10 placas sale mal → base / 0,9 = 1.496,11 (fallas 149,61)
         """
         c = self.py["R01"]
         self.assertAlmostEqual(c["material"], 234.0)
@@ -35,7 +36,8 @@ class Costeo(unittest.TestCase):
         self.assertAlmostEqual(c["energia"], 3.75)
         self.assertAlmostEqual(c["maquina"], 15.0)
         self.assertAlmostEqual(c["mano_obra"], 843.75)
-        self.assertAlmostEqual(c["costo_total"], 1481.15)
+        self.assertAlmostEqual(c["fallas"], 1346.5 * 0.1 / 0.9)
+        self.assertAlmostEqual(c["costo_total"], 1346.5 / 0.9)
 
     def test_python_igual_a_sql(self):
         filas = self.con.execute(f"SELECT id_pieza, {', '.join(COMPONENTES)} FROM v_costo_pieza").fetchall()
@@ -89,6 +91,8 @@ class Costeo(unittest.TestCase):
             costeo.costo_unitario({**pieza, "piezas_por_placa": 0}, self.t)
         with self.assertRaises(ValueError):
             costeo.costo_unitario({**pieza, "tecnologia": "Láser"}, self.t)
+        with self.assertRaises(ValueError):
+            costeo.costo_unitario(pieza, {**self.t, "resina_tasa_fallas": 1.0, "fdm_tasa_fallas": 1.0})
         with self.assertRaises(ValueError):
             costeo.precio_sugerido(1000, {**self.t, "margen_objetivo": 0.95}, 0.10)
 

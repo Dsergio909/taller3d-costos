@@ -8,88 +8,88 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 
 | id_pieza | nombre | tecnologia | costo_unitario | pct_material | pct_mano_obra | precio_lista |
 |---|---|---|---|---|---|---|
-| R05 | Busto 12 cm | Resina | 52,085 | 30.0 | 36.0 | 120,000 |
-| R04 | Figura 10 cm | Resina | 29,590 | 29.7 | 40.1 | 90,000 |
-| F05 | Lámpara (base) | FDM | 28,350 | 46.6 | 30.9 | 70,000 |
-| F04 | Organizador de escritorio | FDM | 27,195 | 60.7 | 18.4 | 45,000 |
-| F09 | Caja con tapa | FDM | 19,583 | 50.6 | 25.5 | 35,000 |
-| F08 | Repuesto a medida | FDM | 16,249 | 16.9 | 69.2 | 20,000 |
-| F06 | Figura multicolor | FDM | 15,593 | 35.3 | 40.1 | 30,000 |
-| F02 | Maceta pequeña | FDM | 11,498 | 57.4 | 27.2 | 25,000 |
-| F03 | Soporte de celular | FDM | 7,744 | 49.7 | 33.9 | 18,000 |
-| R03 | Miniatura 32 mm | Resina | 5,412 | 21.6 | 52.0 | 25,000 |
-| R08 | Llavero detallado | Resina | 4,121 | 18.9 | 54.6 | 14,000 |
-| R07 | Anillo | Resina | 2,481 | 11.8 | 58.0 | 18,000 |
-| R06 | Dije | Resina | 2,435 | 16.0 | 57.5 | 12,000 |
-| R02 | Aretes (par) | Resina | 2,112 | 9.2 | 65.1 | 15,000 |
-| F07 | Imán de nevera | FDM | 1,813 | 48.5 | 40.5 | 6,000 |
-| F01 | Llavero | FDM | 1,675 | 39.4 | 48.5 | 8,000 |
-| R01 | Ficha de juego | Resina | 1,481 | 15.8 | 57.0 | 6,000 |
+| R05 | Busto 12 cm | Resina | 52,611 | 29.7 | 35.6 | 120,000 |
+| R04 | Figura 10 cm | Resina | 29,889 | 29.4 | 39.7 | 90,000 |
+| F05 | Lámpara (base) | FDM | 28,421 | 46.4 | 30.8 | 70,000 |
+| F04 | Organizador de escritorio | FDM | 27,263 | 60.5 | 18.3 | 45,000 |
+| F09 | Caja con tapa | FDM | 19,632 | 50.4 | 25.5 | 35,000 |
+| F08 | Repuesto a medida | FDM | 16,289 | 16.9 | 69.1 | 20,000 |
+| F06 | Figura multicolor | FDM | 15,632 | 35.2 | 40.0 | 30,000 |
+| F02 | Maceta pequeña | FDM | 11,526 | 57.3 | 27.1 | 25,000 |
+| F03 | Soporte de celular | FDM | 7,763 | 49.6 | 33.8 | 18,000 |
+| R03 | Miniatura 32 mm | Resina | 5,467 | 21.4 | 51.4 | 25,000 |
+| R08 | Llavero detallado | Resina | 4,163 | 18.7 | 54.0 | 14,000 |
+| R07 | Anillo | Resina | 2,506 | 11.7 | 57.4 | 18,000 |
+| R06 | Dije | Resina | 2,460 | 15.9 | 56.9 | 12,000 |
+| R02 | Aretes (par) | Resina | 2,133 | 9.1 | 64.5 | 15,000 |
+| F07 | Imán de nevera | FDM | 1,818 | 48.4 | 40.4 | 6,000 |
+| F01 | Llavero | FDM | 1,679 | 39.3 | 48.4 | 8,000 |
+| R01 | Ficha de juego | Resina | 1,496 | 15.6 | 56.4 | 6,000 |
 
 ## 02 · Resina frente a FDM: ¿en qué se va la plata en cada tecnología?
 `sql/02_resina_vs_fdm.sql`
 
 | tecnologia | piezas_en_catalogo | costo_promedio | pct_material | pct_insumos | pct_luz_y_maquina | pct_mano_obra | pct_fallas | margen_bruto_promedio_pct |
 |---|---|---|---|---|---|---|---|---|
-| Resina | 8 | 12,465 | 27.5 | 18.0 | 4.5 | 40.9 | 9.1 | 75.0 |
-| FDM | 9 | 14,411 | 46.1 | 2.4 | 13.2 | 33.6 | 4.8 | 52.2 |
+| Resina | 8 | 12,591 | 27.2 | 17.9 | 4.5 | 40.5 | 10.0 | 74.7 |
+| FDM | 9 | 14,447 | 46.0 | 2.4 | 13.1 | 33.5 | 5.0 | 52.1 |
 
 ## 03 · Precio y margen por pieza y por canal
 `sql/03_precio_y_margen.sql`
 
 | id_pieza | nombre | tecnologia | canal | precio_lista | costo_unitario | margen_pct | precio_sugerido | puesto_de_menor_margen |
 |---|---|---|---|---|---|---|---|---|
-| F08 | Repuesto a medida | FDM | Instagram | 20,000 | 16,249 | 15.8 | 29,000 | 1 |
-| F04 | Organizador de escritorio | FDM | Instagram | 45,000 | 27,195 | 36.6 | 48,000 | 2 |
-| F09 | Caja con tapa | FDM | Instagram | 35,000 | 19,583 | 41.0 | 34,500 | 3 |
-| F06 | Figura multicolor | FDM | Instagram | 30,000 | 15,593 | 45.0 | 27,500 | 4 |
-| F02 | Maceta pequeña | FDM | Instagram | 25,000 | 11,498 | 51.0 | 20,500 | 5 |
-| R05 | Busto 12 cm | Resina | Instagram | 120,000 | 52,085 | 53.6 | 91,500 | 6 |
-| F03 | Soporte de celular | FDM | Instagram | 18,000 | 7,744 | 54.0 | 14,000 | 7 |
-| F05 | Lámpara (base) | FDM | Instagram | 70,000 | 28,350 | 56.5 | 50,000 | 8 |
-| R04 | Figura 10 cm | Resina | Instagram | 90,000 | 29,590 | 64.1 | 52,000 | 9 |
-| F07 | Imán de nevera | FDM | Instagram | 6,000 | 1,813 | 66.8 | 3,500 | 10 |
-| R08 | Llavero detallado | Resina | Instagram | 14,000 | 4,121 | 67.6 | 7,500 | 11 |
-| R01 | Ficha de juego | Resina | Instagram | 6,000 | 1,481 | 72.3 | 3,000 | 12 |
-| R03 | Miniatura 32 mm | Resina | Instagram | 25,000 | 5,412 | 75.4 | 9,500 | 13 |
-| F01 | Llavero | FDM | Instagram | 8,000 | 1,675 | 76.1 | 3,000 | 14 |
-| R06 | Dije | Resina | Instagram | 12,000 | 2,435 | 76.7 | 4,500 | 15 |
-| R02 | Aretes (par) | Resina | Instagram | 15,000 | 2,112 | 82.9 | 4,000 | 16 |
-| R07 | Anillo | Resina | Instagram | 18,000 | 2,481 | 83.2 | 4,500 | 17 |
-| F08 | Repuesto a medida | FDM | TikTok | 20,000 | 16,249 | 8.8 | 32,500 | 1 |
-| F04 | Organizador de escritorio | FDM | TikTok | 45,000 | 27,195 | 29.6 | 54,500 | 2 |
-| F09 | Caja con tapa | FDM | TikTok | 35,000 | 19,583 | 34.1 | 39,500 | 3 |
-| F06 | Figura multicolor | FDM | TikTok | 30,000 | 15,593 | 38.0 | 31,500 | 4 |
-| F02 | Maceta pequeña | FDM | TikTok | 25,000 | 11,498 | 44.0 | 23,000 | 5 |
-| R05 | Busto 12 cm | Resina | TikTok | 120,000 | 52,085 | 46.6 | 104,500 | 6 |
-| F03 | Soporte de celular | FDM | TikTok | 18,000 | 7,744 | 47.0 | 15,500 | 7 |
-| F05 | Lámpara (base) | FDM | TikTok | 70,000 | 28,350 | 49.5 | 57,000 | 8 |
-| R04 | Figura 10 cm | Resina | TikTok | 90,000 | 29,590 | 57.1 | 59,500 | 9 |
-| F07 | Imán de nevera | FDM | TikTok | 6,000 | 1,813 | 59.8 | 4,000 | 10 |
-| R08 | Llavero detallado | Resina | TikTok | 14,000 | 4,121 | 60.6 | 8,500 | 11 |
-| R01 | Ficha de juego | Resina | TikTok | 6,000 | 1,481 | 65.3 | 3,000 | 12 |
-| R03 | Miniatura 32 mm | Resina | TikTok | 25,000 | 5,412 | 68.4 | 11,000 | 13 |
-| F01 | Llavero | FDM | TikTok | 8,000 | 1,675 | 69.1 | 3,500 | 14 |
-| R06 | Dije | Resina | TikTok | 12,000 | 2,435 | 69.7 | 5,000 | 15 |
-| R02 | Aretes (par) | Resina | TikTok | 15,000 | 2,112 | 75.9 | 4,500 | 16 |
-| R07 | Anillo | Resina | TikTok | 18,000 | 2,481 | 76.2 | 5,000 | 17 |
-| F08 | Repuesto a medida | FDM | WhatsApp | 20,000 | 16,249 | 18.8 | 27,500 | 1 |
-| F04 | Organizador de escritorio | FDM | WhatsApp | 45,000 | 27,195 | 39.6 | 45,500 | 2 |
-| F09 | Caja con tapa | FDM | WhatsApp | 35,000 | 19,583 | 44.0 | 33,000 | 3 |
-| F06 | Figura multicolor | FDM | WhatsApp | 30,000 | 15,593 | 48.0 | 26,000 | 4 |
-| F02 | Maceta pequeña | FDM | WhatsApp | 25,000 | 11,498 | 54.0 | 19,500 | 5 |
-| R05 | Busto 12 cm | Resina | WhatsApp | 120,000 | 52,085 | 56.6 | 87,000 | 6 |
-| F03 | Soporte de celular | FDM | WhatsApp | 18,000 | 7,744 | 57.0 | 13,000 | 7 |
-| F05 | Lámpara (base) | FDM | WhatsApp | 70,000 | 28,350 | 59.5 | 47,500 | 8 |
-| R04 | Figura 10 cm | Resina | WhatsApp | 90,000 | 29,590 | 67.1 | 49,500 | 9 |
-| F07 | Imán de nevera | FDM | WhatsApp | 6,000 | 1,813 | 69.8 | 3,500 | 10 |
-| R08 | Llavero detallado | Resina | WhatsApp | 14,000 | 4,121 | 70.6 | 7,000 | 11 |
-| R01 | Ficha de juego | Resina | WhatsApp | 6,000 | 1,481 | 75.3 | 2,500 | 12 |
-| R03 | Miniatura 32 mm | Resina | WhatsApp | 25,000 | 5,412 | 78.4 | 9,500 | 13 |
-| F01 | Llavero | FDM | WhatsApp | 8,000 | 1,675 | 79.1 | 3,000 | 14 |
-| R06 | Dije | Resina | WhatsApp | 12,000 | 2,435 | 79.7 | 4,500 | 15 |
-| R02 | Aretes (par) | Resina | WhatsApp | 15,000 | 2,112 | 85.9 | 4,000 | 16 |
-| R07 | Anillo | Resina | WhatsApp | 18,000 | 2,481 | 86.2 | 4,500 | 17 |
+| F08 | Repuesto a medida | FDM | Instagram | 20,000 | 16,289 | 15.6 | 29,000 | 1 |
+| F04 | Organizador de escritorio | FDM | Instagram | 45,000 | 27,263 | 36.4 | 48,000 | 2 |
+| F09 | Caja con tapa | FDM | Instagram | 35,000 | 19,632 | 40.9 | 34,500 | 3 |
+| F06 | Figura multicolor | FDM | Instagram | 30,000 | 15,632 | 44.9 | 27,500 | 4 |
+| F02 | Maceta pequeña | FDM | Instagram | 25,000 | 11,526 | 50.9 | 20,500 | 5 |
+| R05 | Busto 12 cm | Resina | Instagram | 120,000 | 52,611 | 53.2 | 92,500 | 6 |
+| F03 | Soporte de celular | FDM | Instagram | 18,000 | 7,763 | 53.9 | 14,000 | 7 |
+| F05 | Lámpara (base) | FDM | Instagram | 70,000 | 28,421 | 56.4 | 50,000 | 8 |
+| R04 | Figura 10 cm | Resina | Instagram | 90,000 | 29,889 | 63.8 | 52,500 | 9 |
+| F07 | Imán de nevera | FDM | Instagram | 6,000 | 1,818 | 66.7 | 3,500 | 10 |
+| R08 | Llavero detallado | Resina | Instagram | 14,000 | 4,163 | 67.3 | 7,500 | 11 |
+| R01 | Ficha de juego | Resina | Instagram | 6,000 | 1,496 | 72.1 | 3,000 | 12 |
+| R03 | Miniatura 32 mm | Resina | Instagram | 25,000 | 5,467 | 75.1 | 10,000 | 13 |
+| F01 | Llavero | FDM | Instagram | 8,000 | 1,679 | 76.0 | 3,000 | 14 |
+| R06 | Dije | Resina | Instagram | 12,000 | 2,460 | 76.5 | 4,500 | 15 |
+| R02 | Aretes (par) | Resina | Instagram | 15,000 | 2,133 | 82.8 | 4,000 | 16 |
+| R07 | Anillo | Resina | Instagram | 18,000 | 2,506 | 83.1 | 4,500 | 17 |
+| F08 | Repuesto a medida | FDM | TikTok | 20,000 | 16,289 | 8.6 | 33,000 | 1 |
+| F04 | Organizador de escritorio | FDM | TikTok | 45,000 | 27,263 | 29.4 | 55,000 | 2 |
+| F09 | Caja con tapa | FDM | TikTok | 35,000 | 19,632 | 33.9 | 39,500 | 3 |
+| F06 | Figura multicolor | FDM | TikTok | 30,000 | 15,632 | 37.9 | 31,500 | 4 |
+| F02 | Maceta pequeña | FDM | TikTok | 25,000 | 11,526 | 43.9 | 23,500 | 5 |
+| R05 | Busto 12 cm | Resina | TikTok | 120,000 | 52,611 | 46.2 | 105,500 | 6 |
+| F03 | Soporte de celular | FDM | TikTok | 18,000 | 7,763 | 46.9 | 16,000 | 7 |
+| F05 | Lámpara (base) | FDM | TikTok | 70,000 | 28,421 | 49.4 | 57,000 | 8 |
+| R04 | Figura 10 cm | Resina | TikTok | 90,000 | 29,889 | 56.8 | 60,000 | 9 |
+| F07 | Imán de nevera | FDM | TikTok | 6,000 | 1,818 | 59.7 | 4,000 | 10 |
+| R08 | Llavero detallado | Resina | TikTok | 14,000 | 4,163 | 60.3 | 8,500 | 11 |
+| R01 | Ficha de juego | Resina | TikTok | 6,000 | 1,496 | 65.1 | 3,000 | 12 |
+| R03 | Miniatura 32 mm | Resina | TikTok | 25,000 | 5,467 | 68.1 | 11,000 | 13 |
+| F01 | Llavero | FDM | TikTok | 8,000 | 1,679 | 69.0 | 3,500 | 14 |
+| R06 | Dije | Resina | TikTok | 12,000 | 2,460 | 69.5 | 5,000 | 15 |
+| R02 | Aretes (par) | Resina | TikTok | 15,000 | 2,133 | 75.8 | 4,500 | 16 |
+| R07 | Anillo | Resina | TikTok | 18,000 | 2,506 | 76.1 | 5,500 | 17 |
+| F08 | Repuesto a medida | FDM | WhatsApp | 20,000 | 16,289 | 18.6 | 27,500 | 1 |
+| F04 | Organizador de escritorio | FDM | WhatsApp | 45,000 | 27,263 | 39.4 | 45,500 | 2 |
+| F09 | Caja con tapa | FDM | WhatsApp | 35,000 | 19,632 | 43.9 | 33,000 | 3 |
+| F06 | Figura multicolor | FDM | WhatsApp | 30,000 | 15,632 | 47.9 | 26,500 | 4 |
+| F02 | Maceta pequeña | FDM | WhatsApp | 25,000 | 11,526 | 53.9 | 19,500 | 5 |
+| R05 | Busto 12 cm | Resina | WhatsApp | 120,000 | 52,611 | 56.2 | 88,000 | 6 |
+| F03 | Soporte de celular | FDM | WhatsApp | 18,000 | 7,763 | 56.9 | 13,000 | 7 |
+| F05 | Lámpara (base) | FDM | WhatsApp | 70,000 | 28,421 | 59.4 | 47,500 | 8 |
+| R04 | Figura 10 cm | Resina | WhatsApp | 90,000 | 29,889 | 66.8 | 50,000 | 9 |
+| F07 | Imán de nevera | FDM | WhatsApp | 6,000 | 1,818 | 69.7 | 3,500 | 10 |
+| R08 | Llavero detallado | Resina | WhatsApp | 14,000 | 4,163 | 70.3 | 7,000 | 11 |
+| R01 | Ficha de juego | Resina | WhatsApp | 6,000 | 1,496 | 75.1 | 2,500 | 12 |
+| R03 | Miniatura 32 mm | Resina | WhatsApp | 25,000 | 5,467 | 78.1 | 9,500 | 13 |
+| F01 | Llavero | FDM | WhatsApp | 8,000 | 1,679 | 79.0 | 3,000 | 14 |
+| R06 | Dije | Resina | WhatsApp | 12,000 | 2,460 | 79.5 | 4,500 | 15 |
+| R02 | Aretes (par) | Resina | WhatsApp | 15,000 | 2,133 | 85.8 | 4,000 | 16 |
+| R07 | Anillo | Resina | WhatsApp | 18,000 | 2,506 | 86.1 | 4,500 | 17 |
 
 ## 04 · Gastos del taller por mes y por categoría
 `sql/04_gastos_por_mes.sql`
@@ -176,20 +176,20 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 
 | canal | ventas_netas | costo_piezas | comision | ganancia | margen_pct |
 |---|---|---|---|---|---|
-| WhatsApp | 10,982,100 | 5,121,906 | 0.0 | 5,860,194 | 53.4 |
-| Instagram | 8,650,000 | 2,932,357 | 259,500 | 5,458,143 | 63.1 |
-| TikTok | 6,022,650 | 1,726,390 | 602,265 | 3,693,995 | 61.3 |
+| WhatsApp | 10,982,100 | 5,149,258 | 0.0 | 5,832,842 | 53.1 |
+| Instagram | 8,650,000 | 2,947,912 | 259,500 | 5,442,588 | 62.9 |
+| TikTok | 6,022,650 | 1,737,485 | 602,265 | 3,682,900 | 61.2 |
 
 ## 07 · ¿Qué pasa si cambio el precio y vendo más o menos?
 `sql/07_que_pasa_si.sql`
 
 | escenario | ventas | ganancia |
 |---|---|---|
-| Subo 10 % y vendo igual | 28,220,225 | 17,491,629 |
-| Subo 10 % y vendo 10 % menos | 25,398,203 | 15,742,466 |
-| Bajo 10 % y vendo 20 % más | 27,707,130 | 15,039,639 |
-| Como va | 25,654,750 | 15,012,331 |
-| Bajo 10 % y vendo 10 % más | 25,398,203 | 13,786,335 |
+| Subo 10 % y vendo igual | 28,220,225 | 17,437,629 |
+| Subo 10 % y vendo 10 % menos | 25,398,203 | 15,693,866 |
+| Bajo 10 % y vendo 20 % más | 27,707,130 | 14,974,838 |
+| Como va | 25,654,750 | 14,958,330 |
+| Bajo 10 % y vendo 10 % más | 25,398,203 | 13,726,935 |
 
 ## 08 · Mes a mes: ventas, gastos de caja y cambio contra el mes anterior (LAG)
 `sql/08_resultado_por_mes.sql`
@@ -214,23 +214,23 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 
 | id_pieza | nombre | tecnologia | ganancia_por_pieza | minutos_de_impresora | ganancia_por_hora | puesto_por_hora | puesto_por_pieza | puesto_en_su_impresora |
 |---|---|---|---|---|---|---|---|---|
-| R02 | Aretes (par) | Resina | 12,888 | 2.0 | 386,640 | 1 | 10 | 1 |
-| R07 | Anillo | Resina | 15,520 | 3.0 | 310,390 | 2 | 6 | 2 |
-| R06 | Dije | Resina | 9,565 | 2.9 | 199,263 | 3 | 13 | 3 |
-| R01 | Ficha de juego | Resina | 4,519 | 2.3 | 120,503 | 4 | 15 | 4 |
-| R08 | Llavero detallado | Resina | 9,879 | 6.0 | 98,787 | 5 | 12 | 5 |
-| R03 | Miniatura 32 mm | Resina | 19,588 | 12.5 | 94,022 | 6 | 4 | 6 |
-| F01 | Llavero | FDM | 6,325 | 7.5 | 50,599 | 7 | 14 | 1 |
-| F07 | Imán de nevera | FDM | 4,187 | 7.5 | 33,494 | 8 | 16 | 2 |
-| R04 | Figura 10 cm | Resina | 60,410 | 150.0 | 24,164 | 9 | 2 | 7 |
-| R05 | Busto 12 cm | Resina | 67,915 | 360.0 | 11,319 | 10 | 1 | 8 |
-| F03 | Soporte de celular | FDM | 10,256 | 60.0 | 10,256 | 11 | 11 | 3 |
-| F02 | Maceta pequeña | FDM | 13,503 | 90.0 | 9,002 | 12 | 9 | 4 |
-| F05 | Lámpara (base) | FDM | 41,650 | 420.0 | 5,950 | 13 | 3 | 5 |
-| F06 | Figura multicolor | FDM | 14,408 | 240.0 | 3,602 | 14 | 8 | 6 |
-| F09 | Caja con tapa | FDM | 15,418 | 300.0 | 3,084 | 15 | 7 | 7 |
-| F04 | Organizador de escritorio | FDM | 17,805 | 360.0 | 2,968 | 16 | 5 | 8 |
-| F08 | Repuesto a medida | FDM | 3,751 | 90.0 | 2,501 | 17 | 17 | 9 |
+| R02 | Aretes (par) | Resina | 12,867 | 2.0 | 386,000 | 1 | 10 | 1 |
+| R07 | Anillo | Resina | 15,494 | 3.0 | 309,889 | 2 | 6 | 2 |
+| R06 | Dije | Resina | 9,540 | 2.9 | 198,750 | 3 | 13 | 3 |
+| R01 | Ficha de juego | Resina | 4,504 | 2.3 | 120,104 | 4 | 15 | 4 |
+| R08 | Llavero detallado | Resina | 9,837 | 6.0 | 98,370 | 5 | 12 | 5 |
+| R03 | Miniatura 32 mm | Resina | 19,533 | 12.5 | 93,760 | 6 | 4 | 6 |
+| F01 | Llavero | FDM | 6,321 | 7.5 | 50,565 | 7 | 14 | 1 |
+| F07 | Imán de nevera | FDM | 4,182 | 7.5 | 33,458 | 8 | 16 | 2 |
+| R04 | Figura 10 cm | Resina | 60,111 | 150.0 | 24,044 | 9 | 2 | 7 |
+| R05 | Busto 12 cm | Resina | 67,389 | 360.0 | 11,231 | 10 | 1 | 8 |
+| F03 | Soporte de celular | FDM | 10,237 | 60.0 | 10,237 | 11 | 11 | 3 |
+| F02 | Maceta pequeña | FDM | 13,474 | 90.0 | 8,982 | 12 | 9 | 4 |
+| F05 | Lámpara (base) | FDM | 41,579 | 420.0 | 5,940 | 13 | 3 | 5 |
+| F06 | Figura multicolor | FDM | 14,368 | 240.0 | 3,592 | 14 | 8 | 6 |
+| F09 | Caja con tapa | FDM | 15,368 | 300.0 | 3,074 | 15 | 7 | 7 |
+| F04 | Organizador de escritorio | FDM | 17,737 | 360.0 | 2,956 | 16 | 5 | 8 |
+| F08 | Repuesto a medida | FDM | 3,711 | 90.0 | 2,474 | 17 | 17 | 9 |
 
 ## 10 · Cohortes: de los clientes nuevos de cada trimestre, ¿cuántos volvieron a comprar?
 `sql/10_cohortes_de_clientes.sql`

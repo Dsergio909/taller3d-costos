@@ -46,7 +46,7 @@ Pruebas al cerrar la vuelta: 57 de 57 (8 nuevas del revisor de datos).
 |---|---|---|---|
 | 1 | Privacidad en **todo el historial de git** (no solo lo actual): 126 archivos de todos los commits | Nada sensible. El único hallazgo es un comentario del esquema SQL que nombra la carpeta `datos_reales/`. Autor de los commits: el correo privado de GitHub (`noreply`) | Nada que arreglar |
 | 2 | Control de cifras de la IA con nombres de cliente que traen números | Un cliente «andrea_92» saludado por su nombre hacía descartar un borrador correcto (el «92» contaba como cifra inventada) | Los números del nombre del cliente se permiten; prueba nueva |
-| 3 | Segunda opinión externa (Gemini vía Antigravity) sobre fórmula, SQL, DAX y código del flujo | Pendiente: Antigravity estaba en uso por otro chat desde las 3:49 p. m. | Ver «Uso de IA delegada» |
+| 3 | Segunda opinión externa sobre fórmula, SQL, DAX y código del flujo. Antigravity estuvo ocupado por otro chat 30 minutos (3:49 a 4:18 p. m.), así que la hizo Ollama, como dice la regla | **1 error de fórmula real:** las fallas se sumaban como +10 % del costo, pero si 1 de cada 10 placas sale mal, para tener 9 buenas se pagan 10: el costo es base / 0,9 (+11,1 %). **2 errores reales en el flujo:** un margen objetivo de 0 % hacía fallar el nodo («no se pudieron leer las tarifas») y una comisión con texto pasaba como `NaN` sin aviso. Una instrucción del prompt («sin inventar fechas») chocaba con los días de entrega | Fórmula corregida en los 4 lugares (Python, SQL, JS y Power Query) con protección si la tasa llega a 100 %. El nodo revisa que tarifas y comisiones sean números. Prompt aclarado. Cambiaron 13 cifras del README (por ejemplo, ganancia del año $15.012.331 → $14.958.330); la prueba de cifras las encontró todas y las 5 conclusiones siguen siendo ciertas |
 | 4 | Correr el flujo en n8n de verdad | Pendiente del permiso de Sergio para instalar n8n | — |
 
 ## Vuelta 1 de mejoras (4-nov-2026): qué valora un reclutador de datos u operaciones
@@ -60,9 +60,10 @@ Pruebas al cerrar la vuelta: 57 de 57 (8 nuevas del revisor de datos).
 
 Error encontrado de paso: el patrón `0[1-9]_*.sql` no veía la consulta 10. Ahora busca `[0-9][0-9]_*.sql` sin el esquema.
 
-Pruebas: 62 de 62.
+Pruebas: 63 de 63.
 
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|
 | Vuelta 1 | Ollama qwen3.5:4b (local; Antigravity estaba ocupado y Power BI abierto en otro chat, por eso no el 9b) | Traducción del README al inglés, sección por sección | 14 errores, 3 de sentido (ver vuelta 1) |
+| Vuelta 3 | Ollama qwen3.5:4b (Antigravity ocupado 30 min; Power BI abierto en otro chat) | Segunda opinión de código en 4 partes (5,8 min) | De ~25 hallazgos, 4 reales (tasa de fallas, margen 0 %, comisión no numérica, prompt). Los demás eran falsos: decía que en JS `"5" * precio` concatena textos, que «$1.200» no se reconoce como 1200 y que la fórmula del trimestre está mal; en la parte de DAX repitió el mismo punto más de 40 veces |

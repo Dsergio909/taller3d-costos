@@ -120,7 +120,7 @@ PIEZAS_M = """let
     Maquina = Table.AddColumn(Energia, "Costo máquina", each [horas_placa] * (if EsResina(_) then T[resina_maquina_hora] else T[fdm_maquina_hora]) / [piezas_por_placa], type number),
     ManoObra = Table.AddColumn(Maquina, "Costo mano de obra", each (T[preparacion_min_por_placa] / [piezas_por_placa] + [minutos_acabado]) / 60 * T[mano_obra_hora], type number),
     Base = (f) => f[Costo material] + f[Costo insumos] + f[Costo energía] + f[Costo máquina] + f[Costo mano de obra],
-    Fallas = Table.AddColumn(ManoObra, "Costo fallas", each Base(_) * (if EsResina(_) then T[resina_tasa_fallas] else T[fdm_tasa_fallas]), type number),
+    Fallas = Table.AddColumn(ManoObra, "Costo fallas", each let tasa = if EsResina(_) then T[resina_tasa_fallas] else T[fdm_tasa_fallas] in Base(_) * tasa / (1 - tasa), type number),
     Total = Table.AddColumn(Fallas, "Costo unitario", each Base(_) + [Costo fallas], type number),
     SinMarca = Table.RemoveColumns(Total, {"origen_datos"})
 in

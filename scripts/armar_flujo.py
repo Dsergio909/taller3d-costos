@@ -85,9 +85,11 @@ const canales = Object.fromEntries(filas.filter((f) => 'comision_pct' in f).map(
 const origenDatos = filas.length && filas.every((f) => f.origen_datos === 'ficticio') ? 'ficticio' : 'real';
 
 const fallo = (motivo) => [{ json: { ...pedido, ok: false, motivo, origen_datos: origenDatos } }];
-if (!tarifas.margen_objetivo || !catalogo.length || !Object.keys(canales).length) {
+if (!('margen_objetivo' in tarifas) || !catalogo.length || !Object.keys(canales).length) {
   throw new Error('No se pudieron leer tarifas.csv, piezas.csv o canales.csv');
 }
+const noNumericos = [...Object.entries(tarifas), ...Object.entries(canales)].filter(([, v]) => !Number.isFinite(v)).map(([k]) => k);
+if (noNumericos.length) throw new Error('Valores que no son número en tarifas o canales: ' + noNumericos.join(', '));
 
 let pieza;
 if (pedido.id_pieza === 'A medida') {
@@ -118,7 +120,7 @@ const prompt = [
   '- Precio por unidad: ' + pesos(cot.precio_unitario),
   '- Total: ' + pesos(cot.total),
   '- Entrega: ' + dias + ' días hábiles',
-  'Reglas: máximo 4 frases, tutea, tono amable y concreto, sin emojis, sin inventar descuentos, envíos ni fechas.',
+  'Reglas: máximo 4 frases, tutea, tono amable y concreto, sin emojis. No agregues descuentos, costos de envío ni fechas de calendario.',
   pedido.comentario ? 'El cliente comentó: "' + pedido.comentario + '" (respóndelo solo si se puede sin agregar cifras).' : '',
 ].filter(Boolean).join('\\n');
 const plantilla = 'Hola' + (pedido.cliente ? ' ' + pedido.cliente : '') + ', gracias por escribirnos. '

@@ -148,7 +148,7 @@ class Flujo(unittest.TestCase):
         c = self._correr_nodo("Calcular cotización", self._filas_csv(), {"Configuración": self._pedido()})[0]
         bueno = (f"Hola, gracias por escribirnos. Las 4 miniaturas de 32 mm quedan en {c['precio_texto']} cada una, "
                  f"{c['total_texto']} en total, y te las entregamos en 5 días hábiles. Es impresión 3D en resina.")
-        inventado = bueno + " El envío vale $10.000."
+        inventado = bueno + " El envío vale $12.345."
         sin_total = f"Hola, cada una vale {c['precio_texto']}."
         con_usuario = f"Hola andrea_92, " + bueno
         casos = [(bueno, True), (inventado, False), (sin_total, False), ("", False),

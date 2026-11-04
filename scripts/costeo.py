@@ -9,7 +9,8 @@ Las pruebas comprueban que las cuatro den lo mismo.
 La idea: una placa de impresión se reparte entre las piezas que caben en ella.
 Lo que cuesta por placa (lavado, guantes, luz, máquina, preparar) se divide por
 las piezas de la placa. Lo que cuesta por pieza (material y acabado) va directo.
-Al final se suma lo que se pierde por placas que salen mal (tasa de fallas).
+Al final se suma lo que se pierde por placas que salen mal: si 1 de cada 10 sale
+mal, el costo de cada pieza buena es el costo base / 0,9.
 """
 from __future__ import annotations
 
@@ -69,12 +70,15 @@ def costo_unitario(pieza: dict, t: dict[str, float]) -> dict[str, float]:
     else:
         raise ValueError(f"Tecnología desconocida: {tec}")
 
+    if not 0 <= tasa < 1:
+        raise ValueError("La tasa de fallas debe ser una fracción menor que 1")
     insumos = insumos_placa / ppp
     energia = horas * potencia_w / 1000 * t["energia_precio_kwh"] / ppp
     maquina = horas * maquina_hora / ppp
     mano_obra = (t["preparacion_min_por_placa"] / ppp + acabado_min) / 60 * t["mano_obra_hora"]
     base = material + insumos + energia + maquina + mano_obra
-    fallas = base * tasa
+    # Si 1 de cada 10 placas sale mal, para tener 9 buenas se pagan 10: el costo se divide por (1 - tasa).
+    fallas = base * tasa / (1 - tasa)
     partes = {
         "material": material,
         "insumos": insumos,
