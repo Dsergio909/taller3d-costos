@@ -20,8 +20,8 @@ class ConsultasSQL(unittest.TestCase):
         return [dict(zip(cols, f)) for f in filas]
 
     def test_todas_corren(self):
-        archivos = sorted(SQL.glob("0[1-9]_*.sql"))
-        self.assertEqual(len(archivos), 9)
+        archivos = sorted((q for q in SQL.glob("[0-9][0-9]_*.sql") if not q.name.startswith("00")))
+        self.assertEqual(len(archivos), 10)
         for ruta in archivos:
             _c, filas = cargar_sqlite.correr(self.con, ruta)
             self.assertGreater(len(filas), 0, ruta.name)
@@ -65,6 +65,17 @@ class ConsultasSQL(unittest.TestCase):
             self.assertAlmostEqual(f["ganancia_por_hora"], esperado, delta=0.6, msg=f["id_pieza"])
         self.assertEqual(filas[0]["puesto_por_hora"], 1)
         self.assertEqual([f["ganancia_por_hora"] for f in filas], sorted((f["ganancia_por_hora"] for f in filas), reverse=True))
+
+    def test_cohortes(self):
+        filas = self.correr("10_cohortes_de_clientes.sql")
+        con_compras = self.con.execute(
+            "SELECT COUNT(DISTINCT id_cliente) FROM pedidos WHERE estado = 'Entregado'").fetchone()[0]
+        self.assertEqual(sum(f["clientes_nuevos"] for f in filas), con_compras, "cada cliente cae en una sola cohorte")
+        for f in filas:
+            self.assertLessEqual(f["volvieron_en_90_dias"], f["con_90_dias_para_mirar"])
+            self.assertLessEqual(f["con_90_dias_para_mirar"], f["clientes_nuevos"])
+        self.assertLess(filas[-1]["con_90_dias_para_mirar"], filas[-1]["clientes_nuevos"],
+                        "el último trimestre no tiene 90 días completos: no se cuenta como si no volvieran")
 
     def test_resina_y_fdm(self):
         filas = {f["tecnologia"]: f for f in self.correr("02_resina_vs_fdm.sql")}

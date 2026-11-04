@@ -232,3 +232,13 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 | F04 | Organizador de escritorio | FDM | 17,805 | 360.0 | 2,968 | 16 | 5 | 8 |
 | F08 | Repuesto a medida | FDM | 3,751 | 90.0 | 2,501 | 17 | 17 | 9 |
 
+## 10 · Cohortes: de los clientes nuevos de cada trimestre, ¿cuántos volvieron a comprar?
+`sql/10_cohortes_de_clientes.sql`
+
+| cohorte | clientes_nuevos | con_90_dias_para_mirar | volvieron_en_90_dias | pct_volvieron_en_90_dias | dias_promedio_hasta_volver |
+|---|---|---|---|---|---|
+| 2025-T1 | 77 | 77 | 31 | 40.3 | 122.0 |
+| 2025-T2 | 72 | 72 | 21 | 29.2 | 106.0 |
+| 2025-T3 | 53 | 53 | 13 | 24.5 | 81.0 |
+| 2025-T4 | 50 | 1 | 0 | 0.0 | 31.0 |
+

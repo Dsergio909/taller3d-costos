@@ -41,6 +41,27 @@ La pregunta de esta vuelta: ¿qué se rompe cuando el dueño del taller copia `d
 
 Pruebas al cerrar la vuelta: 57 de 57 (8 nuevas del revisor de datos).
 
+## Vuelta 3 de errores (4-nov-2026): casos borde y privacidad del historial
+| # | Qué revisé | Qué encontré | Arreglo |
+|---|---|---|---|
+| 1 | Privacidad en **todo el historial de git** (no solo lo actual): 126 archivos de todos los commits | Nada sensible. El único hallazgo es un comentario del esquema SQL que nombra la carpeta `datos_reales/`. Autor de los commits: el correo privado de GitHub (`noreply`) | Nada que arreglar |
+| 2 | Control de cifras de la IA con nombres de cliente que traen números | Un cliente «andrea_92» saludado por su nombre hacía descartar un borrador correcto (el «92» contaba como cifra inventada) | Los números del nombre del cliente se permiten; prueba nueva |
+| 3 | Segunda opinión externa (Gemini vía Antigravity) sobre fórmula, SQL, DAX y código del flujo | Pendiente: Antigravity estaba en uso por otro chat desde las 3:49 p. m. | Ver «Uso de IA delegada» |
+| 4 | Correr el flujo en n8n de verdad | Pendiente del permiso de Sergio para instalar n8n | — |
+
+## Vuelta 1 de mejoras (4-nov-2026): qué valora un reclutador de datos u operaciones
+| # | Mejora | Por qué | Resultado |
+|---|---|---|---|
+| 1 | **Ganancia por hora de impresora** (`sql/09`, medida DAX y columna en la página 1) | La impresora es el cuello de botella: importa cuánto deja cada hora de máquina, no solo el margen % | Aretes de resina $386.640 por hora contra $2.968 del organizador, que deja más por pieza ($17.805). Reemplaza la conclusión 5 del README (la de la luz, más débil) |
+| 2 | **Cohortes de clientes** (`sql/10`) con corrección del sesgo de los últimos meses | Muestra SQL avanzado (LEAD, ROW_NUMBER, julianday) y criterio: no comparar cohortes con distinto tiempo para volver | Volvieron en 90 días: T1 40,3 %, T2 29,2 %, T3 24,5 %; T4 sin tiempo suficiente (1 de 50 clientes) |
+| 3 | Nombres genéricos en el flujo («Avisar al dueño», «Aprobación del dueño») | Es una plantilla: la puede usar cualquier taller | 0 menciones de nombres propios en el flujo |
+| 4 | Diagrama del flujo en SVG generado desde el JSON (`scripts/diagrama_flujo.py`), en dos filas | Las reglas piden el diagrama como imagen; generado no se desactualiza | Prueba nueva que falla si el diagrama queda viejo |
+| 5 | Guía corta de Power BI (`docs/guia_power_bi.md`) | Cómo cambiar a datos reales sin que se filtren y cómo guardar el `.pbix` y el PDF | — |
+
+Error encontrado de paso: el patrón `0[1-9]_*.sql` no veía la consulta 10. Ahora busca `[0-9][0-9]_*.sql` sin el esquema.
+
+Pruebas: 62 de 62.
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|

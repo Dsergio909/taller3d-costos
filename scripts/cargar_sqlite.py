@@ -79,7 +79,7 @@ def main() -> None:
     salida = ["# Resultados de las consultas SQL", "",
               "Generado con `python scripts/cargar_sqlite.py --md docs/resultados_sql.md`.",
               "Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.", ""]
-    for ruta in sorted(SQL.glob("0[1-9]_*.sql")):
+    for ruta in sorted((q for q in SQL.glob("[0-9][0-9]_*.sql") if not q.name.startswith("00"))):
         columnas, filas = correr(con, ruta)
         titulo = ruta.read_text(encoding="utf-8").splitlines()[0].lstrip("- ").strip()
         print(f"\n== {titulo} ({len(filas)} filas)")

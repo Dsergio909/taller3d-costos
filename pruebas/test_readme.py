@@ -122,7 +122,7 @@ class CifrasDelReadme(unittest.TestCase):
                   f"FDM printer busy for {float(piezas['Organizador de escritorio']['horas_placa']):g} hours")
 
     def test_consultas_sql(self):
-        n = len(list(SQL.glob("0[1-9]_*.sql")))
+        n = len(list((q for q in SQL.glob("[0-9][0-9]_*.sql") if not q.name.startswith("00"))))
         self.esta(f"{n} consultas numeradas", f"{n} numbered and commented queries")
 
     def test_tasas_de_falla(self):
