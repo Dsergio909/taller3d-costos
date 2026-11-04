@@ -42,9 +42,9 @@ Del tablero con los datos ficticios. El PDF completo está en `powerbi/taller3d-
 
 | Costo por pieza | Precio y margen |
 |---|---|
-| ![Costo por pieza](capturas/01_costo_por_pieza.png) | ![Precio y margen](capturas/02_precio_y_margen.png) |
+| ![Costo por pieza](capturas/01_costo_por_pieza.jpg) | ![Precio y margen](capturas/02_precio_y_margen.jpg) |
 | **Gastos por mes** | **Pedidos por canal** |
-| ![Gastos por mes](capturas/03_gastos_por_mes.png) | ![Pedidos por canal](capturas/04_pedidos_por_canal.png) |
+| ![Gastos por mes](capturas/03_gastos_por_mes.jpg) | ![Pedidos por canal](capturas/04_pedidos_por_canal.jpg) |
 
 ## Qué encontré (en el taller de ejemplo)
 Las cifras son del taller ficticio, pero el método es el que uso con el mío. Todas salen de las consultas de `sql/` y cuadran con el tablero.
@@ -164,9 +164,9 @@ From the dashboard with the fictional data. The full PDF is in `powerbi/taller3d
 
 | Cost per piece | Price and margin |
 |---|---|
-| ![Cost per piece](capturas/01_costo_por_pieza.png) | ![Price and margin](capturas/02_precio_y_margen.png) |
+| ![Cost per piece](capturas/01_costo_por_pieza.jpg) | ![Price and margin](capturas/02_precio_y_margen.jpg) |
 | **Monthly expenses** | **Orders per channel** |
-| ![Monthly expenses](capturas/03_gastos_por_mes.png) | ![Orders per channel](capturas/04_pedidos_por_canal.png) |
+| ![Monthly expenses](capturas/03_gastos_por_mes.jpg) | ![Orders per channel](capturas/04_pedidos_por_canal.jpg) |
 
 ## What I found (in the example workshop)
 The figures are from the fictional workshop, but the method is what I use with mine. All come from `sql/` queries and match the dashboard.

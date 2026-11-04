@@ -77,6 +77,20 @@ Sergio aprobó instalar n8n (4-nov). n8n 2.44.7 con Node 24, puerto 5679, puerto
 
 Nota: el navegador integrado de Claude bloquea el envío de formularios (`ERR_BLOCKED_BY_CLIENT`); por eso las aprobaciones de prueba se envían con el script, igual que lo hace un navegador.
 
+## Vuelta de facilidad y diseño (4-nov-2026)
+Turno de Power BI coordinado con los otros chats (Olist → taller 3D → vuelos).
+
+| # | Qué revisé | Qué encontré | Arreglo |
+|---|---|---|---|
+| 1 | Las 4 páginas con la fórmula corregida, contra el SQL | Todo cuadra: ganancia $14.958.330, escenario $15.693.866 (+$735.536), WhatsApp $5.832.842 y 53,1 %, 549 pedidos, $25.654.750 | — |
+| 2 | Página 1 | La tabla de 6 columnas no cabía: «Ganancia por hora» cortada y barra de desplazamiento | Gráfico 700 → 580 px, tabla 516 → 636 px |
+| 3 | Página 4 | La tabla de 3 filas dejaba mucho espacio vacío | Gráficos 296 → 330 px de alto, tabla 204 → 166 |
+| 4 | Estilo | Fondo claro, letra Segoe UI, un solo azul (#1a5fb4) y grises; sin neón, degradados ni adornos. Aviso «Datos ficticios · taller de ejemplo» en cada página | — |
+| 5 | Entregables | `powerbi/taller3d-costos.pbix` (144 KB), `powerbi/taller3d-costos.pdf` (4 páginas), 4 capturas en `capturas/` | — |
+| 6 | Prueba de privacidad del `.pbix` | **Pasaba sin revisar nada:** Power BI 2.159 ya no guarda las consultas en la parte legible `DataMashup`, sino dentro del modelo comprimido | La prueba ahora revisa que el `.pbix` tenga las mismas 4 páginas del proyecto (que sí lee `datos\`) y el aviso del origen de los datos en cada una. Limitación anotada: el modelo comprimido no se puede leer sin Power BI |
+
+Pruebas: 63 de 63.
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|

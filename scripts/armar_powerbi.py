@@ -534,12 +534,12 @@ def paginas() -> list[Pagina]:
     p1.tarjeta("mo", 476, 84, 220, 84, "% mano de obra", "Del costo es mano de obra")
     p1.tarjeta("mat", 712, 84, 220, 84, "% material", "Del costo es material")
     p1.tarjeta("obj", 948, 84, 308, 84, "Margen objetivo", "Margen objetivo (tarifas.csv)")
-    p1.grafico("comp", 24, 184, 700, 512, "barChart", col("Piezas", "nombre"),
+    p1.grafico("comp", 24, 184, 580, 512, "barChart", col("Piezas", "nombre"),
                [med(m) for m in ("Material", "Insumos", "Luz", "Máquina", "Mano de obra", "Fallas")],
                "En qué se va el costo de cada pieza", orden=(med("Costo por unidad"), "Descending"),
                sub="Pesos por unidad. La placa se reparte entre las piezas que caben en ella.",
                info=[med("Costo por unidad")])
-    p1.tabla("tabla", 740, 184, 516, 512, [
+    p1.tabla("tabla", 620, 184, 636, 512, [
         (col("Piezas", "nombre"), "Pieza"), (col("Piezas", "tecnologia"), "Tecnología"),
         (med("Costo por unidad"), "Costo"), (med("Precio de lista"), "Precio de lista"),
         (med("Margen a precio de lista"), "Margen"), (med("Ganancia por hora de impresora"), "Ganancia por hora")],
@@ -583,12 +583,12 @@ def paginas() -> list[Pagina]:
     p4.tarjeta("ven", 340, 84, 300, 84, "Ventas netas", "Ventas netas")
     p4.tarjeta("tick", 656, 84, 300, 84, "Ticket promedio", "Ticket promedio")
     p4.tarjeta("canc", 972, 84, 284, 84, "% cancelados o devueltos", "Cancelados o devueltos")
-    p4.grafico("linea", 24, 184, 760, 296, "lineChart", col("Calendario", "Mes"), [med("Pedidos")],
+    p4.grafico("linea", 24, 184, 760, 330, "lineChart", col("Calendario", "Mes"), [med("Pedidos")],
                "Pedidos por mes y canal", serie=col("Pedidos", "canal"))
-    p4.grafico("gan", 800, 184, 456, 296, "clusteredBarChart", col("Pedidos", "canal"),
+    p4.grafico("gan", 800, 184, 456, 330, "clusteredBarChart", col("Pedidos", "canal"),
                [med("Ventas netas"), med("Ganancia")], "Ventas y ganancia por canal",
                orden=(med("Ventas netas"), "Descending"))
-    p4.tabla("tabla", 24, 492, 1232, 204, [
+    p4.tabla("tabla", 24, 530, 1232, 166, [
         (col("Pedidos", "canal"), "Canal"), (med("Pedidos"), "Pedidos"), (med("Ventas netas"), "Ventas netas"),
         (med("Ticket promedio"), "Ticket promedio"), (med("Comisiones"), "Comisiones"), (med("Ganancia"), "Ganancia"),
         (med("Margen %"), "Margen"), (med("Clientes que vuelven %"), "Clientes que vuelven")],

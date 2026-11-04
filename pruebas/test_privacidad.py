@@ -92,24 +92,36 @@ class Privacidad(unittest.TestCase):
             for n in flujo["nodes"]:
                 self.assertNotIn("credentials", n, f"{p.name}: el nodo «{n['name']}» trae credenciales")
 
-    def test_pbix_lee_datos_ficticios(self):
-        """El .pbix guarda sus consultas de Power Query: deben leer datos\\, nunca datos_reales\\."""
-        pbix = [p for p in self.archivos if p.suffix.lower() == ".pbix"]
-        for p in pbix:
+    def test_pbix_es_la_version_ficticia(self):
+        """El .pbix guarda los datos adentro, así que se revisa lo que sí se puede leer de él.
+
+        Ojo: Power BI 2.159 guarda las consultas de Power Query dentro del modelo comprimido
+        (DataModel), que no se puede leer sin Power BI. Por eso se revisa:
+        - si trae la parte DataMashup (versiones viejas), que no lea datos_reales;
+        - que tenga las mismas páginas del proyecto PBIP del repo (que sí lee datos\\, ver test_powerbi);
+        - que cada página tenga la tarjeta «Origen de los datos», que dice «DATOS REALES · no publicar»
+          si alguien cargó datos reales: así se ve en el .pbix, el PDF y las capturas.
+        """
+        paginas_pbip = {p.name for p in (RAIZ / "powerbi" / "proyecto" / "taller3d-costos.Report" /
+                                         "definition" / "pages").iterdir() if p.is_dir()}
+        for p in [p for p in self.archivos if p.suffix.lower() == ".pbix"]:
             with zipfile.ZipFile(p) as z:
                 nombres = z.namelist()
-                texto = ""
                 if "DataMashup" in nombres:
                     crudo = z.read("DataMashup")
                     largo = int.from_bytes(crudo[4:8], "little")
                     with zipfile.ZipFile(io.BytesIO(crudo[8:8 + largo])) as paquete:
-                        texto = paquete.read("Formulas/Section1.m").decode("utf-8", "ignore")
-                # Las consultas también quedan en el modelo (texto UTF-16 dentro del DataModel).
+                        m = paquete.read("Formulas/Section1.m").decode("utf-8", "ignore")
+                    self.assertNotIn("datos_reales", m.lower(), f"{p.name} apunta a datos_reales")
+                visuales: dict[str, list[str]] = {}
                 for n in nombres:
-                    if n in ("DataModel",):
-                        continue
-                    texto += z.read(n).decode("utf-8", "ignore") if n.endswith((".json", "Layout")) else ""
-            self.assertNotIn("datos_reales", texto.lower(), f"{p.name} apunta a datos_reales")
+                    partes = n.split("/")
+                    if n.startswith("Report/definition/pages/") and n.endswith("visual.json"):
+                        visuales.setdefault(partes[3], []).append(z.read(n).decode("utf-8", "ignore"))
+            self.assertEqual(set(visuales), paginas_pbip, f"{p.name} no tiene las mismas páginas del proyecto")
+            for pagina, textos in visuales.items():
+                self.assertTrue(any('"Origen de los datos"' in t for t in textos),
+                                f"{p.name}: la página {pagina} no muestra el aviso del origen de los datos")
 
 
 if __name__ == "__main__":
