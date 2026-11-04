@@ -52,6 +52,16 @@ class RevisarDatos(unittest.TestCase):
         shutil.copytree(DATOS, destino)
         return destino
 
+    def test_diccionario_completo(self):
+        from comun import RAIZ
+        texto = (RAIZ / "docs" / "diccionario_de_datos.md").read_text(encoding="utf-8")
+        for tabla, columnas in revisar_datos.ESQUEMA.items():
+            self.assertIn(f"## {tabla}.csv", texto)
+            for col in columnas:
+                self.assertIn(f"`{col}`", texto, f"falta {tabla}.{col} en el diccionario")
+        for t in revisar_datos.TARIFAS_NECESARIAS:
+            self.assertIn(f"`{t}`", texto, f"falta la tarifa {t} en el diccionario")
+
     def test_datos_del_repo_estan_bien(self):
         errores, cambios = revisar_datos.revisar(DATOS)
         self.assertEqual((errores, cambios), ([], []))

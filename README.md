@@ -17,12 +17,12 @@ Tengo un taller de impresión 3D, con una impresora de resina y una FDM. Cuando 
 ## Qué hay adentro
 | Parte | Qué hace | Dónde |
 |---|---|---|
-| Datos ficticios | Un taller inventado: 17 piezas, 549 pedidos de 2025, 77 gastos, 320 clientes (solo un código y una ciudad) | `scripts/generar_datos_ficticios.py` → `datos/` |
+| Datos ficticios | Un taller inventado: 17 piezas, 549 pedidos de 2025, 77 gastos, 320 clientes (solo un código y una ciudad) | `scripts/generar_datos_ficticios.py` → `datos/` · columnas en `docs/diccionario_de_datos.md` |
 | Fórmula de costo | El costo de una pieza, paso a paso. Es la referencia de todo lo demás | `scripts/costeo.py` |
 | SQL | 10 consultas numeradas y comentadas (SQLite), con funciones de ventana y cohortes | `sql/` · resultados en `docs/resultados_sql.md` |
 | Tablero de Power BI | 4 páginas: costo por pieza, precio y margen con «qué pasa si», gastos por mes y pedidos por canal | `powerbi/` · medidas en `dax/medidas.md` |
 | Flujo de n8n | Cotización: recibe el pedido, calcula el precio, la IA local redacta la respuesta, yo apruebo o corrijo y queda registrado | `flujos/` |
-| Pruebas | 62 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Pruebas | 63 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## Cómo se calcula el costo
 Una placa de impresión se reparte entre las piezas que caben en ella. En resina eso pesa mucho: una placa llena tarda casi lo mismo que una sola pieza, porque el tiempo depende de la altura.
@@ -133,12 +133,12 @@ I run a 3D printing workshop with a resin printer and an FDM printer. When someo
 ## What's Inside
 | Part | What it does | Where |
 |---|---|---|
-| Fictional data | A made-up workshop: 17 parts, 549 orders from 2025, 77 expenses, 320 customers (only one code and one city) | `scripts/generar_datos_ficticios.py` → `datos/` |
+| Fictional data | A made-up workshop: 17 parts, 549 orders from 2025, 77 expenses, 320 customers (only one code and one city) | `scripts/generar_datos_ficticios.py` → `datos/` · columns in `docs/diccionario_de_datos.md` |
 | Cost formula | The cost of a part, step by step. It's the reference for everything else | `scripts/costeo.py` |
 | SQL | 10 numbered and commented queries (SQLite), with window functions and cohorts | `sql/` · results in `docs/resultados_sql.md` |
 | Power BI dashboard | 4 pages: cost per part, price and margin with «what-if», expenses per month and orders per channel | `powerbi/` · measures in `dax/medidas.md` |
 | n8n workflow | Quote: receives the order, calculates the price, local AI drafts the response, I approve or correct it and it gets recorded | `flujos/` |
-| Tests | 62 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Tests | 63 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## How cost is calculated
 A print plate is distributed among the parts that fit on it. In resin, this weighs a lot: a full plate takes almost as long as a single part, because time depends on height.
