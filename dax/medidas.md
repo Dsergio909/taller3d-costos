@@ -111,10 +111,11 @@ Margen % =
 DIVIDE([Ganancia], [Ventas netas])
 ```
 
-### Ventas sin comisión
+### Ventas menos comisiones
+Ventas netas (después de descuentos) menos lo que cobran los canales.
 
 ```dax
-Ventas sin comisión =
+Ventas menos comisiones =
 [Ventas netas] - [Comisiones]
 ```
 
@@ -136,11 +137,11 @@ AVERAGEX(VALUES(Calendario[Mes clave]), [Gastos])
 ```
 
 ### Resultado de caja
-Ventas sin comisión menos gastos de caja del mes.
+Ventas menos comisiones, menos gastos de caja del mes.
 
 ```dax
 Resultado de caja =
-[Ventas sin comisión] - [Gastos]
+[Ventas menos comisiones] - [Gastos]
 ```
 
 ## Costo por pieza

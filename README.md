@@ -22,7 +22,7 @@ Tengo un taller de impresión 3D, con una impresora de resina y una FDM. Cuando 
 | SQL | 10 consultas numeradas y comentadas (SQLite), con funciones de ventana y cohortes | `sql/` · resultados en `docs/resultados_sql.md` |
 | Tablero de Power BI | 4 páginas: costo por pieza, precio y margen con «qué pasa si», gastos por mes y pedidos por canal | `powerbi/` · medidas en `dax/medidas.md` |
 | Flujo de n8n | Cotización: recibe el pedido, calcula el precio, la IA local redacta la respuesta, yo apruebo o corrijo y queda registrado | `flujos/` |
-| Pruebas | 65 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Pruebas | 66 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## Cómo se calcula el costo
 Una placa de impresión se reparte entre las piezas que caben en ella. En resina eso pesa mucho: una placa llena tarda casi lo mismo que una sola pieza, porque el tiempo depende de la altura.
@@ -42,16 +42,16 @@ Del tablero con los datos ficticios. El PDF completo está en `powerbi/taller3d-
 
 | Costo por pieza | Precio y margen |
 |---|---|
-| ![Costo por pieza](capturas/01_costo_por_pieza.jpg) | ![Precio y margen](capturas/02_precio_y_margen.jpg) |
+| ![Costo por pieza](capturas/01_costo_por_pieza.png) | ![Precio y margen](capturas/02_precio_y_margen.png) |
 | **Gastos por mes** | **Pedidos por canal** |
-| ![Gastos por mes](capturas/03_gastos_por_mes.jpg) | ![Pedidos por canal](capturas/04_pedidos_por_canal.jpg) |
+| ![Gastos por mes](capturas/03_gastos_por_mes.png) | ![Pedidos por canal](capturas/04_pedidos_por_canal.png) |
 
 ## Qué encontré (en el taller de ejemplo)
 Las cifras son del taller ficticio, pero el método es el que uso con el mío. Todas salen de las consultas de `sql/` y cuadran con el tablero.
 
-1. **En resina, lo que más cuesta es el trabajo, no la resina.** La mano de obra es el 40,5 % del costo de las piezas de resina y el material solo el 27,2 %. En FDM es al revés: el filamento es el 46,0 %. Por eso en resina conviene llenar la placa: el tiempo de preparar y lavar se reparte entre más piezas.
-2. **El repuesto a medida casi no deja.** A precio de lista gana 18,6 %, y por TikTok, con la comisión, baja a 8,6 %. Fue de lo más vendido (64 unidades). Para ganar el 40 % tendría que costar $27.500 por WhatsApp y no $20.000.
-3. **WhatsApp tiene el margen más bajo, pero es el canal que más deja.** Trae el 42,8 % de las ventas con solo 136 de 549 pedidos, ticket promedio de $85.133 y el 42 % de sus clientes vuelve a comprar por WhatsApp (se cuenta dentro del mismo canal). Su margen es el más bajo (53,1 %) porque ahí se venden las piezas grandes y a medida, no por comisiones.
+1. **En resina, lo que más cuesta es el trabajo, no la resina.** Si sumo una pieza de cada una del catálogo de resina, la mano de obra es el 40,5 % del costo y el material solo el 27,2 %. Con lo que se vendió de verdad pesa todavía más: 45,7 %. En FDM es al revés: el filamento es el 46,0 % del catálogo y el 43,1 % de lo vendido. Por eso en resina conviene llenar la placa: el tiempo de preparar y lavar se reparte entre más piezas.
+2. **El repuesto a medida casi no deja.** A precio de lista gana 18,6 %, y por TikTok, con la comisión, baja a 8,6 %. Fue el quinto más vendido (64 unidades). Para ganar el 40 % tendría que costar $27.500 por WhatsApp y no $20.000.
+3. **WhatsApp tiene el margen más bajo, pero es el canal que más deja.** Trae el 42,8 % de las ventas con solo 129 de los 506 pedidos entregados, y su ticket promedio es de $85.133. Además, el 42 % de sus clientes vuelve a comprar por WhatsApp (se cuenta dentro del mismo canal). Su margen es el más bajo (53,1 %) porque ahí se venden las piezas grandes y a medida, no por comisiones.
 4. **Subir el precio 10 % deja más plata aunque se venda 10 % menos.** La ganancia del año pasaría de $14.958.330 a $15.693.866 (+$735.536). Bajar el precio 10 % y vender 20 % más deja casi lo mismo que hoy ($14.974.838), con 20 % más de trabajo.
 5. **Lo que importa es cuánto deja cada hora de impresora, no la ganancia por pieza.** La impresora es el cuello de botella: mientras imprime una cosa, no imprime otra. Un par de aretes de resina deja $386.000 por hora de impresora, porque caben 30 en una placa. El organizador de escritorio deja más por pieza ($17.737), pero ocupa la FDM 6 horas: $2.956 por hora. En cambio, la luz casi no pesa: es el 2,1 % de los gastos del año.
 
@@ -89,7 +89,7 @@ Reintentos: la llamada a Ollama y la escritura de archivos se reintentan 3 veces
 
 La IA puede inventar cosas que no son cifras: en una prueba escribió «la miniatura está lista» cuando todavía no estaba impresa. Por eso yo apruebo o corrijo antes de que salga.
 
-![Formulario de aprobación en n8n](capturas/05_aprobacion_n8n.jpg)
+![Formulario de aprobación en n8n](capturas/05_aprobacion_n8n.png)
 
 ## Privacidad
 - `datos_reales/`, `registro/` y `.env` están en `.gitignore`.
@@ -99,7 +99,7 @@ La IA puede inventar cosas que no son cifras: en una prueba escribió «la minia
 - Los flujos de n8n no traen credenciales. Si conectas Telegram o correo, la credencial se guarda dentro de n8n, nunca en el repo.
 - Antes de subir algo, en mi PC corro `python scripts/revisar_privacidad.py`: compara `datos_reales/` contra todo lo que se subiría (incluido el `.pbix`) y avisa si aparece una pieza, un cliente o una tarifa real.
 
-Para usar tus propios datos: copia la carpeta `datos/` como `datos_reales/`, cambia los valores y pon `real` en `origen_datos`. Si los editas en Excel, corre `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel en español guarda con punto y coma, coma decimal y fechas dd/mm/aaaa, y el script los deja en el formato que esperan el tablero, el SQL y n8n (antes guarda una copia de los originales). También avisa si falta una tarifa, si un margen quedó escrito como 40 en vez de 0,4 o si un pedido tiene un canal que no existe. Después apunta `CarpetaDatos` del tablero a esa carpeta, o corre los scripts con `--datos datos_reales`.
+Para usar tus propios datos: copia la carpeta `datos/` como `datos_reales/`, cambia los valores y pon `real` en `origen_datos`. Si los editas en Excel, corre `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel en español guarda con punto y coma, coma decimal y fechas dd/mm/aaaa, y el script los deja en el formato que esperan el tablero, el SQL y n8n. Antes de cambiarlos, guarda una copia de los originales. También avisa si falta una tarifa, si un margen quedó escrito como 40 en vez de 0,4 o si un pedido tiene un canal que no existe. Después apunta `CarpetaDatos` del tablero a esa carpeta, o corre los scripts con `--datos datos_reales`.
 
 ## Qué falta
 - El flujo no le contesta solo al cliente: deja el mensaje aprobado listo para copiar. Conectar WhatsApp o Telegram necesita credenciales que no van en un repo público.
@@ -144,7 +144,7 @@ I run a 3D printing workshop with a resin printer and an FDM printer. When someo
 | SQL | 10 numbered and commented queries (SQLite), with window functions and cohorts | `sql/` · results in `docs/resultados_sql.md` |
 | Power BI dashboard | 4 pages: cost per part, price and margin with «what-if», expenses per month and orders per channel | `powerbi/` · measures in `dax/medidas.md` |
 | n8n workflow | Quote: receives the order, calculates the price, local AI drafts the response, I approve or correct it and it gets recorded | `flujos/` |
-| Tests | 65 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Tests | 66 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## How cost is calculated
 A print plate is distributed among the parts that fit on it. In resin, this weighs a lot: a full plate takes almost as long as a single part, because time depends on height.
@@ -164,16 +164,16 @@ From the dashboard with the fictional data. The full PDF is in `powerbi/taller3d
 
 | Cost per piece | Price and margin |
 |---|---|
-| ![Cost per piece](capturas/01_costo_por_pieza.jpg) | ![Price and margin](capturas/02_precio_y_margen.jpg) |
+| ![Cost per piece](capturas/01_costo_por_pieza.png) | ![Price and margin](capturas/02_precio_y_margen.png) |
 | **Monthly expenses** | **Orders per channel** |
-| ![Monthly expenses](capturas/03_gastos_por_mes.jpg) | ![Orders per channel](capturas/04_pedidos_por_canal.jpg) |
+| ![Monthly expenses](capturas/03_gastos_por_mes.png) | ![Orders per channel](capturas/04_pedidos_por_canal.png) |
 
 ## What I found (in the example workshop)
 The figures are from the fictional workshop, but the method is what I use with mine. All come from `sql/` queries and match the dashboard.
 
-1. **In resin, labor costs more than the resin.** Labor accounts for 40.5% of the cost of resin parts, while materials account for only 27.2%. In FDM it's reversed: filament is 46.0%. That's why in resin it makes sense to fill the plate: preparation and washing time is spread across more parts.
-2. **Custom spare parts barely make money.** At list price the margin is 18.6%, and on TikTok, after the commission, it drops to 8.6%. They were one of the best sellers (64 units). To make 40% they would have to sell for COP 27,500 on WhatsApp instead of COP 20,000.
-3. **WhatsApp has the lowest margin, but it is the channel that makes the most money.** It brings in 42.8% of sales with only 136 out of 549 orders, an average ticket of COP 85,133 and 42% of its customers buy again through WhatsApp (counted within the same channel). Its margin is the lowest (53.1%) because that is where the large and custom pieces sell, not because of commissions.
+1. **In resin, labor costs more than the resin.** Adding up one of each part in the resin catalog, labor is 40.5% of the cost and materials only 27.2%. Weighted by what actually sold, labor weighs even more: 45.7%. In FDM it's reversed: filament is 46.0% of the catalog and 43.1% of what sold. That's why in resin it makes sense to fill the plate: preparation and washing time is spread across more parts.
+2. **Custom spare parts barely make money.** At list price the margin is 18.6%, and on TikTok, after the commission, it drops to 8.6%. They were the fifth best seller (64 units). To make 40% they would have to sell for COP 27,500 on WhatsApp instead of COP 20,000.
+3. **WhatsApp has the lowest margin, but it is the channel that makes the most money.** It brings in 42.8% of sales with only 129 of the 506 delivered orders, and its average ticket is COP 85,133. On top of that, 42% of its customers buy again through WhatsApp (counted within the same channel). Its margin is the lowest (53.1%) because that is where the large and custom pieces sell, not because of commissions.
 4. **Raising prices by 10% makes more money even if I sell 10% less.** The year's profit would go from COP 14,958,330 to COP 15,693,866 (+COP 735,536). Lowering prices by 10% and selling 20% more leaves almost the same as today (COP 14,974,838), with 20% more work.
 5. **What matters is how much each printer hour makes, not the profit per piece.** The printer is the bottleneck: while it prints one thing, it cannot print another. A pair of resin earrings makes COP 386,000 per printer hour, because 30 fit on one plate. The desk organizer makes more per piece (COP 17,737), but it keeps the FDM printer busy for 6 hours: COP 2,956 per hour. Electricity, on the other hand, barely matters: it is 2.1% of the year's expenses.
 
@@ -211,7 +211,7 @@ Retries: the call to Ollama and file writing are retried 3 times before failing.
 
 The AI can make up things that are not numbers: in one test it wrote «the miniature is ready» when it had not been printed yet. That is why I approve or correct before it goes out.
 
-![Approval form in n8n](capturas/05_aprobacion_n8n.jpg)
+![Approval form in n8n](capturas/05_aprobacion_n8n.png)
 
 ## Privacy
 - `datos_reales/`, `registro/` and `.env` are in `.gitignore`.
@@ -221,7 +221,7 @@ The AI can make up things that are not numbers: in one test it wrote «the minia
 - The n8n workflows do not include credentials. If you connect Telegram or email, the credential is saved inside n8n, never in the repo.
 - Before pushing anything, I run `python scripts/revisar_privacidad.py` on my PC: it compares `datos_reales/` against everything that would be uploaded (including the `.pbix`) and warns if a real piece, customer or rate shows up.
 
-To use your own data: copy the `datos/` folder as `datos_reales/`, change the values, and set `real` in `origen_datos`. If you edit them in Excel, run `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel in Spanish saves with semicolons, decimal commas and dd/mm/yyyy dates, and the script converts them to the format the dashboard, the SQL and n8n expect (it saves a copy of the originals first). It also warns if a rate is missing, if a margin was typed as 40 instead of 0.4, or if an order has a channel that does not exist. Then point the dashboard's `CarpetaDatos` to that folder, or run the scripts with `--datos datos_reales`.
+To use your own data: copy the `datos/` folder as `datos_reales/`, change the values, and set `real` in `origen_datos`. If you edit them in Excel, run `python scripts/revisar_datos.py --datos datos_reales --arreglar`: Excel in Spanish saves with semicolons, decimal commas and dd/mm/yyyy dates, and the script converts them to the format the dashboard, the SQL and n8n expect. Before changing them, it saves a copy of the originals. It also warns if a rate is missing, if a margin was typed as 40 instead of 0.4, or if an order has a channel that does not exist. Then point the dashboard's `CarpetaDatos` to that folder, or run the scripts with `--datos datos_reales`.
 
 ## What's missing
 - The flow does not reply to the customer by itself: it leaves the approved message ready to copy. Connecting WhatsApp or Telegram requires credentials that can't go in a public repo.

@@ -105,6 +105,27 @@ Las cifras del tablero y del README no cambiaron (la tabla mes a mes da lo mismo
 
 Pruebas: 65 de 65.
 
+## Revisión de la nube y arreglos (5-nov-2026)
+La nube clonó el repo como un desconocido (commit 9cdd02a): 65 de 65 pruebas, regenerar deja `git status` vacío, historial de 15 commits sin datos reales, y las tarifas no coinciden con las reales. Rehízo la fórmula desde el README: da lo mismo en las 17 piezas y todas las cifras de «Qué encontré» cuadran. Pidió 9 arreglos de texto y diseño. Cada uno se comprobó contra los datos antes de cambiarlo:
+
+| # | Qué pidió | Comprobado | Arreglo |
+|---|---|---|---|
+| 1 | WhatsApp mezclaba bases: «136 de 549 pedidos» con un % de ventas y un ticket de pedidos entregados | Sí: 129 de 506 entregados; con 136 el ticket daría otro | README (ES y EN): «129 de los 506 pedidos entregados», frase partida en dos. Tablero p. 4: la columna es «Pedidos entregados». `test_readme` exige la misma base |
+| 2 | 40,5 / 27,2 / 46,0 % no decía sobre qué se calcula | Sí: suma de una pieza de cada una del catálogo. Pesado por lo vendido: mano de obra en resina 45,7 %, filamento en FDM 43,1 % | El README dice las dos cosas; la prueba calcula las dos |
+| 3 | «De lo más vendido (64 unidades)» | Sí: quinto de 17 (fichas 380, imanes 104, aretes 99, miniaturas 76) | «El quinto más vendido». La prueba calcula el puesto |
+| 4 | Tablas con barra de desplazamiento (p. 1 y p. 2, faltaban 4 piezas en la 2) | Sí, en Power BI | Filas más bajas (relleno 4 → 2); en la p. 2 la fila de tarjetas baja de 84 a 76 px, el filtro de canal de 84 a 60 y la tabla sube de 412 a 452 px. Revisado en Power BI: 17 de 17 filas, sin barra |
+| 5 | «Datos ficticios» cortado arriba en las capturas | Las capturas viejas eran pantallazos; en el PDF se leía | Tarjeta más alta (40 → 56 px) y capturas sacadas del PDF: se lee completo en las 4 |
+| 6 | Líneas curvas; «may 25» cortado | Sí | Línea recta en p. 3 y p. 4. En la p. 3 el gráfico de líneas pasa de 456 a 600 px de ancho |
+| 7 | «Ventas sin comisión» se confunde con «Ventas netas» | Sí | La medida ahora se llama «Ventas menos comisiones» ($24.792.985) |
+| 8 | Capturas en JPG de 1.403 px | Sí | PNG de 2.656 × 1.536 px sacadas del PDF con Inkscape. El formulario de n8n, en PNG al doble (1.280 px) con Edge sin ventana, y el «40 %» ya no se parte en dos líneas |
+| 9 | `CLAUDE.md` desactualizado | Sí | El cerebro es el repo privado `Dsergio909/cerebro`, nota `Proyectos/Taller 3D costos.md`; desde la nube solo se lee y se entrega un paquete |
+| 11 | Frase de 47 palabras en «Privacidad» | Sí | Partida en dos (ES y EN) |
+| 12 | «Submit» → «Enviar» en el formulario | Se probó: el nodo de espera de n8n 2.44 ignora la opción del botón | Queda «Submit» (anotado en el script). Sí se quitó el pie «Form automated with n8n» |
+
+No se hizo el punto 10 (rama `main`): espera el «sí» de Sergio.
+
+Prueba nueva: todas las imágenes del README existen. Pruebas: 66 de 66. Las cifras del tablero no cambiaron (revisadas en Power BI: $14.958.330, $15.693.866, +$735.536, WhatsApp 129 pedidos entregados, $85.133, 53,1 %).
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|

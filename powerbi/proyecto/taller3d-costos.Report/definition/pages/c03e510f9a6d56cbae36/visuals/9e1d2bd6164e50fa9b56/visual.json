@@ -3,9 +3,9 @@
   "name": "9e1d2bd6164e50fa9b56",
   "position": {
     "x": 640,
-    "y": 284,
+    "y": 244,
     "z": 10000,
-    "height": 412,
+    "height": 452,
     "width": 616,
     "tabOrder": 10000
   },
@@ -130,7 +130,7 @@
             "rowPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },

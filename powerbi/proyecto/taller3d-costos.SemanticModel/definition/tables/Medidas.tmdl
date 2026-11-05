@@ -79,10 +79,11 @@ table Medidas
 		displayFolder: Ganancia
 		lineageTag: 0901dd94-434a-51c4-9f5f-23791798ac15
 
-	measure 'Ventas sin comisión' = [Ventas netas] - [Comisiones]
+	/// Ventas netas (después de descuentos) menos lo que cobran los canales.
+	measure 'Ventas menos comisiones' = [Ventas netas] - [Comisiones]
 		formatString: \$#,0
 		displayFolder: Ganancia
-		lineageTag: a6994d14-1b4d-5e9a-86a7-c5284fe7d6f9
+		lineageTag: 5f32c87d-70fb-501d-b754-2de07fc636a1
 
 	/// Lo que salió de la caja (compras de material, pauta, empaques, repuestos).
 	measure Gastos = SUM(Gastos[valor])
@@ -95,8 +96,8 @@ table Medidas
 		displayFolder: Gastos
 		lineageTag: 8dcad7f8-5994-5835-8447-281aac0af0ef
 
-	/// Ventas sin comisión menos gastos de caja del mes.
-	measure 'Resultado de caja' = [Ventas sin comisión] - [Gastos]
+	/// Ventas menos comisiones, menos gastos de caja del mes.
+	measure 'Resultado de caja' = [Ventas menos comisiones] - [Gastos]
 		formatString: \$#,0
 		displayFolder: Gastos
 		lineageTag: 2d3ee12c-6686-5da3-86bf-30dbef764c06

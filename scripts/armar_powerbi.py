@@ -195,10 +195,11 @@ MEDIDAS = [
      MONEDA, "Ganancia", "Lo que cobra cada canal (tienda de la plataforma o link de pago)."),
     ("Ganancia", "[Ventas netas] - [Costo de lo vendido] - [Comisiones]", MONEDA, "Ganancia", None),
     ("Margen %", "DIVIDE([Ganancia], [Ventas netas])", PCT, "Ganancia", None),
-    ("Ventas sin comisión", "[Ventas netas] - [Comisiones]", MONEDA, "Ganancia", None),
+    ("Ventas menos comisiones", "[Ventas netas] - [Comisiones]", MONEDA, "Ganancia",
+     "Ventas netas (después de descuentos) menos lo que cobran los canales."),
     ("Gastos", "SUM(Gastos[valor])", MONEDA, "Gastos", "Lo que salió de la caja (compras de material, pauta, empaques, repuestos)."),
     ("Gasto promedio por mes", "AVERAGEX(VALUES(Calendario[Mes clave]), [Gastos])", MONEDA, "Gastos", None),
-    ("Resultado de caja", "[Ventas sin comisión] - [Gastos]", MONEDA, "Gastos", "Ventas sin comisión menos gastos de caja del mes."),
+    ("Resultado de caja", "[Ventas menos comisiones] - [Gastos]", MONEDA, "Gastos", "Ventas menos comisiones, menos gastos de caja del mes."),
     ("Material", "SUM(Piezas[Costo material])", MONEDA, "Costo por pieza", None),
     ("Insumos", "SUM(Piezas[Costo insumos])", MONEDA, "Costo por pieza", "Alcohol, guantes, papel y film FEP (resina) o pegante (FDM), repartidos en la placa."),
     ("Luz", "SUM(Piezas[Costo energía])", MONEDA, "Costo por pieza", None),
@@ -503,6 +504,8 @@ class Pagina:
                    "legend": [{"properties": {"show": lit(len(valores) > 1 or serie is not None), "position": lit("Top")}}]}
         if etiquetas:
             objetos["labels"] = [{"properties": {"show": lit(True), "color": {"solid": {"color": lit(TEXTO_SUAVE)}}}}]
+        if tipo == "lineChart":  # recta: la curva inventa subidas entre meses
+            objetos["lineStyles"] = [{"properties": {"lineChartType": lit("'linear'")}}]
         if len(valores) == 1 and serie is None:
             objetos["dataPoint"] = [{"properties": {"fill": {"solid": {"color": lit(AZUL)}}}}]
         self.agregar(clave, x, y, w, h, {"visualType": tipo, "query": query, "objects": objetos,
@@ -515,7 +518,7 @@ class Pagina:
         self.agregar(clave, x, y, w, h, {
             "visualType": "tableEx", "query": query,
             "objects": {"grid": [{"properties": {"gridHorizontalColor": {"solid": {"color": lit("#e9edf1")}},
-                                                 "rowPadding": lit(4), "textSize": lit(10)}}],
+                                                 "rowPadding": lit(2), "textSize": lit(10)}}],
                         "columnHeaders": [{"properties": {"fontColor": {"solid": {"color": lit(TEXTO)}},
                                                           "backColor": {"solid": {"color": lit(FONDO)}}}}],
                         "total": [{"properties": {"totals": lit(False)}}]},
@@ -523,7 +526,7 @@ class Pagina:
 
     def encabezado(self, titulo_txt: str, pregunta: str):
         self.texto("titulo", 24, 12, 900, 64, [(titulo_txt, 20, True, TEXTO), (pregunta, 11, False, TEXTO_SUAVE)])
-        self.aviso("aviso", 1000, 18, 256, 40)
+        self.aviso("aviso", 1000, 12, 256, 56)
 
 
 def paginas() -> list[Pagina]:
@@ -547,19 +550,19 @@ def paginas() -> list[Pagina]:
 
     p2 = Pagina("precio", "Precio y margen")
     p2.encabezado("Precio y margen", "¿Qué pasa con la ganancia del año si cambio el precio y vendo más o menos?")
-    p2.segmentador("ap", 24, 84, 200, 84, col("Ajuste de precio", "Ajuste de precio %"), "Cambio de precio %", True,
+    p2.segmentador("ap", 24, 84, 200, 76, col("Ajuste de precio", "Ajuste de precio %"), "Cambio de precio %", True,
                    valor_inicial=10)
-    p2.segmentador("ac", 240, 84, 200, 84, col("Ajuste de cantidad", "Ajuste de cantidad %"), "Cambio de cantidad %", True,
+    p2.segmentador("ac", 240, 84, 200, 76, col("Ajuste de cantidad", "Ajuste de cantidad %"), "Cambio de cantidad %", True,
                    valor_inicial=-10)
-    p2.tarjeta("g0", 456, 84, 190, 84, "Ganancia", "Ganancia del año")
-    p2.tarjeta("g1", 662, 84, 190, 84, "Ganancia con ajuste", "Ganancia con el cambio")
-    p2.tarjeta("dg", 868, 84, 190, 84, "Cambio en la ganancia", "Diferencia")
-    p2.tarjeta("mg", 1074, 84, 182, 84, "Margen con ajuste %", "Margen con el cambio")
-    p2.grafico("marg", 24, 184, 600, 512, "clusteredBarChart", col("Piezas", "nombre"), [med("Margen %")],
+    p2.tarjeta("g0", 456, 84, 190, 76, "Ganancia", "Ganancia del año")
+    p2.tarjeta("g1", 662, 84, 190, 76, "Ganancia con ajuste", "Ganancia con el cambio")
+    p2.tarjeta("dg", 868, 84, 190, 76, "Cambio en la ganancia", "Diferencia")
+    p2.tarjeta("mg", 1074, 84, 182, 76, "Margen con ajuste %", "Margen con el cambio")
+    p2.grafico("marg", 24, 176, 600, 520, "clusteredBarChart", col("Piezas", "nombre"), [med("Margen %")],
                "Margen real de lo vendido, por pieza", orden=(med("Margen %"), "Ascending"), etiquetas=True,
                sub="Después de descuentos y comisiones. Pedidos entregados del año.")
-    p2.segmentador("canal", 640, 184, 220, 84, col("Canal para precio", "Canal"), "Canal", True, True)
-    p2.tabla("sug", 640, 284, 616, 412, [
+    p2.segmentador("canal", 640, 176, 220, 60, col("Canal para precio", "Canal"), "Canal", True, True)
+    p2.tabla("sug", 640, 244, 616, 452, [
         (col("Piezas", "nombre"), "Pieza"), (med("Costo por unidad"), "Costo"),
         (med("Precio de lista"), "Precio de lista"), (med("Precio sugerido"), "Precio sugerido"),
         (med("Margen a precio de lista"), "Margen a precio de lista")],
@@ -569,13 +572,13 @@ def paginas() -> list[Pagina]:
     p3.encabezado("Gastos por mes", "¿En qué se va la plata del taller cada mes y cuánto queda?")
     p3.tarjeta("tot", 24, 84, 300, 84, "Gastos", "Gastos del año")
     p3.tarjeta("prom", 340, 84, 300, 84, "Gasto promedio por mes", "Gasto promedio por mes")
-    p3.tarjeta("vent", 656, 84, 300, 84, "Ventas sin comisión", "Ventas sin comisión")
+    p3.tarjeta("vent", 656, 84, 300, 84, "Ventas menos comisiones", "Ventas menos comisiones")
     p3.tarjeta("caja", 972, 84, 284, 84, "Resultado de caja", "Resultado de caja")
-    p3.grafico("mes", 24, 184, 760, 512, "columnChart", col("Calendario", "Mes"), [med("Gastos")],
+    p3.grafico("mes", 24, 184, 616, 512, "columnChart", col("Calendario", "Mes"), [med("Gastos")],
                "Gastos por mes y categoría", serie=col("Gastos", "categoria"),
                sub="Lo que salió de la caja: la resina y el filamento se compran por litro o kilo.")
-    p3.grafico("vs", 800, 184, 456, 512, "lineChart", col("Calendario", "Mes"),
-               [med("Ventas sin comisión"), med("Gastos")], "Ventas frente a gastos")
+    p3.grafico("vs", 656, 184, 600, 512, "lineChart", col("Calendario", "Mes"),
+               [med("Ventas menos comisiones"), med("Gastos")], "Ventas frente a gastos")
 
     p4 = Pagina("canal", "Pedidos por canal")
     p4.encabezado("Pedidos por canal", "¿Por dónde llegan los pedidos y cuál canal deja más?")
@@ -589,7 +592,7 @@ def paginas() -> list[Pagina]:
                [med("Ventas netas"), med("Ganancia")], "Ventas y ganancia por canal",
                orden=(med("Ventas netas"), "Descending"))
     p4.tabla("tabla", 24, 530, 1232, 166, [
-        (col("Pedidos", "canal"), "Canal"), (med("Pedidos"), "Pedidos"), (med("Ventas netas"), "Ventas netas"),
+        (col("Pedidos", "canal"), "Canal"), (med("Pedidos entregados"), "Pedidos entregados"), (med("Ventas netas"), "Ventas netas"),
         (med("Ticket promedio"), "Ticket promedio"), (med("Comisiones"), "Comisiones"), (med("Ganancia"), "Ganancia"),
         (med("Margen %"), "Margen"), (med("Clientes que vuelven %"), "Clientes que vuelven")],
         "Resumen por canal", orden=(med("Ventas netas"), "Descending"))

@@ -1,7 +1,11 @@
 # CLAUDE.md
 
 ## Qué es este repo
-Plantilla pública del método de costos y cotizaciones de mi taller de impresión 3D. El plan está en mi cerebro de Obsidian (Google Drive, carpeta Cerebro): `Proyectos/Plan datos y n8n.md`, sección «3. Taller de impresión 3D». Cómo trabajo: `Proyectos/Como trabajar con Sergio.md`. Voz para textos públicos: `Personal/Mi_voz_al_escribir.md`.
+Plantilla pública del método de costos y cotizaciones de mi taller de impresión 3D (proyecto 3 del plan de portafolio de datos).
+
+## Antes de empezar
+- En el PC: lee en el cerebro de Obsidian `Proyectos/Taller 3D costos.md`, `Proyectos/Como trabajar con Sergio.md` y `Proyectos/Plan datos y n8n.md` (sección «3. Taller de impresión 3D»). Si vas a escribir texto público, lee también `Personal/Mi_voz_al_escribir.md`.
+- En la nube: el cerebro solo se lee (repo privado `Dsergio909/cerebro`); al terminar entrega un paquete en Markdown para que Sergio lo aplique desde el PC.
 
 ## Reglas de este repo
 - **Nunca datos reales del taller en el repo.** Van solo en `datos_reales/` (en `.gitignore`). Todo CSV del repo lleva `origen_datos = ficticio`; las pruebas fallan si no.
@@ -14,10 +18,10 @@ Plantilla pública del método de costos y cotizaciones de mi taller de impresi�
 ## Registro de carrera
 Al cerrar ("cierra el chat") o cuando diga "registra esto", revisa si pasó algo que cumpla al menos uno de estos criterios: terminé o entregué algo, tomé una decisión importante con su razón, obtuve un resultado concreto, aprendí una herramienta usándola de verdad, o algo falló y entendí por qué. Si nada cumple, dime "nada para registrar".
 
-- En mi Google Drive, carpeta Cerebro: Carrera/REGISTRO.md (registro) y Carrera/00_Carrera.md (formato).
+- En el cerebro: Carrera/REGISTRO.md (registro) y Carrera/00_Carrera.md (formato). Desde la nube no se escribe: entrega la entrada en un bloque de código.
 - Si aparece una copia que dice "Este cerebro se mudó" (por ejemplo, en la carpeta vieja `Cerebro_Carrera`), ignórala.
 
-Puedes escribir la entrada tú mismo: agrégala al final de REGISTRO.md sin editar ni borrar las anteriores, y confírmame en una línea. Si tu herramienta no puede agregar al final sin reemplazar el archivo completo o crear uno nuevo (por ejemplo, el conector de Drive desde la nube), no lo hagas: entrégame la entrada en un bloque de código para que yo la pegue.
+Puedes escribir la entrada tú mismo: agrégala al final de REGISTRO.md sin editar ni borrar las anteriores, y confírmame en una línea. Si tu herramienta no puede agregar al final sin reemplazar el archivo completo o crear uno nuevo (por ejemplo, desde la nube), no lo hagas: entrégame la entrada en un bloque de código para que yo la pegue.
 
 Si no puedes leer 00_Carrera.md, usa este formato:
 

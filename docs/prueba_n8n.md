@@ -19,7 +19,7 @@ Corrida el 4-nov-2026 en el PC, con n8n 2.44.7 (Node 24, sin Docker, puerto 5679
 
 ## Lo que mostró la prueba
 - **El control de cifras funciona:** en un pedido la IA no escribió el total y el borrador se cambió por la plantilla.
-- **La IA puede inventar cosas que no son cifras.** En otra prueba escribió «la miniatura está lista» y «te enviamos», cuando la pieza todavía no estaba impresa. El control de números no lo atrapa: por eso el dueño aprueba o corrige antes de que salga. Captura del formulario de aprobación: `capturas/05_aprobacion_n8n.jpg`.
+- **La IA puede inventar cosas que no son cifras.** En otra prueba escribió «la miniatura está lista» y «te enviamos», cuando la pieza todavía no estaba impresa. El control de números no lo atrapa: por eso el dueño aprueba o corrige antes de que salga. Captura del formulario de aprobación: `capturas/05_aprobacion_n8n.png`.
 - **El manejo de errores funciona:** el primer intento falló en un nodo (ver abajo) y el flujo «Aviso de errores» lo dejó anotado en `registro/errores.csv` con el nodo y el mensaje.
 
 ## Errores que solo aparecieron corriendo n8n

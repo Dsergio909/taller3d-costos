@@ -351,7 +351,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Aviso para el dueño del taller: deja el enlace de aprobación en registro/pendientes.csv.\n// (Aquí se puede conectar Telegram o correo, con la credencial guardada en n8n, nunca en el repo.)\nconst c = $input.first().json;\nconst r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, cliente: c.cliente,\n  pieza: c.pieza, cantidad: c.cantidad, total: Math.round(c.total), enlace_aprobacion: $execution.resumeFormUrl };\nconst esc = (v) => { const s = v === undefined || v === null ? '' : String(v);\n  return /[\",\\n\\r]/.test(s) ? '\"' + s.replace(/\"/g, '\"\"') + '\"' : s; };\nconst linea = [\"fecha_hora\", \"id_ejecucion\", \"cliente\", \"pieza\", \"cantidad\", \"total\", \"enlace_aprobacion\"].map((c) => esc(r[c])).join(',') + '\\n';\nconst pesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');\nreturn [{ json: { ...c, linea, resumen_para_el_dueno: c.cliente + ' pidió ' + c.cantidad + ' x ' + c.pieza\n  + ' por ' + c.canal + '. Costo ' + pesos(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + ' %.\\n\\n' + c.nota_ia\n  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
+        "jsCode": "// Aviso para el dueño del taller: deja el enlace de aprobación en registro/pendientes.csv.\n// (Aquí se puede conectar Telegram o correo, con la credencial guardada en n8n, nunca en el repo.)\nconst c = $input.first().json;\nconst r = { fecha_hora: new Date().toISOString(), id_ejecucion: $execution.id, cliente: c.cliente,\n  pieza: c.pieza, cantidad: c.cantidad, total: Math.round(c.total), enlace_aprobacion: $execution.resumeFormUrl };\nconst esc = (v) => { const s = v === undefined || v === null ? '' : String(v);\n  return /[\",\\n\\r]/.test(s) ? '\"' + s.replace(/\"/g, '\"\"') + '\"' : s; };\nconst linea = [\"fecha_hora\", \"id_ejecucion\", \"cliente\", \"pieza\", \"cantidad\", \"total\", \"enlace_aprobacion\"].map((c) => esc(r[c])).join(',') + '\\n';\nconst pesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');\nreturn [{ json: { ...c, linea, resumen_para_el_dueno: c.cliente + ' pidió ' + c.cantidad + ' x ' + c.pieza\n  + ' por ' + c.canal + '. Costo ' + pesos(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + '\\u00a0%.\\n\\n' + c.nota_ia\n  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
       },
       "id": "394877bb-4766-574b-a28d-0d844d281a43",
       "name": "Avisar al dueño",
@@ -435,7 +435,9 @@
         "limitType": "afterTimeInterval",
         "resumeAmount": 24,
         "resumeUnit": "hours",
-        "options": {}
+        "options": {
+          "appendAttribution": false
+        }
       },
       "id": "79cedeac-4305-5489-af1e-fb468ad423cf",
       "name": "Aprobación del dueño",

@@ -38,12 +38,12 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Pedidos"
+                  "Property": "Pedidos entregados"
                 }
               },
-              "queryRef": "Medidas.Pedidos",
-              "nativeQueryRef": "Pedidos",
-              "displayName": "Pedidos"
+              "queryRef": "Medidas.Pedidos entregados",
+              "nativeQueryRef": "Pedidos entregados",
+              "displayName": "Pedidos entregados"
             },
             {
               "field": {
@@ -175,7 +175,7 @@
             "rowPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },

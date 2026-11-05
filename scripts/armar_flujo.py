@@ -173,7 +173,7 @@ def codigo_pendiente() -> str:
         + "const pesos = (n) => '$' + Math.round(n).toLocaleString('es-CO').replace(/,/g, '.');\n"
         "return [{ json: { ...c, linea, resumen_para_el_dueno: c.cliente + ' pidió ' + c.cantidad + ' x ' + c.pieza\n"
         "  + ' por ' + c.canal + '. Costo ' + pesos(c.costo_unitario) + ' c/u, precio ' + c.precio_texto\n"
-        "  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + ' %.\\n\\n' + c.nota_ia\n"
+        "  + ', total ' + c.total_texto + ', margen ' + Math.round(c.margen_pct * 100) + '\\u00a0%.\\n\\n' + c.nota_ia\n"
         "  + '\\n\\nBorrador:\\n\\n' + c.borrador } }];\n"
     )
 
@@ -300,7 +300,9 @@ def flujo_cotizacion(piezas: list[dict], costeo_js: str) -> dict:
                 {"fieldLabel": "Texto corregido", "fieldType": "textarea"},
             ]},
             "limitWaitTime": True, "limitType": "afterTimeInterval", "resumeAmount": 24, "resumeUnit": "hours",
-            "options": {},
+            # sin el pie «Form automated with n8n». El botón sigue diciendo «Submit»: el nodo de espera
+            # de n8n 2.44 no deja cambiarlo (se probó con buttonLabel y lo ignora).
+            "options": {"appendAttribution": False},
         }, webhookId=nid("aprobacion")),
         nodo("Armar registro", "n8n-nodes-base.code", 2, 2420, 100, {"jsCode": codigo_registro()}),
         *nodos_guardar("Registro", "={{ $('Configuración').first().json.carpeta_registro }}/cotizaciones.csv", 2640, 100),

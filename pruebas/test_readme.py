@@ -42,6 +42,12 @@ class CifrasDelReadme(unittest.TestCase):
         self.assertTrue(es in self.es, f"el README en español no dice «{es}»")
         self.assertTrue(en in self.en, f"el README en inglés no dice «{en}»")
 
+    def test_imagenes_existen(self):
+        import re
+        for ruta in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", self.es + self.en):
+            if not ruta.startswith("http"):
+                self.assertTrue((RAIZ / ruta).exists(), f"el README muestra {ruta}, que no existe")
+
     def test_tamano_de_los_datos(self):
         n = lambda t: self.con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]  # noqa: E731
         self.esta(f"{n('piezas')} piezas, {n('pedidos')} pedidos de 2025, {n('gastos')} gastos, {n('clientes')} clientes",
@@ -57,6 +63,16 @@ class CifrasDelReadme(unittest.TestCase):
         self.esta(es_pct(f["Resina"]["pct_mano_obra"]), en_pct(f["Resina"]["pct_mano_obra"]))
         self.esta(es_pct(f["Resina"]["pct_material"]), en_pct(f["Resina"]["pct_material"]))
         self.esta(es_pct(f["FDM"]["pct_material"]), en_pct(f["FDM"]["pct_material"]))
+        self.esta("una pieza de cada una del catálogo", "one of each part in the resin catalog")
+        # pesado por lo que se vendió (unidades entregadas)
+        vendido = {r[0]: r[1:] for r in self.con.execute(
+            "SELECT v.tecnologia, SUM(v.mano_obra * s.u) / SUM(v.costo_total * s.u) * 100,"
+            "       SUM(v.material * s.u) / SUM(v.costo_total * s.u) * 100"
+            " FROM v_costo_pieza v JOIN (SELECT d.id_pieza, SUM(d.cantidad) AS u FROM pedido_detalle d"
+            "  JOIN pedidos p USING (id_pedido) WHERE p.estado = 'Entregado' GROUP BY 1) s USING (id_pieza)"
+            " GROUP BY 1")}
+        self.esta(f"todavía más: {es_pct(vendido['Resina'][0])}", f"even more: {en_pct(vendido['Resina'][0])}")
+        self.esta(f"el {es_pct(vendido['FDM'][1])} de lo vendido", f"{en_pct(vendido['FDM'][1])} of what sold")
 
     def test_repuesto_a_medida(self):
         t, canales = costeo.leer_tarifas(DATOS), costeo.leer_canales(DATOS)
@@ -72,7 +88,11 @@ class CifrasDelReadme(unittest.TestCase):
         vendidas = self.con.execute(
             "SELECT SUM(cantidad) FROM pedido_detalle JOIN pedidos USING (id_pedido) "
             "WHERE estado = 'Entregado' AND id_pieza = ?", (pieza["id_pieza"],)).fetchone()[0]
-        self.esta(f"({vendidas} unidades)", f"({vendidas} units)")
+        puesto = 1 + self.con.execute(
+            "SELECT COUNT(*) FROM (SELECT id_pieza, SUM(cantidad) AS u FROM pedido_detalle JOIN pedidos USING (id_pedido)"
+            " WHERE estado = 'Entregado' GROUP BY id_pieza) WHERE u > ?", (vendidas,)).fetchone()[0]
+        self.assertEqual(puesto, 5, "el repuesto a medida ya no es el quinto más vendido: cambia el texto")
+        self.esta(f"el quinto más vendido ({vendidas} unidades)", f"the fifth best seller ({vendidas} units)")
 
     def test_canales(self):
         canal = {r["canal"]: r for r in self.filas("05_pedidos_por_canal.sql")}
@@ -80,8 +100,9 @@ class CifrasDelReadme(unittest.TestCase):
         total = sum(r["ventas_netas"] for r in canal.values())
         w = canal["WhatsApp"]
         self.esta(es_pct(w["ventas_netas"] / total * 100), en_pct(w["ventas_netas"] / total * 100))
-        self.esta(f"{w['pedidos']} de {sum(r['pedidos'] for r in canal.values())} pedidos",
-                  f"{w['pedidos']} out of {sum(r['pedidos'] for r in canal.values())} orders")
+        # el % de ventas y el ticket son de pedidos entregados: el conteo tiene que ser de la misma base
+        self.esta(f"{w['entregados']} de los {sum(r['entregados'] for r in canal.values())} pedidos entregados",
+                  f"{w['entregados']} of the {sum(r['entregados'] for r in canal.values())} delivered orders")
         self.esta(es_pesos(w["ticket_promedio"]), en_pesos(w["ticket_promedio"]))
         # se mide dentro del mismo canal (sql/05): el texto tiene que decirlo
         self.esta(f"el {round(w['pct_clientes_que_vuelven'])} % de sus clientes vuelve a comprar por WhatsApp",

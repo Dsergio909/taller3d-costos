@@ -23,12 +23,12 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Ventas sin comisión"
+                  "Property": "Ventas menos comisiones"
                 }
               },
-              "queryRef": "Medidas.Ventas sin comisión",
-              "nativeQueryRef": "Ventas sin comisión",
-              "displayName": "Ventas sin comisión"
+              "queryRef": "Medidas.Ventas menos comisiones",
+              "nativeQueryRef": "Ventas menos comisiones",
+              "displayName": "Ventas menos comisiones"
             }
           ]
         }
