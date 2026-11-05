@@ -22,7 +22,7 @@ Tengo un taller de impresión 3D, con una impresora de resina y una FDM. Cuando 
 | SQL | 10 consultas numeradas y comentadas (SQLite), con funciones de ventana y cohortes | `sql/` · resultados en `docs/resultados_sql.md` |
 | Tablero de Power BI | 4 páginas: costo por pieza, precio y margen con «qué pasa si», gastos por mes y pedidos por canal | `powerbi/` · medidas en `dax/medidas.md` |
 | Flujo de n8n | Cotización: recibe el pedido, calcula el precio, la IA local redacta la respuesta, yo apruebo o corrijo y queda registrado | `flujos/` |
-| Pruebas | 63 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Pruebas | 65 pruebas que corren en GitHub en cada cambio | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## Cómo se calcula el costo
 Una placa de impresión se reparte entre las piezas que caben en ella. En resina eso pesa mucho: una placa llena tarda casi lo mismo que una sola pieza, porque el tiempo depende de la altura.
@@ -51,7 +51,7 @@ Las cifras son del taller ficticio, pero el método es el que uso con el mío. T
 
 1. **En resina, lo que más cuesta es el trabajo, no la resina.** La mano de obra es el 40,5 % del costo de las piezas de resina y el material solo el 27,2 %. En FDM es al revés: el filamento es el 46,0 %. Por eso en resina conviene llenar la placa: el tiempo de preparar y lavar se reparte entre más piezas.
 2. **El repuesto a medida casi no deja.** A precio de lista gana 18,6 %, y por TikTok, con la comisión, baja a 8,6 %. Fue de lo más vendido (64 unidades). Para ganar el 40 % tendría que costar $27.500 por WhatsApp y no $20.000.
-3. **WhatsApp tiene el margen más bajo, pero es el canal que más deja.** Trae el 42,8 % de las ventas con solo 136 de 549 pedidos, ticket promedio de $85.133 y el 42 % de sus clientes vuelve a comprar. Su margen es el más bajo (53,1 %) porque ahí se venden las piezas grandes y a medida, no por comisiones.
+3. **WhatsApp tiene el margen más bajo, pero es el canal que más deja.** Trae el 42,8 % de las ventas con solo 136 de 549 pedidos, ticket promedio de $85.133 y el 42 % de sus clientes vuelve a comprar por WhatsApp (se cuenta dentro del mismo canal). Su margen es el más bajo (53,1 %) porque ahí se venden las piezas grandes y a medida, no por comisiones.
 4. **Subir el precio 10 % deja más plata aunque se venda 10 % menos.** La ganancia del año pasaría de $14.958.330 a $15.693.866 (+$735.536). Bajar el precio 10 % y vender 20 % más deja casi lo mismo que hoy ($14.974.838), con 20 % más de trabajo.
 5. **Lo que importa es cuánto deja cada hora de impresora, no la ganancia por pieza.** La impresora es el cuello de botella: mientras imprime una cosa, no imprime otra. Un par de aretes de resina deja $386.000 por hora de impresora, porque caben 30 en una placa. El organizador de escritorio deja más por pieza ($17.737), pero ocupa la FDM 6 horas: $2.956 por hora. En cambio, la luz casi no pesa: es el 2,1 % de los gastos del año.
 
@@ -144,7 +144,7 @@ I run a 3D printing workshop with a resin printer and an FDM printer. When someo
 | SQL | 10 numbered and commented queries (SQLite), with window functions and cohorts | `sql/` · results in `docs/resultados_sql.md` |
 | Power BI dashboard | 4 pages: cost per part, price and margin with «what-if», expenses per month and orders per channel | `powerbi/` · measures in `dax/medidas.md` |
 | n8n workflow | Quote: receives the order, calculates the price, local AI drafts the response, I approve or correct it and it gets recorded | `flujos/` |
-| Tests | 63 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
+| Tests | 65 tests that run on GitHub with every change | `pruebas/` · `.github/workflows/pruebas.yml` |
 
 ## How cost is calculated
 A print plate is distributed among the parts that fit on it. In resin, this weighs a lot: a full plate takes almost as long as a single part, because time depends on height.
@@ -173,7 +173,7 @@ The figures are from the fictional workshop, but the method is what I use with m
 
 1. **In resin, labor costs more than the resin.** Labor accounts for 40.5% of the cost of resin parts, while materials account for only 27.2%. In FDM it's reversed: filament is 46.0%. That's why in resin it makes sense to fill the plate: preparation and washing time is spread across more parts.
 2. **Custom spare parts barely make money.** At list price the margin is 18.6%, and on TikTok, after the commission, it drops to 8.6%. They were one of the best sellers (64 units). To make 40% they would have to sell for COP 27,500 on WhatsApp instead of COP 20,000.
-3. **WhatsApp has the lowest margin, but it is the channel that makes the most money.** It brings in 42.8% of sales with only 136 out of 549 orders, an average ticket of COP 85,133 and 42% of its customers return to buy. Its margin is the lowest (53.1%) because that is where the large and custom pieces sell, not because of commissions.
+3. **WhatsApp has the lowest margin, but it is the channel that makes the most money.** It brings in 42.8% of sales with only 136 out of 549 orders, an average ticket of COP 85,133 and 42% of its customers buy again through WhatsApp (counted within the same channel). Its margin is the lowest (53.1%) because that is where the large and custom pieces sell, not because of commissions.
 4. **Raising prices by 10% makes more money even if I sell 10% less.** The year's profit would go from COP 14,958,330 to COP 15,693,866 (+COP 735,536). Lowering prices by 10% and selling 20% more leaves almost the same as today (COP 14,974,838), with 20% more work.
 5. **What matters is how much each printer hour makes, not the profit per piece.** The printer is the bottleneck: while it prints one thing, it cannot print another. A pair of resin earrings makes COP 386,000 per printer hour, because 30 fit on one plate. The desk organizer makes more per piece (COP 17,737), but it keeps the FDM printer busy for 6 hours: COP 2,956 per hour. Electricity, on the other hand, barely matters: it is 2.1% of the year's expenses.
 

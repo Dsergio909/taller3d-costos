@@ -14,6 +14,8 @@ por_pedido AS (
     FROM lineas
     GROUP BY 1, 2, 3, 4
 ),
+-- «Clientes que vuelven» se mide dentro de cada canal: si alguien compra primero por Instagram
+-- y después por WhatsApp, no cuenta como cliente que vuelve en ninguno de los dos.
 compras_cliente AS (            -- cuántos pedidos entregados tiene cada cliente en cada canal
     SELECT canal, id_cliente, COUNT(*) AS pedidos
     FROM por_pedido

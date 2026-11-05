@@ -52,6 +52,37 @@ class ConsultasSQL(unittest.TestCase):
                                sum(c["ventas_netas"] - c["comision"] for c in canales), delta=15)
         self.assertIsNone(meses[0]["pct_ventas_vs_mes_anterior"])
 
+    def test_mes_a_mes_no_pierde_meses(self):
+        """Con datos reales puede haber un mes sin ventas o sin gastos: no debe desaparecer."""
+        con = cargar_sqlite.conectar(DATOS)
+        con.execute("UPDATE pedidos SET estado = 'Cancelado' WHERE substr(fecha, 1, 7) = '2025-06'")
+        con.execute("DELETE FROM gastos WHERE substr(fecha, 1, 7) = '2025-03'")
+        cols, filas = cargar_sqlite.correr(con, SQL / "08_resultado_por_mes.sql")
+        meses = {f[0]: dict(zip(cols, f)) for f in filas}
+        normal = {m["mes"]: m for m in self.correr("08_resultado_por_mes.sql")}
+        self.assertEqual(list(meses), [f"2025-{m:02d}" for m in range(1, 13)], "faltan meses o están en desorden")
+        junio, julio, marzo = meses["2025-06"], meses["2025-07"], meses["2025-03"]
+        self.assertEqual((junio["pedidos"], junio["ventas_sin_comision"]), (0, 0))
+        self.assertEqual(junio["gastos"], normal["2025-06"]["gastos"])
+        self.assertAlmostEqual(junio["pct_ventas_vs_mes_anterior"], -100.0)  # contra mayo, no contra otro mes
+        self.assertIsNone(julio["pct_ventas_vs_mes_anterior"], "no hay % de cambio contra un mes sin ventas")
+        self.assertEqual(marzo["gastos"], 0)
+        self.assertEqual(marzo["ventas_sin_comision"], normal["2025-03"]["ventas_sin_comision"])
+        con.close()
+
+    def test_tecnologia_desconocida_no_se_cobra_como_fdm(self):
+        """Python y JS dan error con una tecnología rara; en SQL el esquema no la deja cargar."""
+        import sqlite3
+        con = cargar_sqlite.conectar(DATOS)
+        with self.assertRaises(sqlite3.IntegrityError):
+            con.execute("UPDATE piezas SET tecnologia = 'SLS' WHERE id_pieza = 'F01'")
+        # y si alguien quita esa regla del esquema, la vista deja el costo vacío en vez de cobrarla como FDM
+        con.execute("PRAGMA ignore_check_constraints = ON")
+        con.execute("UPDATE piezas SET tecnologia = 'SLS' WHERE id_pieza = 'F01'")
+        costo = con.execute("SELECT costo_total FROM v_costo_pieza WHERE id_pieza = 'F01'").fetchone()[0]
+        self.assertIsNone(costo)
+        con.close()
+
     def test_ganancia_por_hora(self):
         filas = self.correr("09_ganancia_por_hora_de_impresora.sql")
         self.assertEqual(len(filas), 17)
@@ -74,6 +105,8 @@ class ConsultasSQL(unittest.TestCase):
         for f in filas:
             self.assertLessEqual(f["volvieron_en_90_dias"], f["con_90_dias_para_mirar"])
             self.assertLessEqual(f["con_90_dias_para_mirar"], f["clientes_nuevos"])
+            if f["dias_promedio_si_volvio_en_90"] is not None:  # misma ventana pareja de 90 días
+                self.assertLessEqual(f["dias_promedio_si_volvio_en_90"], 90)
         self.assertLess(filas[-1]["con_90_dias_para_mirar"], filas[-1]["clientes_nuevos"],
                         "el último trimestre no tiene 90 días completos: no se cuenta como si no volvieran")
 

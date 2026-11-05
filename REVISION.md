@@ -91,8 +91,23 @@ Turno de Power BI coordinado con los otros chats (Olist → taller 3D → vuelos
 
 Pruebas: 63 de 63.
 
+## Auditoría final (4-nov-2026, noche)
+La hizo el chat principal sobre una copia limpia: regenerar datos, costeo y SQL no cambió nada, 63 de 63 pruebas, control de privacidad limpio. Antigravity (Gemini, en 2 partes) revisó la fórmula en Python, JS y SQL, las 10 consultas y las conclusiones del README: **0 errores de cálculo** (confirmó unidades, fallas /(1 − tasa), margen y comisión, redondeo y las cifras de las conclusiones 2, 4 y 5). Una sugerencia se descartó: «división entera en el FEP» no pasa porque `tarifas.valor` es REAL. Quedaron 4 ajustes:
+
+| # | Qué | Por qué importaba | Arreglo | Prueba |
+|---|---|---|---|---|
+| 1 | README, conclusión 3: «el 42 % de sus clientes vuelve a comprar» | `sql/05` cuenta dentro de cada canal: quien compra por Instagram y después por WhatsApp no cuenta como cliente que vuelve en ninguno | El texto dice «vuelve a comprar por WhatsApp (se cuenta dentro del mismo canal)», en español e inglés. Comentario en `sql/05` | `test_readme` exige la frase nueva |
+| 2 | `sql/08` mes a mes: `JOIN caja USING (mes)` era INNER | Con datos reales, un mes con gastos y sin ventas (o al revés) desaparecía y el LAG comparaba contra dos meses atrás | Lista completa de meses (CTE recursiva del primer al último mes), LEFT JOIN de ventas y gastos con 0, y % vacío si el mes anterior no vendió | `test_mes_a_mes_no_pierde_meses`: junio sin ventas y marzo sin gastos → siguen los 12 meses, junio −100 % contra mayo, julio sin % |
+| 3 | `sql/01`: el CASE mandaba cualquier tecnología rara a FDM | Python y JS dan error; SQL la cobraba como FDM | El esquema ya la rechazaba (CHECK); además la vista ahora pide `'FDM'` explícito y deja el costo vacío con otro valor | `test_tecnologia_desconocida_no_se_cobra_como_fdm` |
+| 4 | `sql/10` cohortes: `dias_promedio_hasta_volver` usaba a todos, sin la ventana de 90 días | No era comparable con `pct_volvieron_en_90_dias` (T1: 122 días contra un % medido a 90) | Ahora es `dias_promedio_si_volvio_en_90`, con la misma ventana: T1 50, T2 43, T3 44, T4 vacío. No sale en el README ni en el tablero | `test_cohortes` revisa que sea ≤ 90 |
+
+Las cifras del tablero y del README no cambiaron (la tabla mes a mes da lo mismo con los datos ficticios; solo cambió `docs/resultados_sql.md` en la columna de cohortes). De paso: `docs/resultados_sql.md` mostraba «None» y ahora muestra «—».
+
+Pruebas: 65 de 65.
+
 ## Uso de IA delegada
 | Cuándo | Herramienta | Qué hizo | Qué tuve que corregir |
 |---|---|---|---|
 | Vuelta 1 | Ollama qwen3.5:4b (local; Antigravity estaba ocupado y Power BI abierto en otro chat, por eso no el 9b) | Traducción del README al inglés, sección por sección | 14 errores, 3 de sentido (ver vuelta 1) |
 | Vuelta 3 | Ollama qwen3.5:4b (Antigravity ocupado 30 min; Power BI abierto en otro chat) | Segunda opinión de código en 4 partes (5,8 min) | De ~25 hallazgos, 4 reales (tasa de fallas, margen 0 %, comisión no numérica, prompt). Los demás eran falsos: decía que en JS `"5" * precio` concatena textos, que «$1.200» no se reconoce como 1200 y que la fórmula del trimestre está mal; en la parte de DAX repitió el mismo punto más de 40 veces |
+| Auditoría final | Antigravity (Gemini), lo lanzó el chat principal | Revisó fórmula (Python, JS, SQL), consultas y conclusiones del README en 2 partes | 0 errores de cálculo; 1 sugerencia descartada (división entera en el FEP: `valor` es REAL); 4 ajustes válidos, arreglados arriba |

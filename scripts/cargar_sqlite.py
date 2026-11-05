@@ -63,7 +63,7 @@ def _md(columnas: list[str], filas: list[tuple]) -> str:
     def fmt(v):
         if isinstance(v, float):
             return f"{v:,.1f}" if abs(v) < 1000 else f"{v:,.0f}"
-        return str(v)
+        return "—" if v is None else str(v)
 
     lineas = ["| " + " | ".join(columnas) + " |", "|" + "---|" * len(columnas)]
     lineas += ["| " + " | ".join(fmt(v) for v in f) + " |" for f in filas]

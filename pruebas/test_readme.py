@@ -83,8 +83,9 @@ class CifrasDelReadme(unittest.TestCase):
         self.esta(f"{w['pedidos']} de {sum(r['pedidos'] for r in canal.values())} pedidos",
                   f"{w['pedidos']} out of {sum(r['pedidos'] for r in canal.values())} orders")
         self.esta(es_pesos(w["ticket_promedio"]), en_pesos(w["ticket_promedio"]))
-        self.esta(f"el {round(w['pct_clientes_que_vuelven'])} % de sus clientes",
-                  f"{round(w['pct_clientes_que_vuelven'])}% of its customers")
+        # se mide dentro del mismo canal (sql/05): el texto tiene que decirlo
+        self.esta(f"el {round(w['pct_clientes_que_vuelven'])} % de sus clientes vuelve a comprar por WhatsApp",
+                  f"{round(w['pct_clientes_que_vuelven'])}% of its customers buy again through WhatsApp")
         self.esta(es_pct(ganancia["WhatsApp"]["margen_pct"]), en_pct(ganancia["WhatsApp"]["margen_pct"]))
         self.assertEqual(min(ganancia, key=lambda k: ganancia[k]["margen_pct"]), "WhatsApp", "WhatsApp ya no es el de menor margen")
         self.assertEqual(max(ganancia, key=lambda k: ganancia[k]["ganancia"]), "WhatsApp", "WhatsApp ya no es el que más deja")

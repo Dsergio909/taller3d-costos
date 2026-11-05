@@ -35,22 +35,23 @@ partes AS (
         p.id_pieza, p.nombre, p.categoria, p.tecnologia, p.precio_lista,
         CASE p.tecnologia
             WHEN 'Resina' THEN p.material_cantidad * (1 + t.resina_soportes_pct) * t.resina_precio_litro / 1000.0
-            ELSE               p.material_cantidad * (1 + t.fdm_purga_pct) * t.filamento_precio_kg / 1000.0
-        END AS material,
+            WHEN 'FDM'    THEN p.material_cantidad * (1 + t.fdm_purga_pct) * t.filamento_precio_kg / 1000.0
+        END AS material,          -- otra tecnología queda vacía (NULL), no se cobra como FDM.
+                                  -- además el esquema (00) no deja cargarla, igual que Python y JS dan error
         CASE p.tecnologia
             WHEN 'Resina' THEN (t.alcohol_ml_por_placa * t.alcohol_precio_litro / 1000.0
                                 + t.guantes_pares_por_placa * t.guantes_precio_par
                                 + t.papel_por_placa
                                 + t.fep_precio / t.fep_placas_vida) / p.piezas_por_placa
-            ELSE t.fdm_insumos_por_placa * 1.0 / p.piezas_por_placa
+            WHEN 'FDM'    THEN t.fdm_insumos_por_placa * 1.0 / p.piezas_por_placa
         END AS insumos,
-        p.horas_placa * (CASE p.tecnologia WHEN 'Resina' THEN t.resina_potencia_w ELSE t.fdm_potencia_w END)
+        p.horas_placa * (CASE p.tecnologia WHEN 'Resina' THEN t.resina_potencia_w WHEN 'FDM' THEN t.fdm_potencia_w END)
             / 1000.0 * t.energia_precio_kwh / p.piezas_por_placa AS energia,
-        p.horas_placa * (CASE p.tecnologia WHEN 'Resina' THEN t.resina_maquina_hora ELSE t.fdm_maquina_hora END)
+        p.horas_placa * (CASE p.tecnologia WHEN 'Resina' THEN t.resina_maquina_hora WHEN 'FDM' THEN t.fdm_maquina_hora END)
             / p.piezas_por_placa AS maquina,
         (t.preparacion_min_por_placa * 1.0 / p.piezas_por_placa + p.minutos_acabado) / 60.0 * t.mano_obra_hora
             AS mano_obra,
-        CASE p.tecnologia WHEN 'Resina' THEN t.resina_tasa_fallas ELSE t.fdm_tasa_fallas END AS tasa_fallas
+        CASE p.tecnologia WHEN 'Resina' THEN t.resina_tasa_fallas WHEN 'FDM' THEN t.fdm_tasa_fallas END AS tasa_fallas
     FROM piezas AS p
     CROSS JOIN t
 )

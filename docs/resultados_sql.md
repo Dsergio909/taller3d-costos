@@ -196,7 +196,7 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 
 | mes | pedidos | ventas_sin_comision | gastos | resultado_caja | pct_ventas_vs_mes_anterior |
 |---|---|---|---|---|---|
-| 2025-01 | 28 | 1,205,290 | 587,000 | 618,290 | None |
+| 2025-01 | 28 | 1,205,290 | 587,000 | 618,290 | — |
 | 2025-02 | 30 | 1,195,320 | 581,500 | 613,820 | -0.8 |
 | 2025-03 | 36 | 1,495,210 | 727,000 | 768,210 | 25.1 |
 | 2025-04 | 34 | 1,378,690 | 772,000 | 606,690 | -7.8 |
@@ -235,10 +235,10 @@ Datos: taller ficticio (`datos/`). Ninguna cifra es de un taller real.
 ## 10 · Cohortes: de los clientes nuevos de cada trimestre, ¿cuántos volvieron a comprar?
 `sql/10_cohortes_de_clientes.sql`
 
-| cohorte | clientes_nuevos | con_90_dias_para_mirar | volvieron_en_90_dias | pct_volvieron_en_90_dias | dias_promedio_hasta_volver |
+| cohorte | clientes_nuevos | con_90_dias_para_mirar | volvieron_en_90_dias | pct_volvieron_en_90_dias | dias_promedio_si_volvio_en_90 |
 |---|---|---|---|---|---|
-| 2025-T1 | 77 | 77 | 31 | 40.3 | 122.0 |
-| 2025-T2 | 72 | 72 | 21 | 29.2 | 106.0 |
-| 2025-T3 | 53 | 53 | 13 | 24.5 | 81.0 |
-| 2025-T4 | 50 | 1 | 0 | 0.0 | 31.0 |
+| 2025-T1 | 77 | 77 | 31 | 40.3 | 50.0 |
+| 2025-T2 | 72 | 72 | 21 | 29.2 | 43.0 |
+| 2025-T3 | 53 | 53 | 13 | 24.5 | 44.0 |
+| 2025-T4 | 50 | 1 | 0 | 0.0 | — |
 

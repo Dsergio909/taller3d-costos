@@ -3,6 +3,7 @@
 -- Ojo con la trampa: un cliente que llegó en diciembre tuvo pocos días para volver antes de
 -- que se acaben los datos. Para comparar parejo se mide «volvió en los primeros 90 días» y
 -- solo se cuentan los clientes que tuvieron 90 días completos para hacerlo.
+-- Los días promedio hasta volver usan la misma ventana: solo los que volvieron en esos 90 días.
 
 WITH entregados AS (
     SELECT id_cliente, id_pedido, fecha, canal
@@ -37,7 +38,8 @@ SELECT
         AND p.dias_hasta_volver <= 90)                                          AS volvieron_en_90_dias,
     ROUND(100.0 * SUM(julianday(c.ultima_fecha) - julianday(p.primera_fecha) >= 90 AND p.dias_hasta_volver <= 90)
           / NULLIF(SUM(julianday(c.ultima_fecha) - julianday(p.primera_fecha) >= 90), 0), 1) AS pct_volvieron_en_90_dias,
-    ROUND(AVG(p.dias_hasta_volver), 0)                                         AS dias_promedio_hasta_volver
+    ROUND(AVG(CASE WHEN julianday(c.ultima_fecha) - julianday(p.primera_fecha) >= 90
+                    AND p.dias_hasta_volver <= 90 THEN p.dias_hasta_volver END), 0) AS dias_promedio_si_volvio_en_90
 FROM primeras AS p
 CROSS JOIN corte AS c
 GROUP BY p.cohorte

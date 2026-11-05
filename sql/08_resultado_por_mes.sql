@@ -2,6 +2,9 @@
 -- Ojo: los gastos son lo que salió de la caja ese mes (resina por litro, filamento por
 -- kilo, pauta, empaques). No es lo mismo que el costo por pieza: ahí no entran la
 -- publicidad ni las herramientas, y sí entran la mano de obra y el desgaste.
+-- Con datos reales puede haber un mes con gastos y sin ventas (o al revés). Por eso se arma
+-- primero la lista completa de meses y las ventas y los gastos se pegan con LEFT JOIN y 0:
+-- así ningún mes desaparece y el LAG siempre compara contra el mes de verdad anterior.
 
 WITH ventas AS (
     SELECT
@@ -18,15 +21,36 @@ caja AS (
     SELECT substr(fecha, 1, 7) AS mes, SUM(valor) AS gastos
     FROM gastos
     GROUP BY 1
+),
+limites AS (                    -- primer y último mes con pedidos o gastos
+    SELECT MIN(mes) AS primero, MAX(mes) AS ultimo
+    FROM (SELECT mes FROM ventas UNION SELECT mes FROM caja)
+),
+meses(mes) AS (                 -- todos los meses entre los dos, sin saltos
+    SELECT primero FROM limites
+    UNION ALL
+    SELECT strftime('%Y-%m', date(m.mes || '-01', '+1 month'))
+    FROM meses AS m, limites AS l
+    WHERE m.mes < l.ultimo
+),
+juntos AS (
+    SELECT
+        m.mes,
+        COALESCE(v.pedidos, 0)             AS pedidos,
+        COALESCE(v.ventas_sin_comision, 0) AS ventas_sin_comision,
+        COALESCE(c.gastos, 0)              AS gastos
+    FROM meses AS m
+    LEFT JOIN ventas AS v USING (mes)
+    LEFT JOIN caja   AS c USING (mes)
 )
 SELECT
-    v.mes,
-    v.pedidos,
-    ROUND(v.ventas_sin_comision, 0)                                     AS ventas_sin_comision,
-    c.gastos,
-    ROUND(v.ventas_sin_comision - c.gastos, 0)                          AS resultado_caja,
-    ROUND((v.ventas_sin_comision - LAG(v.ventas_sin_comision) OVER (ORDER BY v.mes))
-          / LAG(v.ventas_sin_comision) OVER (ORDER BY v.mes) * 100, 1)  AS pct_ventas_vs_mes_anterior
-FROM ventas AS v
-JOIN caja AS c USING (mes)
-ORDER BY v.mes;
+    mes,
+    pedidos,
+    ROUND(ventas_sin_comision, 0)                                       AS ventas_sin_comision,
+    gastos,
+    ROUND(ventas_sin_comision - gastos, 0)                              AS resultado_caja,
+    -- si el mes anterior no vendió nada, el cambio en % no existe (queda vacío)
+    ROUND((ventas_sin_comision - LAG(ventas_sin_comision) OVER (ORDER BY mes))
+          / NULLIF(LAG(ventas_sin_comision) OVER (ORDER BY mes), 0) * 100, 1) AS pct_ventas_vs_mes_anterior
+FROM juntos
+ORDER BY mes;
